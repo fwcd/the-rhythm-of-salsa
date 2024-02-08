@@ -46,8 +46,15 @@ struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
     }
 }
 
+extension PageView where Navigation == EmptyView {
+    init(title: String, text: String, @ViewBuilder detail: @escaping () -> Detail) {
+        self.init(title: title, text: text, detail: detail, navigation: {})
+    }
+}
+
+
 extension PageView where Detail == EmptyView, Navigation == EmptyView {
     init(title: String, text: String) {
-        self.init(title: title, text: text) {} navigation: {}
+        self.init(title: title, text: text, detail: {}, navigation: {})
     }
 }
