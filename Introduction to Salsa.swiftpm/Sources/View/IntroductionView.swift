@@ -13,14 +13,14 @@ struct IntroductionView: View {
                             .multilineTextAlignment(.center)
                         Text(
                             """
-                            Salsa is a dance and a style of music that originated in Cuba. Popularized in the 1960s in New York, many variants have emerged over time.
+                            Salsa is a dance and a style of music that originated in Cuba. Popularized in the 1960s in NYC, many variants have emerged over time.
                             
                             This introduction will teach you about the fundamental elements of Salsa music, its rhythm and Cuban-style Salsa dancing.
                             """
                         )
                         .multilineTextAlignment(.center)
                         .font(.system(size: ViewConstants.subtitleFontSize))
-                        .frame(maxWidth: geometry.size.width * 0.4)
+                        .frame(maxWidth: 400)
                         Button("Get Started") {
                             route = .rhythmTutorial
                         }
