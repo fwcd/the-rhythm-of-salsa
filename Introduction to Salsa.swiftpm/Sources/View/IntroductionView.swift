@@ -9,7 +9,7 @@ struct IntroductionView: View {
                 let content = Group {
                     VStack(spacing: ViewConstants.mediumSpace) {
                         Text("Introduction to Salsa")
-                            .font(.system(size: ViewConstants.splashFontSize))
+                            .font(.system(size: ViewConstants.titleFontSize))
                             .multilineTextAlignment(.center)
                         Text(
                             """
