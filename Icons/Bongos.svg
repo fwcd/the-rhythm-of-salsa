@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="250"
+   height="250"
+   viewBox="0 0 66.145832 66.145833"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   sodipodi:docname="Bongos.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#3e3e3e"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="77.074639"
+     inkscape:cy="87.681241"
+     inkscape:window-width="1392"
+     inkscape:window-height="973"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g8" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g5-2"
+       transform="translate(21.692463,-2.782777)">
+      <g
+         id="g6"
+         transform="matrix(0.81733889,0,0,0.81733889,-3.7299441,6.3193223)">
+        <g
+           id="g7">
+          <g
+             id="g5"
+             transform="translate(-23.282951,8.0944165)"
+             style="fill:#9e9e9e;fill-opacity:1" />
+          <g
+             id="g8"
+             style="stroke-width:0.999585;stroke-dasharray:none"
+             transform="matrix(1.1068744,0,0,1.1068744,-1.9757887,1.9453377)">
+            <g
+               id="g9"
+               transform="translate(0.12530825,0.66545399)">
+              <path
+                 id="rect8"
+                 style="fill:#b1b1b1;fill-opacity:0.772619;stroke-width:0.903069;stroke-linecap:round"
+                 d="M 9.7152864,19.925647 A 13.997595,6.0139642 0 0 0 -4.2820926,25.939865 13.997595,6.0139642 0 0 0 9.7152864,31.953511 13.997595,6.0139642 0 0 0 23.713237,25.939865 13.997595,6.0139642 0 0 0 9.7152864,19.925647 Z m -13.2273946,10.723232 2.3333725,12.378584 h 0.071972 c 0.5651384,1.443063 4.7030987,3.136657 9.7995934,3.34212 V 33.918456 C 3.9797552,33.717063 -0.43237042,32.203222 -3.5121082,30.648879 Z m 26.4553602,0 c -3.079859,1.554404 -7.491739,3.06824 -12.204937,3.269577 v 12.451127 c 5.096452,-0.205488 9.234454,-1.899054 9.799593,-3.34212 h 0.0714 z" />
+              <path
+                 id="rect8-0"
+                 style="fill:#b1b1b1;fill-opacity:0.772619;stroke-width:0.903069;stroke-linecap:round;stroke-dasharray:none"
+                 d="m 27.010232,14.080506 c -4.048362,0.05722 -8.30587,0.592281 -11.80215,2.782056 -0.711192,0.466063 -2.819214,1.545905 -0.683617,1.421442 3.27735,0.349968 6.631647,1.321958 9.334358,3.364829 1.340298,1.008398 2.530098,2.778444 2.145998,4.424694 4.326042,0.149414 8.351264,-0.308372 12.222182,-2.380677 1.485349,-0.818991 3.142063,-2.334706 2.708965,-4.213051 -0.62871,-2.124008 -2.863863,-3.178137 -4.764945,-3.932752 -2.924753,-1.065578 -6.06022,-1.45603 -9.160791,-1.466541 z m 13.227966,10.723232 c -4.570735,2.274289 -9.368506,3.779328 -14.489025,3.463819 -0.754451,4.01077 -1.541705,8.015476 -2.34096,12.018117 2.876112,0.235768 5.802045,0.411563 8.639566,-0.249067 1.953981,-0.463637 4.070806,-0.979169 5.534077,-2.443256 0.495215,-0.483009 0.428484,-1.245764 0.605761,-1.913911 z"
+                 sodipodi:nodetypes="cccccccccccccccc" />
+            </g>
+            <g
+               id="g5-1"
+               transform="translate(-5.7394298,-1.8868448e-4)"
+               style="fill:#9e9e9e;fill-opacity:1;stroke-width:0.999585;stroke-dasharray:none" />
+            <g
+               id="g5-9"
+               transform="translate(-12.262371,0.16127582)"
+               style="fill:#ff8234;fill-opacity:1;stroke-width:0.999585;stroke-dasharray:none" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
