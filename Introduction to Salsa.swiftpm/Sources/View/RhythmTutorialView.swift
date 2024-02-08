@@ -1,13 +1,15 @@
 import SwiftUI
 
 struct RhythmTutorialView: View {
+    let instrument: Instrument
+    
     var body: some View {
-        Text("The Cowbell")
+        Text(instrument.description)
             .font(.system(size: ViewConstants.titleFontSize))
     }
 }
 
 #Preview {
-    RhythmTutorialView()
+    RhythmTutorialView(instrument: .cowbell)
         .preferredColorScheme(.dark)
 }

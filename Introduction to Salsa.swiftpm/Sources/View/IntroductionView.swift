@@ -22,7 +22,7 @@ struct IntroductionView: View {
                         .font(.system(size: ViewConstants.subtitleFontSize))
                         .frame(maxWidth: 400)
                         Button("Get Started") {
-                            route = .rhythmTutorial
+                            route = .rhythmTutorial(.cowbell)
                         }
                         .buttonStyle(BorderedProminentButtonStyle())
                     }
