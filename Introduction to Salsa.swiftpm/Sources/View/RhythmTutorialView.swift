@@ -4,8 +4,10 @@ struct RhythmTutorialView: View {
     let instrument: Instrument
     
     var body: some View {
-        Text(instrument.description)
-            .font(.system(size: ViewConstants.titleFontSize))
+        PageView(
+            title: instrument.name,
+            text: instrument.longDescription
+        )
     }
 }
 
