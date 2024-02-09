@@ -9,22 +9,19 @@ struct ContentView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $route) {
                 NavigationLink("Introduction", value: ContentRoute.introduction)
-                    .tag(ContentRoute.introduction)
                 DisclosureGroup("The Instruments", isExpanded: $instrumentTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
                         NavigationLink(value: ContentRoute.rhythmTutorial(instrument)) {
                             Image(instrument)
-                                .renderingMode(.template)
-                                .resizable()
-                                .foregroundStyle(.primary)
-                                .frame(
-                                    width: ViewConstants.sidebarIconSize,
-                                    height: ViewConstants.sidebarIconSize
-                                )
+                                .sidebarIcon()
                             Text(instrument.name)
                         }
-                        .tag(ContentRoute.rhythmTutorial(instrument))
                     }
+                }
+                NavigationLink(value: ContentRoute.beatSequencer) {
+                    Image(systemName: "square.grid.3x3.square")
+                        .sidebarIcon()
+                    Text("Beat Sequencer")
                 }
             }
         } detail: {
@@ -33,6 +30,8 @@ struct ContentView: View {
                 IntroductionView(route: $route)
             case .rhythmTutorial(let instrument):
                 InstrumentTutorialView(instrument: instrument)
+            case .beatSequencer:
+                BeatSequencerView()
             case nil:
                 EmptyView()
             }
