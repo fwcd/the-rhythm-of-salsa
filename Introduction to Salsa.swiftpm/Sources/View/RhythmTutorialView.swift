@@ -7,7 +7,9 @@ struct RhythmTutorialView: View {
         PageView(
             title: instrument.name,
             text: instrument.longDescription
-        )
+        ) {
+            Image("Icons/\(instrument.name)")
+        }
     }
 }
 
