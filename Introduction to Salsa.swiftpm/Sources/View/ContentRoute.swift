@@ -1,5 +1,5 @@
 enum ContentRoute: Hashable, Codable {
     case introduction
-    case rhythmTutorial(Instrument)
+    case instrumentTutorial(Instrument)
     case beatSequencer
 }

@@ -16,7 +16,7 @@ struct IntroductionView: View {
                 .clipShape(Circle())
         } navigation: {
             Button("Get Started") {
-                route = .rhythmTutorial(Instrument.allCases.first!)
+                route = .instrumentTutorial(Instrument.allCases.first!)
             }
             .buttonStyle(BorderedProminentButtonStyle())
         }
