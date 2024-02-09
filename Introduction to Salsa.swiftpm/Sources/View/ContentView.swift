@@ -8,14 +8,20 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $route) {
-                NavigationLink("Introduction", value: ContentRoute.introduction)
-                DisclosureGroup("The Instruments", isExpanded: $instrumentTutorialExpanded) {
+                NavigationLink(value: ContentRoute.introduction) {
+                    Text("Introduction")
+                        .sidebarIcon(systemName: "house")
+                }
+                DisclosureGroup(isExpanded: $instrumentTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
                         NavigationLink(value: ContentRoute.instrumentTutorial(instrument)) {
                             Text(instrument.name)
                                 .sidebarIcon(Image(instrument))
                         }
                     }
+                } label: {
+                    Text("The Instruments")
+                        .sidebarIcon(systemName: "circle.hexagonpath")
                 }
                 NavigationLink(value: ContentRoute.beatSequencer) {
                     Text("Beat Sequencer")
