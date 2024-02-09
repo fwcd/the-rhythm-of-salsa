@@ -11,6 +11,7 @@ struct ContentView: View {
                 NavigationLink(value: ContentRoute.introduction) {
                     Text("Introduction")
                 }
+                NavigationLink("The Count", value: ContentRoute.countTutorial)
                 DisclosureGroup(isExpanded: $instrumentTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
                         NavigationLink(value: ContentRoute.instrumentTutorial(instrument)) {
@@ -29,8 +30,10 @@ struct ContentView: View {
             switch route {
             case .introduction:
                 IntroductionView(route: $route)
+            case .countTutorial:
+                CountTutorialView(route: $route)
             case .instrumentTutorial(let instrument):
-                InstrumentTutorialView(instrument: instrument)
+                InstrumentTutorialView(instrument: instrument, route: $route)
             case .beatSequencer:
                 BeatSequencerView()
             case nil:

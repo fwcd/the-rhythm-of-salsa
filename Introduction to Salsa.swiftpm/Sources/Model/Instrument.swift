@@ -18,4 +18,16 @@ enum Instrument: String, Hashable, Codable, CustomStringConvertible, CaseIterabl
             "" // TODO
         }
     }
+    
+    var ordinal: Int {
+        Self.allCases.firstIndex(of: self)!
+    }
+    
+    var next: Instrument {
+        Self.allCases[(ordinal + 1) % Self.allCases.count]
+    }
+    
+    var isLast: Bool {
+        ordinal == Self.allCases.count - 1
+    }
 }
