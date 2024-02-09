@@ -4,7 +4,7 @@ import SwiftUI
 struct IntroductionToSalsaApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootScreen()
                 .preferredColorScheme(.dark)
         }
     }

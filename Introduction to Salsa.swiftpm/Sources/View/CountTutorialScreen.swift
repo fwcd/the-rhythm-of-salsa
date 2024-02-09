@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct CountTutorialView: View {
+struct CountTutorialScreen: View {
     @Binding var route: ContentRoute?
     
     var body: some View {
@@ -19,6 +19,6 @@ struct CountTutorialView: View {
 }
 
 #Preview {
-    CountTutorialView(route: .constant(nil))
+    CountTutorialScreen(route: .constant(nil))
         .preferredColorScheme(.dark)
 }

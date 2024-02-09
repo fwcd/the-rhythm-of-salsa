@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct IntroductionView: View {
+struct IntroductionScreen: View {
     @Binding var route: ContentRoute?
     
     var body: some View {

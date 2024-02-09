@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct InstrumentTutorialView: View {
+struct InstrumentTutorialScreen: View {
     let instrument: Instrument
     @Binding var route: ContentRoute?
     
@@ -22,6 +22,6 @@ struct InstrumentTutorialView: View {
 }
 
 #Preview {
-    InstrumentTutorialView(instrument: .cowbell, route: .constant(nil))
+    InstrumentTutorialScreen(instrument: .cowbell, route: .constant(nil))
         .preferredColorScheme(.dark)
 }

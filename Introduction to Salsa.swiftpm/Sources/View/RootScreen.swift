@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View {
+struct RootScreen: View {
     @State private var route: ContentRoute? = .introduction
     @State private var columnVisibility: NavigationSplitViewVisibility = .detailOnly
     @State private var instrumentTutorialExpanded: Bool = true
@@ -29,13 +29,13 @@ struct ContentView: View {
         } detail: {
             switch route {
             case .introduction:
-                IntroductionView(route: $route)
+                IntroductionScreen(route: $route)
             case .countTutorial:
-                CountTutorialView(route: $route)
+                CountTutorialScreen(route: $route)
             case .instrumentTutorial(let instrument):
-                InstrumentTutorialView(instrument: instrument, route: $route)
+                InstrumentTutorialScreen(instrument: instrument, route: $route)
             case .beatSequencer:
-                BeatSequencerView()
+                BeatSequencerScreen()
             case nil:
                 EmptyView()
             }
