@@ -8,7 +8,7 @@ struct RhythmTutorialView: View {
             title: instrument.name,
             text: instrument.longDescription
         ) {
-            Image("Icons/\(instrument.name)")
+            Image(instrument)
         }
     }
 }

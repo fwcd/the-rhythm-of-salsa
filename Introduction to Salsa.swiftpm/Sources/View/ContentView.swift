@@ -12,8 +12,18 @@ struct ContentView: View {
                     .tag(ContentRoute.introduction)
                 DisclosureGroup("Rhythm Tutorial", isExpanded: $rhythmTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
-                        NavigationLink(instrument.description, value: ContentRoute.rhythmTutorial(instrument))
-                            .tag(ContentRoute.rhythmTutorial(instrument))
+                        NavigationLink(value: ContentRoute.rhythmTutorial(instrument)) {
+                            Image(instrument)
+                                .renderingMode(.template)
+                                .resizable()
+                                .foregroundStyle(.primary)
+                                .frame(
+                                    width: ViewConstants.sidebarIconSize,
+                                    height: ViewConstants.sidebarIconSize
+                                )
+                            Text(instrument.name)
+                        }
+                        .tag(ContentRoute.rhythmTutorial(instrument))
                     }
                 }
             }

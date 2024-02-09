@@ -11,4 +11,6 @@ enum ViewConstants {
     
     static let horizontalBreakpoint: CGFloat = 600
     static let verticalBreakpoint: CGFloat = 680
+    
+    static let sidebarIconSize: CGFloat = 30
 }
