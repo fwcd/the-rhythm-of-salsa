@@ -3,14 +3,14 @@ import SwiftUI
 struct ContentView: View {
     @State private var route: ContentRoute? = .introduction
     @State private var columnVisibility: NavigationSplitViewVisibility = .detailOnly
-    @State private var rhythmTutorialExpanded: Bool = true
+    @State private var instrumentTutorialExpanded: Bool = true
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $route) {
                 NavigationLink("Introduction", value: ContentRoute.introduction)
                     .tag(ContentRoute.introduction)
-                DisclosureGroup("Rhythm Tutorial", isExpanded: $rhythmTutorialExpanded) {
+                DisclosureGroup("The Instruments", isExpanded: $instrumentTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
                         NavigationLink(value: ContentRoute.rhythmTutorial(instrument)) {
                             Image(instrument)
@@ -32,7 +32,7 @@ struct ContentView: View {
             case .introduction:
                 IntroductionView(route: $route)
             case .rhythmTutorial(let instrument):
-                RhythmTutorialView(instrument: instrument)
+                InstrumentTutorialView(instrument: instrument)
             case nil:
                 EmptyView()
             }

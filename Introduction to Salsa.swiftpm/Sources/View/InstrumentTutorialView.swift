@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct RhythmTutorialView: View {
+struct InstrumentTutorialView: View {
     let instrument: Instrument
     
     var body: some View {
@@ -14,6 +14,6 @@ struct RhythmTutorialView: View {
 }
 
 #Preview {
-    RhythmTutorialView(instrument: .cowbell)
+    InstrumentTutorialView(instrument: .cowbell)
         .preferredColorScheme(.dark)
 }
