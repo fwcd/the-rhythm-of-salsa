@@ -8,23 +8,17 @@ struct RootScreen: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $route) {
-                NavigationLink(value: ContentRoute.introduction) {
-                    Text("Introduction")
-                }
+                NavigationLink("Introduction", value: ContentRoute.introduction)
                 NavigationLink("The Count", value: ContentRoute.countTutorial)
-                DisclosureGroup(isExpanded: $instrumentTutorialExpanded) {
+                DisclosureGroup("The Instruments", isExpanded: $instrumentTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
                         NavigationLink(value: ContentRoute.instrumentTutorial(instrument)) {
                             Text(instrument.name)
                                 .sidebarIcon(Image(instrument))
                         }
                     }
-                } label: {
-                    Text("The Instruments")
                 }
-                NavigationLink(value: ContentRoute.beatSequencer) {
-                    Text("Beat Sequencer")
-                }
+                NavigationLink("Beat Sequencer", value: ContentRoute.beatSequencer)
             }
         } detail: {
             switch route {
