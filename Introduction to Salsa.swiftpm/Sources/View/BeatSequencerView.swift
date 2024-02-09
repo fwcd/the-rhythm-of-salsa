@@ -4,11 +4,19 @@ struct BeatSequencerView: View {
     // TODO: Should we make this a binding? Share the audio state?
     
     let instruments: [Instrument] = Instrument.allCases
+    var beatCount: Int = 8
     
     var body: some View {
-        VStack(spacing: ViewConstants.smallSpace) {
-            ForEach(instruments, id: \.self) { instrument in
-                BeatSequencerTrackView(instrument: instrument)
+        GeometryReader { geometry in
+            let beatSize = min(geometry.size.width, geometry.size.height) / (1.2 * CGFloat(beatCount))
+            VStack(spacing: ViewConstants.smallSpace) {
+                ForEach(instruments, id: \.self) { instrument in
+                    BeatSequencerTrackView(
+                        instrument: instrument,
+                        beatCount: beatCount,
+                        beatSize: beatSize
+                    )
+                }
             }
         }
     }
