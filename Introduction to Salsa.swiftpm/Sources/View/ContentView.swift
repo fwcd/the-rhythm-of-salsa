@@ -12,16 +12,14 @@ struct ContentView: View {
                 DisclosureGroup("The Instruments", isExpanded: $instrumentTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
                         NavigationLink(value: ContentRoute.instrumentTutorial(instrument)) {
-                            Image(instrument)
-                                .sidebarIcon()
                             Text(instrument.name)
+                                .sidebarIcon(Image(instrument))
                         }
                     }
                 }
                 NavigationLink(value: ContentRoute.beatSequencer) {
-                    Image(systemName: "square.grid.3x3.square")
-                        .sidebarIcon()
                     Text("Beat Sequencer")
+                        .sidebarIcon(systemName: "square.grid.3x3.square")
                 }
             }
         } detail: {
