@@ -24,12 +24,12 @@
      inkscape:deskcolor="#3e3e3e"
      inkscape:document-units="mm"
      inkscape:zoom="1.6855798"
-     inkscape:cx="94.922826"
+     inkscape:cx="94.922827"
      inkscape:cy="113.31412"
      inkscape:window-width="1392"
      inkscape:window-height="973"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-x="283"
+     inkscape:window-y="57"
      inkscape:window-maximized="0"
      inkscape:current-layer="g6" />
   <defs
@@ -45,7 +45,8 @@
          id="g6"
          transform="matrix(0.81733889,0,0,0.81733889,-3.7299441,6.3193223)">
         <g
-           id="g7">
+           id="g7"
+           transform="matrix(1.6647855,0,0,1.6647855,-12.290095,-24.023512)">
           <g
              id="g5"
              transform="translate(-23.282951,8.0944165)"
