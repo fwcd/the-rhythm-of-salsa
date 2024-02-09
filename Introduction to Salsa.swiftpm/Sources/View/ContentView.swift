@@ -10,7 +10,6 @@ struct ContentView: View {
             List(selection: $route) {
                 NavigationLink(value: ContentRoute.introduction) {
                     Text("Introduction")
-                        .sidebarIcon(systemName: "house")
                 }
                 DisclosureGroup(isExpanded: $instrumentTutorialExpanded) {
                     ForEach(Instrument.allCases, id: \.self) { instrument in
@@ -21,11 +20,9 @@ struct ContentView: View {
                     }
                 } label: {
                     Text("The Instruments")
-                        .sidebarIcon(systemName: "circle.hexagonpath")
                 }
                 NavigationLink(value: ContentRoute.beatSequencer) {
                     Text("Beat Sequencer")
-                        .sidebarIcon(systemName: "square.grid.3x3.square")
                 }
             }
         } detail: {
