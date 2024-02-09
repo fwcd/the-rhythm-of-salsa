@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+cd "$(dirname $0)/.."
+
+appicongen --ios -o "Introduction to Salsa.swiftpm/Resources/Assets.xcassets/AppIcon.appiconset" Icons/AppIcon.svg
