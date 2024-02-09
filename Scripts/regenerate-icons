@@ -6,5 +6,7 @@ cd "$(dirname $0)/.."
 for path in Icons/*; do
   name="$(basename "$path")"
   stem="${name%%.*}"
-  inkscape -o "Introduction to Salsa.swiftpm/Resources/Assets.xcassets/Icons/$stem.imageset/$stem.pdf" "$path"
+  if [ "$stem" != "AppIcon" ]; then
+    inkscape -o "Introduction to Salsa.swiftpm/Resources/Assets.xcassets/Icons/$stem.imageset/$stem.pdf" "$path"
+  fi
 done
