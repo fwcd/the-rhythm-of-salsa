@@ -3,13 +3,13 @@ import Foundation
 /// A sequencer track holding note events for a certain instrument.
 struct Track: Hashable, Codable, Identifiable {
     var id = UUID()
-    var instrument: Instrument = .clave
+    var instrument: Instrument? = nil
     var length: Beats = 8
     var isLooping: Bool = true
     var offsetEvents: [OffsetEvent] = []
     
     var shortDescription: String {
-        "\(id) (\(instrument), \(length))"
+        "\(id) (\(instrument.map { "\($0)" } ?? "no instrument"), \(length))"
     }
     
     func findEvents(in range: Range<Beats>) -> [OffsetEvent] {

@@ -159,7 +159,7 @@ class BeatSequencerEngine: ObservableObject {
     
     private func sync(sequencerTrack: AVMusicTrack, activeTrack: Track?, with newTrack: Track) {
         if activeTrack?.instrument != newTrack.instrument {
-            sequencerTrack.destinationAudioUnit = samplers[newTrack.instrument]
+            sequencerTrack.destinationAudioUnit = newTrack.instrument.flatMap { samplers[$0] }
         }
         if activeTrack?.length != newTrack.length {
             sequencerTrack.lengthInBeats = AVMusicTimeStamp(newTrack.length.rawValue)

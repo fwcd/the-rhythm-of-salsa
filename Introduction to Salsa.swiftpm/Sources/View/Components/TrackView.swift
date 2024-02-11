@@ -23,17 +23,19 @@ struct TrackView: View {
     var body: some View {
         HStack {
             let imageSize = beatSize * 0.7
-            Image(track.instrument)
-                .resizable()
-                .frame(width: imageSize, height: imageSize)
-                .padding((beatSize - imageSize) / 2)
-                .foregroundStyle(track.instrument.color)
+            let color = track.instrument?.color ?? .primary
+            if let instrument = track.instrument {
+                Image(instrument)
+                    .resizable()
+                    .frame(width: imageSize, height: imageSize)
+                    .padding((beatSize - imageSize) / 2)
+                    .foregroundStyle(color)
+            }
             ForEach(0..<squareCount, id: \.self) { i in
                 let beatIndex = (i / squaresPerBeat) % 4
                 let squareIndex = i % squaresPerBeat
                 let beatRange = (Beats(i) / Beats(squaresPerBeat))..<(Beats(i + 1) / Beats(squaresPerBeat))
                 let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
-                let color = track.instrument.color
                 shape
                     .strokeBorder(
                         beatRange.contains(loopedPlayhead)
