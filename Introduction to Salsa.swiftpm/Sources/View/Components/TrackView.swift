@@ -3,15 +3,15 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
-    let beatSize: CGFloat
-    let squaresPerBeat: Int
+    let padSize: CGFloat
+    let padsPerBeat: Int
     
     private var beatCount: Int {
         Int(track.length.rawValue.rounded(.up))
     }
             
-    private var squareCount: Int {
-        beatCount * squaresPerBeat
+    private var padCount: Int {
+        beatCount * padsPerBeat
     }
     
     private var loopedPlayhead: Beats {
@@ -22,44 +22,35 @@ struct TrackView: View {
     
     var body: some View {
         HStack {
-            let imageSize = beatSize * 0.7
+            let imageSize = padSize * 0.7
             let color = track.instrument?.color ?? .primary
             if let instrument = track.instrument {
                 Image(instrument)
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .padding((beatSize - imageSize) / 2)
+                    .padding((padSize - imageSize) / 2)
                     .foregroundStyle(color)
             }
-            ForEach(0..<squareCount, id: \.self) { i in
-                let beatIndex = (i / squaresPerBeat) % 4
-                let squareIndex = i % squaresPerBeat
-                let beatRange = (Beats(i) / Beats(squaresPerBeat))..<(Beats(i + 1) / Beats(squaresPerBeat))
-                let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
-                shape
-                    .strokeBorder(
-                        beatRange.contains(loopedPlayhead)
-                            ? color
-                            : color.opacity(0.5),
-                        lineWidth: 2
-                    )
-                    .background(shape.foregroundStyle(
+            ForEach(0..<padCount, id: \.self) { i in
+                let beatRange = (Beats(i) / Beats(padsPerBeat))..<(Beats(i + 1) / Beats(padsPerBeat))
+                let padInBeat = i % padsPerBeat
+                let beatInMeasure = (i / padsPerBeat) % 4
+                PadView(
+                    isActive: Binding {
                         !track.findEvents(in: beatRange).isEmpty
-                            ? color
-                            : squareIndex == 0
-                                ? beatIndex == 0
-                                    ? color.opacity(0.2)
-                                    : color.opacity(0.15)
-                                : color.opacity(0.1)
-                    ))
-                    .frame(width: beatSize, height: beatSize)
-                    .onTapGesture {
-                        if track.findEvents(in: beatRange).isEmpty {
-                            track.replaceEvents(in: beatRange, with: Event(duration: 1 / Beats(squaresPerBeat)))
+                    } set: {
+                        if $0 {
+                            track.replaceEvents(in: beatRange, with: Event(duration: 1 / Beats(padsPerBeat)))
                         } else {
                             track.removeEvents(in: beatRange)
                         }
-                    }
+                    },
+                    isPlayed: beatRange.contains(loopedPlayhead),
+                    size: padSize,
+                    color: color,
+                    padInBeat: padInBeat,
+                    beatInMeasure: beatInMeasure
+                )
             }
         }
     }
@@ -69,8 +60,8 @@ struct TrackView: View {
     TrackView(
         track: .constant(.init()),
         playhead: .constant(0),
-        beatSize: 50.0,
-        squaresPerBeat: 1
+        padSize: 50.0,
+        padsPerBeat: 1
     )
     .preferredColorScheme(.dark)
 }
