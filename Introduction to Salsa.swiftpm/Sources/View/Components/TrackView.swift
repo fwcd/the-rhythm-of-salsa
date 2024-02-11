@@ -3,6 +3,7 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
+    let isInteractive: Bool
     let padSize: CGFloat
     let padsPerBeat: Int
     
@@ -46,6 +47,7 @@ struct TrackView: View {
                         }
                     },
                     isPlayed: beatRange.contains(loopedPlayhead),
+                    isPressable: isInteractive,
                     size: padSize,
                     color: color,
                     padInBeat: padInBeat,
@@ -60,6 +62,7 @@ struct TrackView: View {
     TrackView(
         track: .constant(.init()),
         playhead: .constant(0),
+        isInteractive: true,
         padSize: 50.0,
         padsPerBeat: 1
     )

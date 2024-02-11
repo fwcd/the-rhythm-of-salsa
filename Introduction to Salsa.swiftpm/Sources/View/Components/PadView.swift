@@ -3,6 +3,7 @@ import SwiftUI
 struct PadView: View {
     @Binding var isActive: Bool
     let isPlayed: Bool
+    var isPressable: Bool = true
     var size: CGFloat = 64
     var color: Color = .primary
     var padInBeat: Int = 0
@@ -32,6 +33,7 @@ struct PadView: View {
                 .frame(width: size, height: size)
         }
         .buttonStyle(PadViewButtonStyle(isActive: isActive))
+        .disabled(!isPressable)
     }
 }
 
