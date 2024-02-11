@@ -20,7 +20,7 @@ private func configureAVAudioSession() {
 
 class BeatSequencerEngine: ObservableObject {
     private let engine: AVAudioEngine
-    private let sampler: AVAudioUnitSampler
+    private let samplers: [Instrument: AVAudioUnitSampler]
     
     private let sequencer: AVAudioSequencer
     private let sequencerPlaybackRequestorQueue = DispatchQueue(label: "Engine.BeatSequencerEngine.sequencerPlaybackRequestorQueue")
@@ -47,15 +47,24 @@ class BeatSequencerEngine: ObservableObject {
         
         engine = AVAudioEngine()
         
-        sampler = AVAudioUnitSampler()
-        engine.attach(sampler)
-        engine.connect(sampler, to: engine.mainMixerNode, format: nil)
+        var samplers: [Instrument: AVAudioUnitSampler] = [:]
         
-        do {
-            try sampler.loadAudioFiles(at: Instrument.allCases.flatMap { try $0.sampleURLs })
-        } catch {
-            log.error("Could not load sampler audio files: \(error)")
+        for instrument in Instrument.allCases {
+            let sampler = AVAudioUnitSampler()
+            samplers[instrument] = sampler
+            
+            engine.attach(sampler)
+            engine.connect(sampler, to: engine.mainMixerNode, format: nil)
+            
+            do {
+                // TODO: Currently all samples per instrument seem to play simultaneously. It would be nice if we could e.g. map them to different keys. That might require using CAF files instead of WAV, which e.g. would let us set the base note and a range of low-high notes. See https://developer.apple.com/library/archive/documentation/MusicAudio/Reference/CAFSpec/CAF_spec/CAF_spec.html for details.
+                try sampler.loadAudioFiles(at: instrument.sampleURLs)
+            } catch {
+                log.error("Could not load sampler audio files: \(error)")
+            }
         }
+        
+        self.samplers = samplers
         
         do {
             try engine.start()
@@ -79,9 +88,9 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     func playDebugSample() {
-        sampler.startNote(60, withVelocity: 128, onChannel: 0)
+        samplers[.bongos]!.startNote(60, withVelocity: 128, onChannel: 0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.sampler.stopNote(0, onChannel: 0)
+            self.samplers[.bongos]!.stopNote(0, onChannel: 0)
         }
     }
 }
