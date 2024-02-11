@@ -8,7 +8,7 @@ struct BeatSequencerView: View {
         GeometryReader { geometry in
             let beatSize = min(geometry.size.width, geometry.size.height) / (1.2 * CGFloat(beatCount))
             VStack(spacing: ViewConstants.smallSpace) {
-                ForEach(tracks, id: \.self) { track in
+                ForEach(tracks) { track in
                     TrackView(
                         track: track,
                         beatSize: beatSize

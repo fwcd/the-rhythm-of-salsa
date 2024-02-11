@@ -1,5 +1,8 @@
+import Foundation
+
 /// A sequencer track holding note events for a certain instrument.
-struct Track: Hashable, Codable {
+struct Track: Hashable, Codable, Identifiable {
+    var id = UUID()
     var instrument: Instrument = .clave
     var length: Beats = 8
     var offsetEvents: [OffsetEvent] = []
