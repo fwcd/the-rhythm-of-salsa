@@ -3,6 +3,8 @@ import SwiftUI
 struct IntroductionScreen: View {
     @Binding var route: ContentRoute?
     
+    @EnvironmentObject private var engine: BeatSequencerEngine
+    
     var body: some View {
         PageView(
             title: "Introduction to Salsa",
@@ -19,6 +21,11 @@ struct IntroductionScreen: View {
                 route = .countTutorial
             }
             .buttonStyle(BorderedProminentButtonStyle())
+            
+            // DEBUG
+            Button("Press Me") {
+                engine.playDebugSample()
+            }
         }
     }
 }

@@ -77,4 +77,11 @@ class BeatSequencerEngine: ObservableObject {
             }
         }
     }
+    
+    func playDebugSample() {
+        sampler.startNote(60, withVelocity: 128, onChannel: 0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.sampler.stopNote(0, onChannel: 0)
+        }
+    }
 }
