@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RootScreen: View {
     @State private var route: ContentRoute? = .introduction
-    @State private var columnVisibility: NavigationSplitViewVisibility = .detailOnly
+    @State private var columnVisibility: NavigationSplitViewVisibility = .all
     @State private var instrumentTutorialExpanded: Bool = true
     
     var body: some View {
