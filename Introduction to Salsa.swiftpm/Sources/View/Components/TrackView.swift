@@ -29,6 +29,8 @@ struct TrackView: View {
                 .padding((beatSize - imageSize) / 2)
                 .foregroundStyle(track.instrument.color)
             ForEach(0..<squareCount, id: \.self) { i in
+                let beatIndex = (i / squaresPerBeat) % 4
+                let squareIndex = i % squaresPerBeat
                 let beatRange = (Beats(i) / Beats(squaresPerBeat))..<(Beats(i + 1) / Beats(squaresPerBeat))
                 let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
                 let color = track.instrument.color
@@ -42,7 +44,11 @@ struct TrackView: View {
                     .background(shape.foregroundStyle(
                         !track.findEvents(in: beatRange).isEmpty
                             ? color
-                            : color.opacity(0.15)
+                            : squareIndex == 0
+                                ? beatIndex == 0
+                                    ? color.opacity(0.2)
+                                    : color.opacity(0.15)
+                                : color.opacity(0.1)
                     ))
                     .frame(width: beatSize, height: beatSize)
                     .onTapGesture {
