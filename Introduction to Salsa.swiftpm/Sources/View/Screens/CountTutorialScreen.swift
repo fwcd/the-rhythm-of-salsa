@@ -8,7 +8,7 @@ struct CountTutorialScreen: View {
             title: "The Count",
             text: "The basic rhythm of Salsa music is divided into units of 8 beats, or two measures"
         ) {
-            SharedBeatSequencerView(isInteractive: false) { engine in
+        SharedBeatSequencerView(isInteractive: false, padsPerBeat: 1) { engine in
                 engine.model.tracks = [
                     Track(),
                 ]
