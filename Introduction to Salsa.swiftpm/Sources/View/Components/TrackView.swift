@@ -5,6 +5,12 @@ struct TrackView: View {
     @Binding var playhead: Beats
     let beatSize: CGFloat
     
+    private var loopedPlayhead: Beats {
+        track.isLooping
+            ? Beats(playhead.rawValue.truncatingRemainder(dividingBy: track.length.rawValue))
+            : playhead
+    }
+    
     var body: some View {
         HStack {
             let imageSize = beatSize * 0.7
@@ -19,7 +25,7 @@ struct TrackView: View {
                 let color = track.instrument.color
                 shape
                     .strokeBorder(
-                        beatRange.contains(playhead)
+                        beatRange.contains(loopedPlayhead)
                             ? color
                             : color.opacity(0.5),
                         lineWidth: 2
