@@ -10,26 +10,28 @@ struct PadView: View {
     
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
-        shape
-            .strokeBorder(
-                isPlayed
-                    ? color
-                    : color.opacity(0.5),
-                lineWidth: 2
-            )
-            .background(shape.foregroundStyle(
-                isActive
-                    ? color
-                    : padInBeat == 0
-                        ? beatInMeasure == 0
-                            ? color.opacity(0.2)
-                            : color.opacity(0.15)
-                        : color.opacity(0.1)
-            ))
-            .frame(width: size, height: size)
-            .onTapGesture {
-                isActive = !isActive
-            }
+        Button {
+            isActive = !isActive
+        } label: {
+            shape
+                .strokeBorder(
+                    isPlayed
+                        ? color
+                        : color.opacity(0.5),
+                    lineWidth: 2
+                )
+                .background(shape.foregroundStyle(
+                    isActive
+                        ? color
+                        : padInBeat == 0
+                            ? beatInMeasure == 0
+                                ? color.opacity(0.2)
+                                : color.opacity(0.15)
+                            : color.opacity(0.1)
+                ))
+                .frame(width: size, height: size)
+        }
+        .buttonStyle(PadViewButtonStyle(isActive: isActive))
     }
 }
 
