@@ -13,11 +13,12 @@ struct BeatSequencerTrackView: View {
                 .resizable()
                 .frame(width: imageSize, height: imageSize)
                 .padding((beatSize - imageSize) / 2)
+                .foregroundStyle(instrument.color)
             ForEach(0..<beatCount, id: \.self) { i in
                 let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
                 shape
-                    .strokeBorder(activeBeat == i ? Color.primary : .gray, lineWidth: 2)
-                    .background(shape.foregroundStyle(.primary.opacity(0.15)))
+                    .strokeBorder(activeBeat == i ? instrument.color : instrument.color.opacity(0.5), lineWidth: 2)
+                    .background(shape.foregroundStyle(instrument.color.opacity(0.15)))
                     .frame(width: beatSize, height: beatSize)
             }
         }

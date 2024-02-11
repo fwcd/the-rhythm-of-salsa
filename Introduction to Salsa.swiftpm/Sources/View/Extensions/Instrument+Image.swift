@@ -8,6 +8,7 @@ extension Instrument {
 
 extension Image {
     init(_ instrument: Instrument) {
-        self.init(instrument.imageName)
+        self = Self(instrument.imageName)
+            .renderingMode(.template)
     }
 }
