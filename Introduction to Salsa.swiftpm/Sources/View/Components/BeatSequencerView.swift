@@ -2,6 +2,7 @@ import SwiftUI
 
 struct BeatSequencerView: View {
     @Binding var tracks: [Track]
+    @Binding var playhead: Beats
     var beatCount: Int = 8
     
     var body: some View {
@@ -11,6 +12,7 @@ struct BeatSequencerView: View {
                 ForEach($tracks) { $track in
                     TrackView(
                         track: $track,
+                        playhead: $playhead,
                         beatSize: beatSize
                     )
                 }
@@ -21,6 +23,6 @@ struct BeatSequencerView: View {
 }
 
 #Preview {
-    BeatSequencerView(tracks: .constant([Track()]))
+    BeatSequencerView(tracks: .constant([Track()]), playhead: .constant(0))
         .preferredColorScheme(.dark)
 }

@@ -39,6 +39,8 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     @Published var tracks: [Track] = []
+    @Published var playhead: Beats = 0
+    
     private var activeTracks: [Track] = []
     private var sequencerTracks: [UUID: AVMusicTrack] = [:]
     

@@ -4,6 +4,18 @@ struct Beats: Codable, Hashable, RawRepresentable {
     var rawValue: Double
 }
 
+extension Beats {
+    init(_ value: Int) {
+        self.init(rawValue: Double(value))
+    }
+}
+
+extension Beats {
+    init(_ value: Double) {
+        self.init(rawValue: value)
+    }
+}
+
 extension Beats: CustomStringConvertible {
     var description: String {
         if rawValue == 1 {
@@ -18,11 +30,11 @@ extension Beats: AdditiveArithmetic {
     static let zero = Beats(rawValue: 0)
     
     static func +(lhs: Beats, rhs: Beats) -> Beats {
-        Beats(rawValue: lhs.rawValue + rhs.rawValue)
+        Beats(lhs.rawValue + rhs.rawValue)
     }
     
     static func -(lhs: Beats, rhs: Beats) -> Beats {
-        Beats(rawValue: lhs.rawValue - rhs.rawValue)
+        Beats(lhs.rawValue - rhs.rawValue)
     }
 }
 
@@ -38,7 +50,7 @@ extension Beats: Strideable {
     }
     
     func advanced(by n: Double) -> Beats {
-        Beats(rawValue: rawValue + n)
+        Beats(rawValue + n)
     }
 }
 

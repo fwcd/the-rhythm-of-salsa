@@ -2,8 +2,8 @@ import SwiftUI
 
 struct TrackView: View {
     @Binding var track: Track
+    @Binding var playhead: Beats
     let beatSize: CGFloat
-    var activeBeat: Int = 0
     
     var body: some View {
         HStack {
@@ -14,10 +14,11 @@ struct TrackView: View {
                 .padding((beatSize - imageSize) / 2)
                 .foregroundStyle(track.instrument.color)
             ForEach(0..<Int(track.length.rawValue.rounded(.up)), id: \.self) { i in
+                let beatRange = Beats(i)..<Beats(i + 1)
                 let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
                 shape
                     .strokeBorder(
-                        activeBeat == i
+                        beatRange.contains(playhead)
                             ? track.instrument.color
                             : track.instrument.color.opacity(0.5),
                         lineWidth: 2
@@ -30,6 +31,6 @@ struct TrackView: View {
 }
 
 #Preview {
-    TrackView(track: .constant(.init()), beatSize: 50.0)
+    TrackView(track: .constant(.init()), playhead: .constant(0), beatSize: 50.0)
         .preferredColorScheme(.dark)
 }
