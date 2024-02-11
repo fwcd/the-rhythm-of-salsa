@@ -116,13 +116,11 @@ class BeatSequencerEngine: ObservableObject {
         let activeTracksByPreset = Dictionary(grouping: activeModel?.tracks ?? [], by: \.preset)
         let newTracksByPreset = Dictionary(grouping: newTracks, by: \.preset)
         
-        let activePresets = Set(activeTracksByPreset.keys)
-        let newPresets = Set(newTracksByPreset.keys)
-        
-        assert(activePresets == Set(sequencerTracks.keys))
-        
         // Create sequencer tracks for missing presets
-        let missingPresets = newPresets.subtracting(activePresets)
+        
+        let newPresets = Set(newTracksByPreset.keys)
+        let missingPresets = newPresets.subtracting(sequencerTracks.keys)
+        
         for preset in missingPresets {
             let sequencerTrack = sequencer.createAndAppendTrack()
             sequencerTrack.destinationAudioUnit = preset.instrument.flatMap { samplers[$0] }
