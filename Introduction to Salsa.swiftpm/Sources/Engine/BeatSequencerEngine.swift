@@ -38,8 +38,11 @@ class BeatSequencerEngine: ObservableObject {
         }
     }
     
-    // TODO: Set the tracks up dynamically
-    @Published var tracks: [Track] = Instrument.allCases.map { Track(instrument: $0) }
+    @Published var tracks: [Track] = []
+    private var activeTracks: [Track] = []
+    private var sequencerTracks: [UUID: AVMusicTrack] = [:]
+    
+    private var cancellables: Set<AnyCancellable> = []
     
     // Credits go to
     // - https://www.rockhoppertech.com/blog/swift-2-avaudiosequencer/
@@ -83,6 +86,46 @@ class BeatSequencerEngine: ObservableObject {
         } catch {
             log.error("Could not start audio engine: \(error)")
         }
+        
+        $tracks
+            .sink { tracks in
+                self.syncSequencer(with: tracks)
+            }
+            .store(in: &cancellables)
+        
+        // TODO: Set up the tracks dynamically
+        tracks = Instrument.allCases.map { Track(instrument: $0) }
+    }
+    
+    private func syncSequencer(with newTracks: [Track]) {
+        let newById = Dictionary(grouping: newTracks, by: \.id).mapValues { $0[0] }
+        let activeById = Dictionary(grouping: activeTracks, by: \.id).mapValues { $0[0] }
+        
+        let newIds = Set(newById.keys)
+        let activeIds = Set(activeById.keys)
+        
+        let removedIds = activeIds.subtracting(newIds)
+        let addedIds = newIds.subtracting(activeIds)
+        
+        for id in removedIds {
+            let track = activeById[id]!
+            if let sequencerTrack = sequencerTracks[id] {
+                sequencer.removeTrack(sequencerTrack)
+                sequencerTracks[id] = nil
+                log.debug("Removed track \(track.shortDescription) from sequencer")
+            } else {
+                log.warning("Ignoring that the sequencer does not have the to-be-removed track \(String(describing: track)) (this shouldn't happen and probably indicates a bug).")
+            }
+        }
+        
+        for id in addedIds {
+            let track = newById[id]!
+            let sequencerTrack = sequencer.createAndAppendTrack()
+            sequencerTracks[id] = sequencerTrack
+            log.debug("Added track \(track.shortDescription) to sequencer")
+        }
+        
+        activeTracks = newTracks
     }
     
     /// Guarantees playback while the returned object is held.

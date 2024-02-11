@@ -1,5 +1,17 @@
+import Foundation
+
 struct Beats: Codable, Hashable, RawRepresentable {
     var rawValue: Double
+}
+
+extension Beats: CustomStringConvertible {
+    var description: String {
+        if rawValue == 1 {
+            "1 beat"
+        } else {
+            String(format: "%.2f beats", rawValue)
+        }
+    }
 }
 
 extension Beats: AdditiveArithmetic {

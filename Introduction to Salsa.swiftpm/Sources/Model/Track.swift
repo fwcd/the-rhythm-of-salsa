@@ -7,6 +7,10 @@ struct Track: Hashable, Codable, Identifiable {
     var length: Beats = 8
     var offsetEvents: [OffsetEvent] = []
     
+    var shortDescription: String {
+        "\(id) (\(instrument), \(length))"
+    }
+    
     func findEvents(in range: Range<Beats>) -> [OffsetEvent] {
         offsetEvents.filter { event in
             range.overlaps(event.range)
