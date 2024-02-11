@@ -22,18 +22,24 @@ class BeatSequencerEngine: ObservableObject {
     private let engine: AVAudioEngine
     private let samplers: [Instrument: AVAudioUnitSampler]
     
-    private let sequencer: AVAudioSequencer
+    private var sequencer: AVAudioSequencer {
+        willSet {
+            if sequencerPlaybackDependents > 0 {
+                stopSequencer()
+            }
+        }
+        didSet {
+            if sequencerPlaybackDependents > 0 {
+                startSequencer()
+            }
+        }
+    }
     private var sequencerPlaybackDependents: Int = 0 {
         didSet {
             if sequencerPlaybackDependents > 0 {
-                do {
-                    sequencer.prepareToPlay()
-                    try sequencer.start()
-                } catch {
-                    log.error("Could not start the sequencer: \(error)")
-                }
+                startSequencer()
             } else {
-                sequencer.stop()
+                stopSequencer()
             }
         }
     }
@@ -108,6 +114,30 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func syncSequencer(with newModel: BeatSequencerModel) {
+        let newTracksById = Dictionary(uniqueKeysWithValues: newModel.tracks.map { ($0.id, $0) })
+        let activeTracksById = Dictionary(uniqueKeysWithValues: activeModel?.tracks.map { ($0.id, $0) } ?? [])
+        
+        let newTrackIds = Set(newTracksById.keys)
+        let activeTrackIds = Set(activeTracksById.keys)
+        
+        if newTrackIds != activeTrackIds {
+            log.debug("Recreating sequencer...")
+            recreateSequencer(from: newModel)
+        } else {
+            log.debug("Updating sequencer...")
+            for activeTrack in activeModel?.tracks ?? [] {
+                guard let sequencerTrack = sequencerTracks[activeTrack.id] else {
+                    log.error("No sequencer track for active track \(activeTrack.shortDescription), this is very likely a bug!")
+                    continue
+                }
+                guard let newTrack = newTracksById[activeTrack.id] else {
+                    log.error("No new track for active track \(activeTrack.shortDescription), this is very likely a bug!")
+                    continue
+                }
+                sync(sequencerTrack: sequencerTrack, activeTrack: activeTrack, with: newTrack)
+            }
+        }
+        
         if activeModel?.beatsPerMinute != newModel.beatsPerMinute {
             let tempoTrack = sequencer.tempoTrack
             if activeModel != nil {
@@ -115,43 +145,19 @@ class BeatSequencerEngine: ObservableObject {
             }
             tempoTrack.addEvent(AVExtendedTempoEvent(tempo: newModel.beatsPerMinute), at: 0)
         }
-        
-        let newById = Dictionary(grouping: newModel.tracks, by: \.id).mapValues { $0[0] }
-        let activeById = Dictionary(grouping: activeModel?.tracks ?? [], by: \.id).mapValues { $0[0] }
-        
-        let newIds = Set(newById.keys)
-        let activeIds = Set(activeById.keys)
-        
-        let removedIds = activeIds.subtracting(newIds)
-        let addedIds = newIds.subtracting(activeIds)
-        
-        for id in removedIds {
-            let track = activeById[id]!
-            if let sequencerTrack = sequencerTracks[id] {
-                sequencer.removeTrack(sequencerTrack)
-                sequencerTracks[id] = nil
-                log.debug("Removed track \(track.shortDescription) from sequencer")
-            } else {
-                log.warning("Ignoring that the sequencer does not have the to-be-removed track \(track.shortDescription) (this shouldn't happen and probably indicates a bug).")
-            }
-        }
-        
-        for id in addedIds {
-            let track = newById[id]!
-            let sequencerTrack = sequencer.createAndAppendTrack()
-            sequencerTracks[id] = sequencerTrack
-            log.debug("Added track \(track.shortDescription) to sequencer")
-        }
+       
+        activeModel = newModel
+    }
+    
+    private func recreateSequencer(from newModel: BeatSequencerModel) {
+        sequencerTracks = [:]
+        sequencer = AVAudioSequencer(audioEngine: engine)
         
         for newTrack in newModel.tracks {
-            if let sequencerTrack = sequencerTracks[newTrack.id] {
-                sync(sequencerTrack: sequencerTrack, activeTrack: activeById[newTrack.id], with: newTrack)
-            } else {
-                log.warning("Could not find sequencer track for \(newTrack.shortDescription), this is very likely a bug!")
-            }
+            let sequencerTrack = sequencer.createAndAppendTrack()
+            sequencerTracks[newTrack.id] = sequencerTrack
+            sync(sequencerTrack: sequencerTrack, activeTrack: nil, with: newTrack)
         }
-        
-        activeModel = newModel
     }
     
     private func sync(sequencerTrack: AVMusicTrack, activeTrack: Track?, with newTrack: Track) {
@@ -184,5 +190,18 @@ class BeatSequencerEngine: ObservableObject {
     
     func decrementPlaybackDependents() {
         sequencerPlaybackDependents -= 1
+    }
+    
+    func startSequencer() {
+        do {
+            sequencer.prepareToPlay()
+            try sequencer.start()
+        } catch {
+            log.error("Could not start the sequencer: \(error)")
+        }
+    }
+    
+    func stopSequencer() {
+        sequencer.stop()
     }
 }
