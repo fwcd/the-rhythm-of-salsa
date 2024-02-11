@@ -93,9 +93,6 @@ class BeatSequencerEngine: ObservableObject {
             .store(in: &cancellables)
         syncSequencer(with: model)
         
-        // TODO: Set up the tracks dynamically
-        model.tracks = Instrument.allCases.map { Track(instrument: $0) }
-        
         // Repeatedly poll the actual playhead position
         // TODO: Make the polling frequency dependent on the BPM
         Timer.publish(every: 0.1, on: .main, in: .default)
