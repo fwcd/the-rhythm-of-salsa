@@ -31,7 +31,11 @@ struct TrackView: View {
                     ))
                     .frame(width: beatSize, height: beatSize)
                     .onTapGesture {
-                        track.replaceEvents(in: beatRange, with: Event())
+                        if track.findEvents(in: beatRange).isEmpty {
+                            track.replaceEvents(in: beatRange, with: Event())
+                        } else {
+                            track.removeEvents(in: beatRange)
+                        }
                     }
             }
         }
