@@ -1,11 +1,11 @@
 /// A MIDI-style note event.
 struct Event: Codable, Hashable {
     /// The MIDI channel.
-    var channel: UInt8 = 0
+    var channel: UInt32 = 0
     /// The MIDI key.
-    var note: UInt8 = 60
+    var key: UInt32 = 60
     /// The MIDI velocity.
-    var velocity: UInt8 = 128
+    var velocity: UInt32 = 128
     /// The duration of the event in beats.
     var duration: Beats = 1
 }
