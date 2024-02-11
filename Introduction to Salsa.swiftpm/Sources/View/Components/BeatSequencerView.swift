@@ -21,7 +21,7 @@ struct BeatSequencerView: View {
                         playhead: $playhead,
                         isInteractive: isInteractive,
                         padSize: beatSize,
-                        padsPerBeat: 2
+                        padsPerBeat: padsPerBeat
                     )
                 }
             }
