@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SharedBeatSequencerView: View {
-    var isInteractive: Bool = true
+    var isInteractive: Bool = BeatSequencerDefaults.isInteractive
     var updater: (BeatSequencerEngine) -> Void = { _ in }
     
     @EnvironmentObject private var engine: BeatSequencerEngine

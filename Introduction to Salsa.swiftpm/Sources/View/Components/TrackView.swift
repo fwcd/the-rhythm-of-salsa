@@ -3,9 +3,9 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
-    let isInteractive: Bool
-    let padSize: CGFloat
-    let padsPerBeat: Int
+    var isInteractive: Bool = BeatSequencerDefaults.isInteractive
+    var padSize: CGFloat = BeatSequencerDefaults.padSize
+    var padsPerBeat: Int = BeatSequencerDefaults.padsPerBeat
     
     private var beatCount: Int {
         Int(track.length.rawValue.rounded(.up))
@@ -61,10 +61,7 @@ struct TrackView: View {
 #Preview {
     TrackView(
         track: .constant(.init()),
-        playhead: .constant(0),
-        isInteractive: true,
-        padSize: 50.0,
-        padsPerBeat: 1
+        playhead: .constant(0)
     )
     .preferredColorScheme(.dark)
 }

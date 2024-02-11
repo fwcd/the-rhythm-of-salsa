@@ -3,8 +3,8 @@ import SwiftUI
 struct PadView: View {
     @Binding var isActive: Bool
     let isPlayed: Bool
-    var isPressable: Bool = true
-    var size: CGFloat = 64
+    var isPressable: Bool = BeatSequencerDefaults.isInteractive
+    var size: CGFloat = BeatSequencerDefaults.padSize
     var color: Color = .primary
     var padInBeat: Int = 0
     var beatInMeasure: Int = 0

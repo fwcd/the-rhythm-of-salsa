@@ -3,9 +3,9 @@ import SwiftUI
 struct BeatSequencerView: View {
     @Binding var model: BeatSequencerModel
     @Binding var playhead: Beats
-    var isInteractive: Bool = true
-    var beatCount: Int = 8
-    var padsPerBeat: Int = 2
+    var isInteractive: Bool = BeatSequencerDefaults.isInteractive
+    var beatCount: Int = BeatSequencerDefaults.beatCount
+    var padsPerBeat: Int = BeatSequencerDefaults.padsPerBeat
     
     var padCount: Int {
         beatCount * padsPerBeat
