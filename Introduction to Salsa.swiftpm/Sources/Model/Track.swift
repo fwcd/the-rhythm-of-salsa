@@ -1,6 +1,7 @@
 /// A sequencer track holding note events for a certain instrument.
 struct Track: Hashable, Codable {
     var instrument: Instrument = .clave
+    var length: Beats = 8
     var offsetEvents: [OffsetEvent] = []
     
     func findEvents(in range: Range<Beats>) -> [OffsetEvent] {

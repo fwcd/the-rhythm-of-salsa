@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BeatSequencerScreen: View {
     var body: some View {
-        BeatSequencerView()
+        SharedBeatSequencerView()
             .navigationTitle("Beat Sequencer")
     }
 }

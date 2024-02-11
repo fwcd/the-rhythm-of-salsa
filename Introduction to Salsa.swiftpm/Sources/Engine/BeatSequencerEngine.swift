@@ -38,6 +38,9 @@ class BeatSequencerEngine: ObservableObject {
         }
     }
     
+    // TODO: Set the tracks up dynamically
+    @Published var tracks: [Track] = Instrument.allCases.map { Track(instrument: $0) }
+    
     // Credits go to
     // - https://www.rockhoppertech.com/blog/swift-2-avaudiosequencer/
     // - https://www.rockhoppertech.com/blog/the-great-avaudiounitsampler-workout/

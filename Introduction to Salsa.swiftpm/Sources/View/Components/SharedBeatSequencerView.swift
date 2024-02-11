@@ -4,6 +4,6 @@ struct SharedBeatSequencerView: View {
     @EnvironmentObject private var engine: BeatSequencerEngine
     
     var body: some View {
-        BeatSequencerView()
+        BeatSequencerView(tracks: engine.tracks)
     }
 }
