@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct BeatSequencerView: View {
-    @Binding var tracks: [Track]
+    @Binding var model: BeatSequencerModel
     @Binding var playhead: Beats
     var beatCount: Int = 8
     
@@ -9,7 +9,7 @@ struct BeatSequencerView: View {
         GeometryReader { geometry in
             let beatSize = min(geometry.size.width, geometry.size.height) / (1.2 * CGFloat(beatCount))
             VStack(spacing: ViewConstants.smallSpace) {
-                ForEach($tracks) { $track in
+                ForEach($model.tracks) { $track in
                     TrackView(
                         track: $track,
                         playhead: $playhead,
@@ -23,6 +23,6 @@ struct BeatSequencerView: View {
 }
 
 #Preview {
-    BeatSequencerView(tracks: .constant([Track()]), playhead: .constant(0))
+    BeatSequencerView(model: .constant(.init(tracks: [Track()])), playhead: .constant(0))
         .preferredColorScheme(.dark)
 }

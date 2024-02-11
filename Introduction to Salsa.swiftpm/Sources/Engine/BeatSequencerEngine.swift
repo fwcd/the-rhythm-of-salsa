@@ -38,9 +38,9 @@ class BeatSequencerEngine: ObservableObject {
         }
     }
     
-    @Published var tracks: [Track] = []
+    @Published var model: BeatSequencerModel = .init()
     @Published var playhead: Beats = 0
-    private var activeTracks: [Track] = []
+    private var activeModel: BeatSequencerModel? = nil
     private var sequencerTracks: [UUID: AVMusicTrack] = [:]
     
     private var cancellables: Set<AnyCancellable> = []
@@ -85,14 +85,16 @@ class BeatSequencerEngine: ObservableObject {
             log.error("Could not start audio engine: \(error)")
         }
         
-        $tracks
-            .sink { tracks in
-                self.syncSequencer(with: tracks)
+        // Set up model-sequencer synchronization
+        $model
+            .sink { newModel in
+                self.syncSequencer(with: newModel)
             }
             .store(in: &cancellables)
+        syncSequencer(with: model)
         
         // TODO: Set up the tracks dynamically
-        tracks = Instrument.allCases.map { Track(instrument: $0) }
+        model.tracks = Instrument.allCases.map { Track(instrument: $0) }
         
         // Repeatedly poll the actual playhead position
         Timer.publish(every: 0.5, on: .main, in: .default)
@@ -107,9 +109,17 @@ class BeatSequencerEngine: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func syncSequencer(with newTracks: [Track]) {
-        let newById = Dictionary(grouping: newTracks, by: \.id).mapValues { $0[0] }
-        let activeById = Dictionary(grouping: activeTracks, by: \.id).mapValues { $0[0] }
+    private func syncSequencer(with newModel: BeatSequencerModel) {
+        if activeModel?.beatsPerMinute != newModel.beatsPerMinute {
+            let tempoTrack = sequencer.tempoTrack
+            if activeModel != nil {
+                tempoTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
+            }
+            tempoTrack.addEvent(AVExtendedTempoEvent(tempo: newModel.beatsPerMinute), at: 0)
+        }
+        
+        let newById = Dictionary(grouping: newModel.tracks, by: \.id).mapValues { $0[0] }
+        let activeById = Dictionary(grouping: activeModel?.tracks ?? [], by: \.id).mapValues { $0[0] }
         
         let newIds = Set(newById.keys)
         let activeIds = Set(activeById.keys)
@@ -135,29 +145,29 @@ class BeatSequencerEngine: ObservableObject {
             log.debug("Added track \(track.shortDescription) to sequencer")
         }
         
-        for newTrack in newTracks {
+        for newTrack in newModel.tracks {
             if let sequencerTrack = sequencerTracks[newTrack.id] {
-                sync(sequencerTrack: sequencerTrack, track: activeById[newTrack.id], with: newTrack)
+                sync(sequencerTrack: sequencerTrack, activeTrack: activeById[newTrack.id], with: newTrack)
             } else {
                 log.warning("Could not find sequencer track for \(newTrack.shortDescription), this is very likely a bug!")
             }
         }
         
-        activeTracks = newTracks
+        activeModel = newModel
     }
     
-    private func sync(sequencerTrack: AVMusicTrack, track: Track?, with newTrack: Track) {
-        if track?.instrument != newTrack.instrument {
+    private func sync(sequencerTrack: AVMusicTrack, activeTrack: Track?, with newTrack: Track) {
+        if activeTrack?.instrument != newTrack.instrument {
             sequencerTrack.destinationAudioUnit = samplers[newTrack.instrument]
         }
-        if track?.length != newTrack.length {
+        if activeTrack?.length != newTrack.length {
             sequencerTrack.lengthInBeats = AVMusicTimeStamp(newTrack.length.rawValue)
         }
-        if track?.isLooping != newTrack.isLooping {
+        if activeTrack?.isLooping != newTrack.isLooping {
             sequencerTrack.isLoopingEnabled = newTrack.isLooping
         }
-        if track?.offsetEvents != newTrack.offsetEvents {
-            if (track?.offsetEvents.count ?? 0) > 0 {
+        if activeTrack?.offsetEvents != newTrack.offsetEvents {
+            if (activeTrack?.offsetEvents.count ?? 0) > 0 {
                 // TODO: Check whether this is the right range
                 sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
             }

@@ -5,7 +5,7 @@ struct SharedBeatSequencerView: View {
     
     var body: some View {
         BeatSequencerView(
-            tracks: $engine.tracks,
+            model: $engine.model,
             playhead: $engine.playhead
         )
         .onAppear {
