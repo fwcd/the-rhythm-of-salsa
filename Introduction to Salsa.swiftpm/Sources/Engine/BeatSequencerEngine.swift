@@ -25,18 +25,14 @@ class BeatSequencerEngine: ObservableObject {
     private var sequencer: AVAudioSequencer
     private var sequencerPlaybackDependents: Int = 0 {
         didSet {
-            if sequencerPlaybackDependents > 0 && !(activeModel?.tracks.isEmpty ?? true) {
-                startSequencer()
-            } else {
-                stopSequencer()
-            }
+            updateSequencerPlayState()
         }
     }
     
     @Published var model: BeatSequencerModel = .init()
     @Published var playhead: Beats = 0
     private var activeModel: BeatSequencerModel? = nil
-    private var sequencerTracks: [UUID: AVMusicTrack] = [:]
+    private var sequencerTracks: [TrackPreset: AVMusicTrack] = [:]
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -48,6 +44,7 @@ class BeatSequencerEngine: ObservableObject {
         configureAVAudioSession()
         
         engine = AVAudioEngine()
+        sequencer = AVAudioSequencer(audioEngine: engine)
         
         var samplers: [Instrument: AVAudioUnitSampler] = [:]
         
@@ -72,8 +69,6 @@ class BeatSequencerEngine: ObservableObject {
         
         self.samplers = samplers
         
-        sequencer = AVAudioSequencer(audioEngine: engine)
-        
         do {
             try engine.start()
         } catch {
@@ -84,6 +79,7 @@ class BeatSequencerEngine: ObservableObject {
         $model
             .sink { newModel in
                 self.syncSequencer(with: newModel)
+                self.updateSequencerPlayState()
             }
             .store(in: &cancellables)
         syncSequencer(with: model)
@@ -103,29 +99,7 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func syncSequencer(with newModel: BeatSequencerModel) {
-        let newTracksById = Dictionary(uniqueKeysWithValues: newModel.tracks.map { ($0.id, $0) })
-        let activeTracksById = Dictionary(uniqueKeysWithValues: activeModel?.tracks.map { ($0.id, $0) } ?? [])
-        
-        let newTrackIds = Set(newTracksById.keys)
-        let activeTrackIds = Set(activeTracksById.keys)
-        
-        if newTrackIds != activeTrackIds {
-            log.debug("Recreating sequencer...")
-            recreateSequencer(from: newModel)
-        } else {
-            log.debug("Updating sequencer...")
-            for activeTrack in activeModel?.tracks ?? [] {
-                guard let sequencerTrack = sequencerTracks[activeTrack.id] else {
-                    log.error("No sequencer track for active track \(activeTrack.shortDescription), this is very likely a bug!")
-                    continue
-                }
-                guard let newTrack = newTracksById[activeTrack.id] else {
-                    log.error("No new track for active track \(activeTrack.shortDescription), this is very likely a bug!")
-                    continue
-                }
-                sync(sequencerTrack: sequencerTrack, activeTrack: activeTrack, with: newTrack)
-            }
-        }
+        syncSequencerTracks(with: newModel.tracks)
         
         if activeModel?.beatsPerMinute != newModel.beatsPerMinute {
             let tempoTrack = sequencer.tempoTrack
@@ -138,41 +112,42 @@ class BeatSequencerEngine: ObservableObject {
         activeModel = newModel
     }
     
-    private func recreateSequencer(from newModel: BeatSequencerModel) {
-        if sequencerPlaybackDependents > 0 && !(activeModel?.tracks.isEmpty ?? true) {
-            stopSequencer()
-        }
+    private func syncSequencerTracks(with newTracks: [Track]) {
+        let activeTracksByPreset = Dictionary(grouping: activeModel?.tracks ?? [], by: \.preset)
+        let newTracksByPreset = Dictionary(grouping: newTracks, by: \.preset)
         
-        sequencerTracks = [:]
-        activeModel = nil
-        sequencer = AVAudioSequencer(audioEngine: engine)
+        let activePresets = Set(activeTracksByPreset.keys)
+        let newPresets = Set(newTracksByPreset.keys)
         
-        for newTrack in newModel.tracks {
+        assert(activePresets == Set(sequencerTracks.keys))
+        
+        // Create sequencer tracks for missing presets
+        let missingPresets = newPresets.subtracting(activePresets)
+        for preset in missingPresets {
             let sequencerTrack = sequencer.createAndAppendTrack()
-            sequencerTracks[newTrack.id] = sequencerTrack
-            sync(sequencerTrack: sequencerTrack, activeTrack: nil, with: newTrack)
+            sequencerTrack.destinationAudioUnit = preset.instrument.flatMap { samplers[$0] }
+            sequencerTrack.lengthInBeats = AVMusicTimeStamp(preset.length.rawValue)
+            sequencerTrack.isLoopingEnabled = preset.isLooping
+            sequencerTracks[preset] = sequencerTrack
         }
         
-        if sequencerPlaybackDependents > 0 && !newModel.tracks.isEmpty {
-            startSequencer()
+        // Sync each sequencer track, keyed by preset
+        for (preset, sequencerTrack) in sequencerTracks {
+            let activeTracks = activeTracksByPreset[preset] ?? []
+            let newTracks = newTracksByPreset[preset] ?? []
+            sync(sequencerTrack: sequencerTrack, activeTracks: activeTracks, with: newTracks)
         }
     }
     
-    private func sync(sequencerTrack: AVMusicTrack, activeTrack: Track?, with newTrack: Track) {
-        if activeTrack?.instrument != newTrack.instrument {
-            sequencerTrack.destinationAudioUnit = newTrack.instrument.flatMap { samplers[$0] }
+    private func sync(sequencerTrack: AVMusicTrack, activeTracks: [Track], with newTracks: [Track]) {
+        guard activeTracks != newTracks else { return }
+        
+        if !activeTracks.flatMap(\.offsetEvents).isEmpty {
+            // TODO: Check whether this is the right range
+            sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
         }
-        if activeTrack?.length != newTrack.length {
-            sequencerTrack.lengthInBeats = AVMusicTimeStamp(newTrack.length.rawValue)
-        }
-        if activeTrack?.isLooping != newTrack.isLooping {
-            sequencerTrack.isLoopingEnabled = newTrack.isLooping
-        }
-        if activeTrack?.offsetEvents != newTrack.offsetEvents {
-            if (activeTrack?.offsetEvents.count ?? 0) > 0 {
-                // TODO: Check whether this is the right range
-                sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
-            }
+        
+        for newTrack in newTracks {
             for offsetEvent in newTrack.offsetEvents {
                 sequencerTrack.addEvent(
                     AVMIDINoteEvent(offsetEvent.event),
@@ -190,7 +165,16 @@ class BeatSequencerEngine: ObservableObject {
         sequencerPlaybackDependents -= 1
     }
     
-    func startSequencer() {
+    private func updateSequencerPlayState() {
+        if sequencerPlaybackDependents > 0 && !(activeModel?.tracks.isEmpty ?? true) {
+            startSequencer()
+        } else {
+            stopSequencer()
+        }
+    }
+    
+    private func startSequencer() {
+        guard !sequencer.isPlaying else { return }
         do {
             sequencer.prepareToPlay()
             try sequencer.start()
@@ -199,7 +183,8 @@ class BeatSequencerEngine: ObservableObject {
         }
     }
     
-    func stopSequencer() {
+    private func stopSequencer() {
+        guard sequencer.isPlaying else { return }
         sequencer.stop()
     }
 }
