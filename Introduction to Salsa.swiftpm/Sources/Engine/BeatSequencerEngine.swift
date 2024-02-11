@@ -144,6 +144,7 @@ class BeatSequencerEngine: ObservableObject {
         }
         
         sequencerTracks = [:]
+        activeModel = nil
         sequencer = AVAudioSequencer(audioEngine: engine)
         
         for newTrack in newModel.tracks {
