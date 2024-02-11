@@ -8,5 +8,11 @@ struct SharedBeatSequencerView: View {
             tracks: $engine.tracks,
             playhead: $engine.playhead
         )
+        .onAppear {
+            engine.incrementPlaybackDependents()
+        }
+        .onDisappear {
+            engine.decrementPlaybackDependents()
+        }
     }
 }

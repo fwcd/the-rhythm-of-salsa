@@ -23,11 +23,11 @@ class BeatSequencerEngine: ObservableObject {
     private let samplers: [Instrument: AVAudioUnitSampler]
     
     private let sequencer: AVAudioSequencer
-    private let sequencerPlaybackRequestorQueue = DispatchQueue(label: "Engine.BeatSequencerEngine.sequencerPlaybackRequestorQueue")
-    private var sequencerPlaybackRequestors: Int = 0 {
+    private var sequencerPlaybackDependents: Int = 0 {
         didSet {
-            if sequencerPlaybackRequestors > 0 {
+            if sequencerPlaybackDependents > 0 {
                 do {
+                    sequencer.prepareToPlay()
                     try sequencer.start()
                 } catch {
                     log.error("Could not start the sequencer: \(error)")
@@ -78,7 +78,6 @@ class BeatSequencerEngine: ObservableObject {
         self.samplers = samplers
         
         sequencer = AVAudioSequencer(audioEngine: engine)
-        sequencer.prepareToPlay()
         
         do {
             try engine.start()
@@ -139,15 +138,11 @@ class BeatSequencerEngine: ObservableObject {
         activeTracks = newTracks
     }
     
-    /// Guarantees playback while the returned object is held.
-    func requestPlayback() -> Guard {
-        sequencerPlaybackRequestorQueue.sync {
-            sequencerPlaybackRequestors += 1
-        }
-        return Guard {
-            self.sequencerPlaybackRequestorQueue.async {
-                self.sequencerPlaybackRequestors -= 1
-            }
-        }
+    func incrementPlaybackDependents() {
+        sequencerPlaybackDependents += 1
+    }
+    
+    func decrementPlaybackDependents() {
+        sequencerPlaybackDependents -= 1
     }
 }
