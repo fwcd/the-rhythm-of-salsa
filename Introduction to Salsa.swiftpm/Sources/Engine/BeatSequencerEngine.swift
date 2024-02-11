@@ -77,8 +77,6 @@ class BeatSequencerEngine: ObservableObject {
         self.samplers = samplers
         
         sequencer = AVAudioSequencer(audioEngine: engine)
-        let track = sequencer.createAndAppendTrack()
-        track.destinationAudioUnit = samplers[.congas]
         sequencer.prepareToPlay()
         
         do {
@@ -137,17 +135,6 @@ class BeatSequencerEngine: ObservableObject {
             self.sequencerPlaybackRequestorQueue.async {
                 self.sequencerPlaybackRequestors -= 1
             }
-        }
-    }
-    
-    func playDebugSample() {
-        let track = sequencer.tracks[0]
-        track.addEvent(AVMIDINoteEvent(channel: 0, key: 60, velocity: 128, duration: 1), at: 0)
-        
-        do {
-            try sequencer.start()
-        } catch {
-            log.error("Could not start sequencer: \(error)")
         }
     }
 }

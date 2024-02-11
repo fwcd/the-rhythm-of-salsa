@@ -21,11 +21,6 @@ struct IntroductionScreen: View {
                 route = .countTutorial
             }
             .buttonStyle(BorderedProminentButtonStyle())
-            
-            // DEBUG
-            Button("Press Me") {
-                engine.playDebugSample()
-            }
         }
     }
 }
