@@ -3,11 +3,10 @@ import SwiftUI
 struct PadView: View {
     @Binding var isActive: Bool
     let isPlayed: Bool
-    var isPressable: Bool = BeatSequencerDefaults.isInteractive
-    var size: CGFloat = BeatSequencerDefaults.padSize
     var color: Color = .primary
-    var padInBeat: Int = 0
     var beatInMeasure: Int = 0
+    var padInBeat: Int = 0
+    var options: PadOptions = .init()
     
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
@@ -30,10 +29,10 @@ struct PadView: View {
                                 : color.opacity(0.15)
                             : color.opacity(0.1)
                 ))
-                .frame(width: size, height: size)
+                .frame(width: options.size, height: options.size)
         }
         .buttonStyle(PadViewButtonStyle(isActive: isActive))
-        .disabled(!isPressable)
+        .disabled(!options.isPressable)
     }
 }
 

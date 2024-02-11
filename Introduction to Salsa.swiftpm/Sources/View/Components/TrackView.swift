@@ -3,7 +3,7 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
-    var options: BeatSequencerOptions = .init()
+    var options: TrackOptions = .init()
     
     private var beatCount: Int {
         Int(track.length.rawValue.rounded(.up))
@@ -17,13 +17,13 @@ struct TrackView: View {
     
     var body: some View {
         HStack {
-            let imageSize = options.padSize * 0.7
+            let imageSize = options.pads.size * 0.7
             let color = track.instrument?.color ?? .primary
             if let instrument = track.instrument {
                 Image(instrument)
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .padding((options.padSize - imageSize) / 2)
+                    .padding((options.pads.size - imageSize) / 2)
                     .foregroundStyle(color)
             }
             ForEach(0..<options.padCount, id: \.self) { i in
@@ -41,11 +41,10 @@ struct TrackView: View {
                         }
                     },
                     isPlayed: beatRange.contains(loopedPlayhead),
-                    isPressable: options.isInteractive,
-                    size: options.padSize,
                     color: color,
+                    beatInMeasure: beatInMeasure,
                     padInBeat: padInBeat,
-                    beatInMeasure: beatInMeasure
+                    options: options.pads
                 )
             }
         }
