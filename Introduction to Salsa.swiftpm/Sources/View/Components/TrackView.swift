@@ -16,15 +16,23 @@ struct TrackView: View {
             ForEach(0..<Int(track.length.rawValue.rounded(.up)), id: \.self) { i in
                 let beatRange = Beats(i)..<Beats(i + 1)
                 let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
+                let color = track.instrument.color
                 shape
                     .strokeBorder(
                         beatRange.contains(playhead)
-                            ? track.instrument.color
-                            : track.instrument.color.opacity(0.5),
+                            ? color
+                            : color.opacity(0.5),
                         lineWidth: 2
                     )
-                    .background(shape.foregroundStyle(track.instrument.color.opacity(0.15)))
+                    .background(shape.foregroundStyle(
+                        !track.findEvents(in: beatRange).isEmpty
+                            ? color
+                            : color.opacity(0.15)
+                    ))
                     .frame(width: beatSize, height: beatSize)
+                    .onTapGesture {
+                        track.replaceEvents(in: beatRange, with: Event())
+                    }
             }
         }
     }

@@ -23,4 +23,9 @@ struct Track: Hashable, Codable, Identifiable {
             range.overlaps(event.range)
         }
     }
+    
+    mutating func replaceEvents(in range: Range<Beats>, with event: Event) {
+        removeEvents(in: range)
+        offsetEvents.append(.init(event: event, startOffset: range.lowerBound))
+    }
 }
