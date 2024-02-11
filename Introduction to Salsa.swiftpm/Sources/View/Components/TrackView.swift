@@ -3,6 +3,7 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
+    var padSize: CGFloat = 64
     var options: TrackOptions = .init()
     
     private var beatCount: Int {
@@ -17,13 +18,13 @@ struct TrackView: View {
     
     var body: some View {
         HStack {
-            let imageSize = options.pads.size * 0.7
+            let imageSize = padSize * 0.7
             let color = track.instrument?.color ?? .primary
             if let instrument = track.instrument {
                 Image(instrument)
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .padding((options.pads.size - imageSize) / 2)
+                    .padding((padSize - imageSize) / 2)
                     .foregroundStyle(color)
             }
             ForEach(0..<options.padCount, id: \.self) { i in
@@ -42,6 +43,7 @@ struct TrackView: View {
                     },
                     isPlayed: beatRange.contains(loopedPlayhead),
                     color: color,
+                    size: padSize,
                     beatInMeasure: beatInMeasure,
                     padInBeat: padInBeat,
                     options: options.pads
@@ -54,7 +56,8 @@ struct TrackView: View {
 #Preview {
     TrackView(
         track: .constant(.init()),
-        playhead: .constant(0)
+        playhead: .constant(0),
+        padSize: 48
     )
     .preferredColorScheme(.dark)
 }

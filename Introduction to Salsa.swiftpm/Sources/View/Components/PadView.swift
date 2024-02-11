@@ -4,6 +4,7 @@ struct PadView: View {
     @Binding var isActive: Bool
     let isPlayed: Bool
     var color: Color = .primary
+    var size: CGFloat = 64
     var beatInMeasure: Int = 0
     var padInBeat: Int = 0
     var options: PadOptions = .init()
@@ -29,7 +30,7 @@ struct PadView: View {
                                 : color.opacity(0.15)
                             : color.opacity(0.1)
                 ))
-                .frame(width: options.size, height: options.size)
+                .frame(width: size, height: size)
         }
         .buttonStyle(PadViewButtonStyle(isActive: isActive))
         .disabled(!options.isPressable)

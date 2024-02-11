@@ -7,12 +7,13 @@ struct BeatSequencerView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            let beatSize = min(geometry.size.width, geometry.size.height) / (1.2 * CGFloat(options.tracks.padCount))
+            let padSize = min(geometry.size.width, geometry.size.height) / (1.2 * CGFloat(options.tracks.padCount))
             VStack(spacing: ViewConstants.smallSpace) {
                 ForEach($model.tracks) { $track in
                     TrackView(
                         track: $track,
                         playhead: $playhead,
+                        padSize: padSize,
                         options: options.tracks
                     )
                 }
