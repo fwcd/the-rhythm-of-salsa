@@ -56,23 +56,30 @@ class BeatSequencerEngine: ObservableObject {
             engine.attach(sampler)
             engine.connect(sampler, to: engine.mainMixerNode, format: nil)
             
-            do {
-                // TODO: Currently all samples per instrument seem to play simultaneously. It would be nice if we could e.g. map them to different keys. That might require using CAF files instead of WAV, which e.g. would let us set the base note and a range of low-high notes. See https://developer.apple.com/library/archive/documentation/MusicAudio/Reference/CAFSpec/CAF_spec/CAF_spec.html for details.
-                try sampler.loadAudioFiles(at: instrument.sampleURLs)
-            } catch {
-                log.error("Could not load sampler audio files: \(error)")
+            if !instrument.sampleNames.isEmpty {
+                do {
+                    // TODO: Currently all samples per instrument seem to play simultaneously. It would be nice if we could e.g. map them to different keys. That might require using CAF files instead of WAV, which e.g. would let us set the base note and a range of low-high notes. See https://developer.apple.com/library/archive/documentation/MusicAudio/Reference/CAFSpec/CAF_spec/CAF_spec.html for details.
+                    try sampler.loadAudioFiles(at: instrument.sampleURLs)
+                } catch {
+                    log.error("Could not load audio file(s) for \(instrument) sampler: \(error)")
+                }
+            } else {
+                log.warning("Sampler for \(instrument) has no audio files!")
             }
         }
         
         self.samplers = samplers
+        
+        sequencer = AVAudioSequencer(audioEngine: engine)
+        let track = sequencer.createAndAppendTrack()
+        track.destinationAudioUnit = samplers[.congas]
+        sequencer.prepareToPlay()
         
         do {
             try engine.start()
         } catch {
             log.error("Could not start audio engine: \(error)")
         }
-        
-        sequencer = AVAudioSequencer(audioEngine: engine)
     }
     
     /// Guarantees playback while the returned object is held.
@@ -88,9 +95,13 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     func playDebugSample() {
-        samplers[.bongos]!.startNote(60, withVelocity: 128, onChannel: 0)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.samplers[.bongos]!.stopNote(0, onChannel: 0)
+        let track = sequencer.tracks[0]
+        track.addEvent(AVMIDINoteEvent(channel: 0, key: 60, velocity: 128, duration: 1), at: 0)
+        
+        do {
+            try sequencer.start()
+        } catch {
+            log.error("Could not start sequencer: \(error)")
         }
     }
 }
