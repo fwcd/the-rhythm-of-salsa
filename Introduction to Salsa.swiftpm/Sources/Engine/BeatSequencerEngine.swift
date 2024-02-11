@@ -40,7 +40,6 @@ class BeatSequencerEngine: ObservableObject {
     
     @Published var tracks: [Track] = []
     @Published var playhead: Beats = 0
-    
     private var activeTracks: [Track] = []
     private var sequencerTracks: [UUID: AVMusicTrack] = [:]
     
@@ -95,6 +94,18 @@ class BeatSequencerEngine: ObservableObject {
         
         // TODO: Set up the tracks dynamically
         tracks = Instrument.allCases.map { Track(instrument: $0) }
+        
+        // Repeatedly poll the actual playhead position
+        Timer.publish(every: 0.5, on: .main, in: .default)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self else { return }
+                let newPlayhead = Beats(sequencer.currentPositionInBeats)
+                if newPlayhead != playhead {
+                    playhead = newPlayhead
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func syncSequencer(with newTracks: [Track]) {
