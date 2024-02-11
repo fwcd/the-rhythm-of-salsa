@@ -4,7 +4,7 @@ struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
     let beatSize: CGFloat
-    let squaresPerBeat: Int = 2
+    let squaresPerBeat: Int
     
     private var beatCount: Int {
         Int(track.length.rawValue.rounded(.up))
@@ -58,6 +58,11 @@ struct TrackView: View {
 }
 
 #Preview {
-    TrackView(track: .constant(.init()), playhead: .constant(0), beatSize: 50.0)
-        .preferredColorScheme(.dark)
+    TrackView(
+        track: .constant(.init()),
+        playhead: .constant(0),
+        beatSize: 50.0,
+        squaresPerBeat: 1
+    )
+    .preferredColorScheme(.dark)
 }
