@@ -3,6 +3,7 @@ import SwiftUI
 struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
     let title: String
     let text: String
+    var alwaysVertical: Bool = false
     @ViewBuilder let detail: () -> Detail
     @ViewBuilder let navigation: () -> Navigation
     

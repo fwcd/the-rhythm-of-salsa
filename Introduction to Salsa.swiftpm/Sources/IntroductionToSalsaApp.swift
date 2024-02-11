@@ -8,7 +8,6 @@ struct IntroductionToSalsaApp: App {
         WindowGroup {
             RootScreen()
                 .environmentObject(engine)
-                .preferredColorScheme(.dark)
         }
     }
 }
