@@ -36,6 +36,49 @@ extension Beats: AdditiveArithmetic {
     static func -(lhs: Beats, rhs: Beats) -> Beats {
         Beats(lhs.rawValue - rhs.rawValue)
     }
+    
+    static func +=(lhs: inout Beats, rhs: Beats) {
+        lhs.rawValue += rhs.rawValue
+    }
+    
+    static func -=(lhs: inout Beats, rhs: Beats) {
+        lhs.rawValue -= rhs.rawValue
+    }
+}
+
+extension Beats: Numeric {
+    var magnitude: Beats { Beats(rawValue.magnitude) }
+    
+    init?<T>(exactly source: T) where T: BinaryInteger {
+        guard let rawValue = Double(exactly: source) else { return nil }
+        self.init(rawValue: rawValue)
+    }
+    
+    static func *(lhs: Beats, rhs: Beats) -> Beats {
+        Beats(lhs.rawValue * rhs.rawValue)
+    }
+    
+    static func *=(lhs: inout Beats, rhs: Beats) {
+        lhs.rawValue *= rhs.rawValue
+    }
+    
+    static func /(lhs: Beats, rhs: Beats) -> Beats {
+        Beats(lhs.rawValue / rhs.rawValue)
+    }
+    
+    static func /=(lhs: inout Beats, rhs: Beats) {
+        lhs.rawValue /= rhs.rawValue
+    }
+}
+
+extension Beats: SignedNumeric {
+    static prefix func -(operand: Beats) -> Beats {
+        Beats(-operand.rawValue)
+    }
+    
+    mutating func negate() {
+        rawValue.negate()
+    }
 }
 
 extension Beats: Comparable {
