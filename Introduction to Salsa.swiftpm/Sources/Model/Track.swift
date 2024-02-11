@@ -5,6 +5,7 @@ struct Track: Hashable, Codable, Identifiable {
     var id = UUID()
     var instrument: Instrument = .clave
     var length: Beats = 8
+    var isLooping: Bool = true
     var offsetEvents: [OffsetEvent] = []
     
     var shortDescription: String {
