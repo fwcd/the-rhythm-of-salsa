@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TrackView: View {
-    let track: Track
+    @Binding var track: Track
     let beatSize: CGFloat
     var activeBeat: Int = 0
     
@@ -30,6 +30,6 @@ struct TrackView: View {
 }
 
 #Preview {
-    TrackView(track: .init(), beatSize: 50.0)
+    TrackView(track: .constant(.init()), beatSize: 50.0)
         .preferredColorScheme(.dark)
 }
