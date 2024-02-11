@@ -1,7 +1,6 @@
 import Foundation
 
-struct OffsetEvent: Hashable, Codable, Identifiable {
-    var id = UUID()
+struct OffsetEvent: Hashable, Codable {
     var event: Event
     var startOffset: Beats
     

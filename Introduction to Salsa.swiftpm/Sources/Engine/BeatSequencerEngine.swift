@@ -124,7 +124,7 @@ class BeatSequencerEngine: ObservableObject {
                 sequencerTracks[id] = nil
                 log.debug("Removed track \(track.shortDescription) from sequencer")
             } else {
-                log.warning("Ignoring that the sequencer does not have the to-be-removed track \(String(describing: track)) (this shouldn't happen and probably indicates a bug).")
+                log.warning("Ignoring that the sequencer does not have the to-be-removed track \(track.shortDescription) (this shouldn't happen and probably indicates a bug).")
             }
         }
         
@@ -135,7 +135,39 @@ class BeatSequencerEngine: ObservableObject {
             log.debug("Added track \(track.shortDescription) to sequencer")
         }
         
+        for newTrack in newTracks {
+            if let sequencerTrack = sequencerTracks[newTrack.id] {
+                sync(sequencerTrack: sequencerTrack, track: activeById[newTrack.id], with: newTrack)
+            } else {
+                log.warning("Could not find sequencer track for \(newTrack.shortDescription), this is very likely a bug!")
+            }
+        }
+        
         activeTracks = newTracks
+    }
+    
+    private func sync(sequencerTrack: AVMusicTrack, track: Track?, with newTrack: Track) {
+        if track?.instrument != newTrack.instrument {
+            sequencerTrack.destinationAudioUnit = samplers[newTrack.instrument]
+        }
+        if track?.length != newTrack.length {
+            sequencerTrack.lengthInBeats = AVMusicTimeStamp(newTrack.length.rawValue)
+        }
+        if track?.isLooping != newTrack.isLooping {
+            sequencerTrack.isLoopingEnabled = newTrack.isLooping
+        }
+        if track?.offsetEvents != newTrack.offsetEvents {
+            if (track?.offsetEvents.count ?? 0) > 0 {
+                // TODO: Check whether this is the right range
+                sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
+            }
+            for offsetEvent in newTrack.offsetEvents {
+                sequencerTrack.addEvent(
+                    AVMIDINoteEvent(offsetEvent.event),
+                    at: AVMusicTimeStamp(offsetEvent.startOffset.rawValue)
+                )
+            }
+        }
     }
     
     func incrementPlaybackDependents() {
