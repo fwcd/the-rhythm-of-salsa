@@ -22,21 +22,10 @@ class BeatSequencerEngine: ObservableObject {
     private let engine: AVAudioEngine
     private let samplers: [Instrument: AVAudioUnitSampler]
     
-    private var sequencer: AVAudioSequencer {
-        willSet {
-            if sequencerPlaybackDependents > 0 {
-                stopSequencer()
-            }
-        }
-        didSet {
-            if sequencerPlaybackDependents > 0 {
-                startSequencer()
-            }
-        }
-    }
+    private var sequencer: AVAudioSequencer
     private var sequencerPlaybackDependents: Int = 0 {
         didSet {
-            if sequencerPlaybackDependents > 0 {
+            if sequencerPlaybackDependents > 0 && !(activeModel?.tracks.isEmpty ?? true) {
                 startSequencer()
             } else {
                 stopSequencer()
@@ -150,6 +139,10 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func recreateSequencer(from newModel: BeatSequencerModel) {
+        if sequencerPlaybackDependents > 0 && !(activeModel?.tracks.isEmpty ?? true) {
+            stopSequencer()
+        }
+        
         sequencerTracks = [:]
         sequencer = AVAudioSequencer(audioEngine: engine)
         
@@ -157,6 +150,10 @@ class BeatSequencerEngine: ObservableObject {
             let sequencerTrack = sequencer.createAndAppendTrack()
             sequencerTracks[newTrack.id] = sequencerTrack
             sync(sequencerTrack: sequencerTrack, activeTrack: nil, with: newTrack)
+        }
+        
+        if sequencerPlaybackDependents > 0 && !newModel.tracks.isEmpty {
+            startSequencer()
         }
     }
     
