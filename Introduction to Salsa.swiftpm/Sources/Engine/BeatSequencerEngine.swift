@@ -97,6 +97,7 @@ class BeatSequencerEngine: ObservableObject {
         model.tracks = Instrument.allCases.map { Track(instrument: $0) }
         
         // Repeatedly poll the actual playhead position
+        // TODO: Make the polling frequency dependent on the BPM
         Timer.publish(every: 0.1, on: .main, in: .default)
             .autoconnect()
             .sink { [weak self] _ in
