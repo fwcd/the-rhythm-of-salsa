@@ -54,6 +54,7 @@ struct TrackView: View {
                         }
                     },
                     isPlayed: beatRange.contains(loopedPlayhead),
+                    velocity: track.findEvents(in: beatRange).first.map { CGFloat($0.event.velocity) / 127 } ?? 1,
                     color: color,
                     size: padSize,
                     beatInMeasure: position.beatIndex % 4,
