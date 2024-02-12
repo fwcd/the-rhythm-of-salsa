@@ -14,11 +14,11 @@ extension Instrument {
     
     var examplePattern: [OffsetEvent] {
         switch self {
-        case .clave:
-            events(for: [1, 2, 4, 5.5, 7]) // 2-3 pattern
+        case .clave: events(for: [1, 2, 4, 5.5, 7]) // 2-3 pattern
+        case .cowbell: events(for: [0, 4])
+        case .congas: events(for: [3, 3.5, 7, 7.5])
         // TODO: Remove default
-        default:
-            []
+        default: []
         }
     }
 }
