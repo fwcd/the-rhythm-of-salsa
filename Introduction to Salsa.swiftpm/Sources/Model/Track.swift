@@ -31,6 +31,12 @@ struct Track: Hashable, Codable, Identifiable {
         }
     }
     
+    func looped(_ offset: Beats) -> Beats {
+        isLooping
+            ? Beats(offset.rawValue.truncatingRemainder(dividingBy: length.rawValue))
+            : offset
+    }
+    
     mutating func removeEvents(in range: Range<Beats>) {
         offsetEvents.removeAll { event in
             range.overlaps(event.range)

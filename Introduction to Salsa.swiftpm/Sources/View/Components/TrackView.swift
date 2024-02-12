@@ -10,12 +10,6 @@ struct TrackView: View {
         Int(track.length.rawValue.rounded(.up))
     }
             
-    private var loopedPlayhead: Beats {
-        track.isLooping
-            ? Beats(playhead.rawValue.truncatingRemainder(dividingBy: track.length.rawValue))
-            : playhead
-    }
-    
     private struct Position: Hashable {
         let beatIndex: Int
         let padInBeat: Int
@@ -53,7 +47,7 @@ struct TrackView: View {
                             track.removeEvents(in: beatRange)
                         }
                     },
-                    isPlayed: beatRange.contains(loopedPlayhead),
+                    isPlayed: beatRange.contains(track.looped(playhead)),
                     velocity: track.findEvents(in: beatRange).first.map { CGFloat($0.event.velocity) / 127 } ?? 1,
                     color: color,
                     size: padSize,
