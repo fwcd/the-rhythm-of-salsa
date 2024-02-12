@@ -20,7 +20,7 @@ struct PadView: View {
                     isPlayed
                         ? color
                         : color.opacity(0.5),
-                    lineWidth: 2
+                    lineWidth: isPlayed ? 2 : 1.5
                 )
                 .background(
                     shape
