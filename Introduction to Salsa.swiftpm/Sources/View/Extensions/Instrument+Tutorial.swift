@@ -22,6 +22,7 @@ extension Instrument {
             event.event.velocity /= i % 2 == 0 ? 2 : 3
             return event
         }
+        case .maracas: events(for: [1, 1.5, 2, 2.5, 3.5, 4, 4.5, 5, 6, 6.5, 7, 7.5])
         // TODO: Remove default
         default: []
         }
