@@ -30,4 +30,8 @@ enum Instrument: String, Hashable, Codable, CustomStringConvertible, CaseIterabl
     var isLast: Bool {
         ordinal == Self.allCases.count - 1
     }
+    
+    var prefix: ArraySlice<Instrument> {
+        Self.allCases[0..<(ordinal + 1)]
+    }
 }

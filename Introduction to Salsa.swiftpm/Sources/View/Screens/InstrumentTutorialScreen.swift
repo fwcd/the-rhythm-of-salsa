@@ -24,12 +24,19 @@ struct InstrumentTutorialScreen: View {
             updateTracks(with: instrument)
         }
         .onChange(of: instrument) { instrument in
-            updateTracks(with: instrument)
+            withAnimation {
+                updateTracks(with: instrument)
+            }
         }
     }
     
     private func updateTracks(with instrument: Instrument) {
-        engine.model.tracks = [Track(preset: .init(instrument: instrument))]
+        engine.model.tracks = instrument.prefix.map {
+            Track(
+                id: "$TutorialInstrument_\($0)",
+                preset: .init(instrument: $0)
+            )
+        }
     }
 }
 

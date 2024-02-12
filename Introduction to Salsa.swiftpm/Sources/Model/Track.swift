@@ -2,7 +2,7 @@ import Foundation
 
 /// A sequencer track holding note events for a certain instrument.
 struct Track: Hashable, Codable, Identifiable {
-    var id = UUID()
+    var id: String = UUID().uuidString
     var preset: TrackPreset = .init()
     var offsetEvents: [OffsetEvent] = []
     
