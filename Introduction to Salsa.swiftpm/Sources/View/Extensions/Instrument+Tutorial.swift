@@ -17,6 +17,11 @@ extension Instrument {
         case .clave: events(for: [1, 2, 4, 5.5, 7]) // 2-3 pattern
         case .cowbell: events(for: [0, 4])
         case .congas: events(for: [3, 3.5, 7, 7.5])
+        case .bongos: events(for: Array(0..<16).map { Beats($0) / 2 }).enumerated().map { (i, event) in
+            var event = event
+            event.event.velocity /= i % 2 == 0 ? 2 : 3
+            return event
+        }
         // TODO: Remove default
         default: []
         }
