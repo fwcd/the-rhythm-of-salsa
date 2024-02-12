@@ -106,7 +106,7 @@ class BeatSequencerEngine: ObservableObject {
             if activeModel != nil {
                 tempoTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
             }
-            tempoTrack.addEvent(AVExtendedTempoEvent(tempo: newModel.beatsPerMinute), at: 0)
+            tempoTrack.addEvent(AVExtendedTempoEvent(tempo: newModel.beatsPerMinute.rawValue), at: 0)
         }
        
         activeModel = newModel
