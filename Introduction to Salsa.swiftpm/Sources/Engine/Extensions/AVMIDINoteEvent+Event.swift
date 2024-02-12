@@ -10,3 +10,14 @@ extension AVMIDINoteEvent {
         )
     }
 }
+
+extension Event {
+    init(_ avEvent: AVMIDINoteEvent) {
+        self.init(
+            channel: avEvent.channel,
+            key: avEvent.key,
+            velocity: avEvent.velocity,
+            duration: Beats(avEvent.duration)
+        )
+    }
+}
