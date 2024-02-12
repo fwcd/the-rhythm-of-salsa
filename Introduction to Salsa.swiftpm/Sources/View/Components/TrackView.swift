@@ -16,6 +16,11 @@ struct TrackView: View {
             : playhead
     }
     
+    private struct Position: Hashable {
+        let beatIndex: Int
+        let padInBeat: Int
+    }
+    
     var body: some View {
         HStack {
             let imageSize = padSize * 0.7
@@ -27,10 +32,17 @@ struct TrackView: View {
                     .padding((padSize - imageSize) / 2)
                     .foregroundStyle(color)
             }
-            ForEach(0..<options.padCount, id: \.self) { i in
+            let padIndices = (0..<options.padCount).map { i in
+                (
+                    index: i,
+                    position: Position(
+                        beatIndex: i / options.padsPerBeat,
+                        padInBeat: i % options.padsPerBeat
+                    )
+                )
+            }
+            ForEach(padIndices, id: \.position) { (i, position) in
                 let beatRange = (Beats(i) / Beats(options.padsPerBeat))..<(Beats(i + 1) / Beats(options.padsPerBeat))
-                let padInBeat = i % options.padsPerBeat
-                let beatInMeasure = (i / options.padsPerBeat) % 4
                 PadView(
                     isActive: Binding {
                         !track.findEvents(in: beatRange).isEmpty
@@ -44,8 +56,8 @@ struct TrackView: View {
                     isPlayed: beatRange.contains(loopedPlayhead),
                     color: color,
                     size: padSize,
-                    beatInMeasure: beatInMeasure,
-                    padInBeat: padInBeat,
+                    beatInMeasure: position.beatIndex % 4,
+                    padInBeat: position.padInBeat,
                     options: options.pads
                 )
             }
