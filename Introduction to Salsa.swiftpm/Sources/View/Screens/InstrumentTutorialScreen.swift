@@ -10,6 +10,7 @@ struct InstrumentTutorialScreen: View {
         PageView(
             title: instrument.name,
             text: instrument.tutorialDescription
+            // TODO: Add note about being able to edit the beats
         ) {
             SharedBeatSequencerView()
         } navigation: {
