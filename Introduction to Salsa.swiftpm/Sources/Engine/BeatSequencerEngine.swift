@@ -140,13 +140,21 @@ class BeatSequencerEngine: ObservableObject {
     private func sync(sequencerTrack: AVMusicTrack, activeTracks: [Track], with newTracks: [Track]) {
         guard activeTracks != newTracks else { return }
         
-        if !activeTracks.flatMap(\.offsetEvents).isEmpty {
-            // TODO: Check whether this is the right range
-            sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
+        let activeEvents = Set(activeTracks.flatMap(\.offsetEvents))
+        let newEvents = Set(newTracks.flatMap(\.offsetEvents))
+        
+        let removedEvents = activeEvents.subtracting(newEvents)
+        let removedRange: Range<Beats>? = removedEvents.map(\.range).reduce(nil) {
+            $0?.merging($1) ?? $1
         }
         
-        for newTrack in newTracks {
-            for offsetEvent in newTrack.offsetEvents {
+        if let removedRange, !removedRange.isEmpty {
+            // TODO: Figure out why this still occasionally errors with an invalid/empty range!
+            sequencerTrack.clearEvents(in: AVBeatRange(removedRange))
+        }
+        
+        for offsetEvent in newEvents {
+            if (removedRange?.overlaps(offsetEvent.range) ?? false) || !activeEvents.contains(offsetEvent) {
                 sequencerTrack.addEvent(
                     AVMIDINoteEvent(offsetEvent.event),
                     at: AVMusicTimeStamp(offsetEvent.startOffset.rawValue)
