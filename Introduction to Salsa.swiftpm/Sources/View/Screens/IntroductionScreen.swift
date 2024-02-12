@@ -14,8 +14,6 @@ struct IntroductionScreen: View {
             This introduction will teach you about the fundamental elements of Salsa music, its rhythm and Cuban-style Salsa dancing.
             """
         ) {
-            Image("Dancers")
-                .clipShape(Circle())
         } navigation: {
             Button("Get Started") {
                 route = .countTutorial
