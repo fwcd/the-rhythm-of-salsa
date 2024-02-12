@@ -9,7 +9,7 @@ struct InstrumentTutorialScreen: View {
             title: instrument.name,
             text: instrument.longDescription
         ) {
-            Image(instrument)
+            SharedBeatSequencerView()
         } navigation: {
             Button(instrument.isLast ? "Complete" : "Next") {
                 route = instrument.isLast
