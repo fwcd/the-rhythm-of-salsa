@@ -10,13 +10,16 @@ extension MusicTrack {
                 throw MusicTrackError.couldNotFormEventIterator
             }
             
-            var hasNext: DarwinBoolean = true
+            var hasCurrent: DarwinBoolean = true
             
-            while hasNext == true {
-                guard MusicEventIteratorHasNextEvent(iterator, &hasNext) == OSStatus(noErr) else {
-                    throw MusicTrackError.couldNotCheckIfEventIteratorHasNext
+            while true {
+                guard MusicEventIteratorHasCurrentEvent(iterator, &hasCurrent) == OSStatus(noErr) else {
+                    throw MusicTrackError.couldNotCheckIfEventIteratorHasCurrent
                 }
                 
+                if hasCurrent == false {
+                    break
+                }
                 var timestamp: MusicTimeStamp = 0
                 var eventType: MusicEventType = 0
                 var eventData: UnsafeRawPointer?
@@ -30,6 +33,10 @@ extension MusicTrack {
                         timestamp: timestamp,
                         message: message
                     ))
+                }
+                
+                guard MusicEventIteratorNextEvent(iterator) == OSStatus(noErr) else {
+                    throw MusicTrackError.couldNotAdvanceEventIterator
                 }
             }
             

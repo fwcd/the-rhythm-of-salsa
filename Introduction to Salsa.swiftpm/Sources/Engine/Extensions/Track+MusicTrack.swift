@@ -2,11 +2,13 @@ import AVFoundation
 
 extension Track {
     init(_ track: MusicTrack) throws {
-        guard let loopInfo: MusicTrackLoopInfo = try? track.getProperty(kSequenceTrackProperty_LoopInfo) else {
+        var loopInfo = MusicTrackLoopInfo(loopDuration: 0, numberOfLoops: 1)
+        guard (try? track.getProperty(kSequenceTrackProperty_LoopInfo, into: &loopInfo)) != nil else {
             throw MusicTrackError.couldNotGetLoopInfo
         }
         
-        guard let length: MusicTimeStamp = try? track.getProperty(kSequenceTrackProperty_TrackLength) else {
+        var length: MusicTimeStamp = 0
+        guard (try? track.getProperty(kSequenceTrackProperty_TrackLength, into: &length)) != nil else {
             throw MusicTrackError.couldNotGetLength
         }
         
