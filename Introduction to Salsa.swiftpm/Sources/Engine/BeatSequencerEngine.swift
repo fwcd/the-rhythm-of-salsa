@@ -141,6 +141,13 @@ class BeatSequencerEngine: ObservableObject {
             sync(sequencerTrack: sequencerTrack, activeTracks: activeTracks, with: newTracks)
         }
         
+        // Jump to the first loop to not skip a beat
+        let lengths = newTracks.map(\.length)
+        if Set(lengths).count == 1 {
+            sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
+                .truncatingRemainder(dividingBy: lengths[0].rawValue)
+        }
+        
         if wasPlaying {
             startSequencer()
         }
