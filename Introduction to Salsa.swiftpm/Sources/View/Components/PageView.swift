@@ -11,7 +11,7 @@ struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
         GeometryReader { geometry in
             let usesCompactTitle = geometry.size.height < ViewConstants.verticalBreakpoint
             Group {
-                let content = Group {
+                VStack(spacing: ViewConstants.veryLargeSpace) {
                     VStack(spacing: ViewConstants.mediumSpace) {
                         if !usesCompactTitle {
                             Text(title)
@@ -26,15 +26,6 @@ struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
                         navigation()
                     }
                     detail()
-                }
-                if geometry.size.width < ViewConstants.horizontalBreakpoint {
-                    VStack(spacing: ViewConstants.veryLargeSpace) {
-                        content
-                    }
-                } else {
-                    HStack(spacing: geometry.size.width * 0.06) {
-                        content
-                    }
                 }
             }
             .navigationTitle(Text(usesCompactTitle ? title : ""))
