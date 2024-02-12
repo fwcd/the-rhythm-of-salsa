@@ -3,14 +3,18 @@ import SwiftUI
 struct CountTutorialScreen: View {
     @Binding var route: ContentRoute?
     
+    @State private var showDoubledPads: Bool = false
+    
     var body: some View {
         PageView(
             title: "The Count",
-            text: "The basic rhythm of Salsa music is divided into units of 8 beats, or two measures"
+            text: (["The basic rhythm of Salsa music is divided into units of 8 beats, or two measures"]
+                + (showDoubledPads ? ["To give the rhythm a more swingy feel, instruments often play on off-beats too, effectively resulting in 16 half beats."] : []))
+                .joined(separator: "\n\n")
         ) {
         SharedBeatSequencerView(options: .init(
             tracks: .init(
-                padsPerBeat: 1,
+                padsPerBeat: showDoubledPads ? 2 : 1,
                 pads: .init(
                     isPressable: false
                 )
@@ -22,7 +26,13 @@ struct CountTutorialScreen: View {
             }
         } navigation: {
             Button("Continue") {
-                route = .instrumentTutorial(Instrument.allCases.first!)
+                if !showDoubledPads {
+                    withAnimation {
+                        showDoubledPads = true
+                    }
+                } else {
+                    route = .instrumentTutorial(Instrument.allCases.first!)
+                }
             }
             .buttonStyle(BorderedButtonStyle())
         }

@@ -10,23 +10,21 @@ struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
     var body: some View {
         GeometryReader { geometry in
             let usesCompactTitle = geometry.size.height < ViewConstants.verticalBreakpoint
-            Group {
-                VStack(spacing: ViewConstants.veryLargeSpace) {
-                    VStack(spacing: ViewConstants.mediumSpace) {
-                        if !usesCompactTitle {
-                            Text(title)
-                                .font(.system(size: ViewConstants.titleFontSize))
-                                .fontWeight(.bold)
-                                .multilineTextAlignment(.center)
-                        }
-                        Text(text)
+            VStack(spacing: ViewConstants.veryLargeSpace) {
+                VStack(spacing: ViewConstants.mediumSpace) {
+                    if !usesCompactTitle {
+                        Text(title)
+                            .font(.system(size: ViewConstants.titleFontSize))
+                            .fontWeight(.bold)
                             .multilineTextAlignment(.center)
-                            .font(.system(size: ViewConstants.subtitleFontSize))
-                            .frame(maxWidth: 400)
-                        navigation()
                     }
-                    detail()
+                    Text(text)
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: ViewConstants.subtitleFontSize))
+                        .frame(maxWidth: 400)
+                    navigation()
                 }
+                detail()
             }
             .navigationTitle(Text(usesCompactTitle ? title : ""))
             .padding(ViewConstants.smallSpace)
