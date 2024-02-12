@@ -9,7 +9,7 @@ struct InstrumentTutorialScreen: View {
     var body: some View {
         PageView(
             title: instrument.name,
-            text: instrument.longDescription
+            text: instrument.tutorialDescription
         ) {
             SharedBeatSequencerView()
         } navigation: {
