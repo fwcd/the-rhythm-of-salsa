@@ -35,7 +35,8 @@ struct InstrumentTutorialScreen: View {
         engine.model.tracks = instrument.prefix.map {
             Track(
                 id: "$TutorialInstrument_\($0)",
-                preset: .init(instrument: $0)
+                preset: .init(instrument: $0),
+                offsetEvents: $0.examplePattern
             )
         }
     }

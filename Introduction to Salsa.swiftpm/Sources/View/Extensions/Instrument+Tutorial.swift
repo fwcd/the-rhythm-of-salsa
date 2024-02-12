@@ -7,4 +7,18 @@ extension Instrument {
             "" // TODO
         }
     }
+    
+    var examplePattern: [OffsetEvent] {
+        switch self {
+        case .clave:
+            events(for: [1, 2, 4, 5.5, 7]) // 2-3 pattern
+        // TODO: Remove default
+        default:
+            []
+        }
+    }
+}
+
+private func events(for pattern: [Beats]) -> [OffsetEvent] {
+    pattern.map { OffsetEvent(event: Event(duration: 0.5), startOffset: $0) }
 }
