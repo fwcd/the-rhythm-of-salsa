@@ -6,9 +6,9 @@ extension Instrument {
         case .clave: .orange
         case .cowbell: .yellow
         case .congas: .red
-        case .bongos: .gray
-        case .maracas: .green
-        case .timbales: .blue
+        case .bongos: .purple
+        case .maracas: .blue
+        case .timbales: .green
         case .piano: .primary
         }
     }
