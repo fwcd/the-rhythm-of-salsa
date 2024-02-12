@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SharedBeatSequencerView: View {
     var options: BeatSequencerOptions = .init()
-    var updater: (BeatSequencerEngine) -> Void = { _ in }
     
     @EnvironmentObject private var engine: BeatSequencerEngine
     
@@ -14,7 +13,6 @@ struct SharedBeatSequencerView: View {
         )
         .onAppear {
             engine.incrementPlaybackDependents()
-            updater(engine)
         }
         .onDisappear {
             engine.decrementPlaybackDependents()

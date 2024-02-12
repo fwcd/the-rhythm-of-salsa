@@ -121,6 +121,11 @@ class BeatSequencerEngine: ObservableObject {
         let newPresets = Set(newTracksByPreset.keys)
         let missingPresets = newPresets.subtracting(sequencerTracks.keys)
         
+        let wasPlaying = sequencer.isPlaying
+        if wasPlaying {
+            stopSequencer()
+        }
+        
         for preset in missingPresets {
             let sequencerTrack = sequencer.createAndAppendTrack()
             sequencerTrack.destinationAudioUnit = preset.instrument.flatMap { samplers[$0] }
@@ -134,6 +139,10 @@ class BeatSequencerEngine: ObservableObject {
             let activeTracks = activeTracksByPreset[preset] ?? []
             let newTracks = newTracksByPreset[preset] ?? []
             sync(sequencerTrack: sequencerTrack, activeTracks: activeTracks, with: newTracks)
+        }
+        
+        if wasPlaying {
+            startSequencer()
         }
     }
     

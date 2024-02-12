@@ -4,6 +4,7 @@ struct CountTutorialScreen: View {
     @Binding var route: ContentRoute?
     
     @State private var showDoubledPads: Bool = false
+    @EnvironmentObject private var engine: BeatSequencerEngine
     
     var body: some View {
         PageView(
@@ -19,11 +20,7 @@ struct CountTutorialScreen: View {
                     isPressable: false
                 )
             )
-        )) { engine in
-                engine.model.tracks = [
-                    Track(),
-                ]
-            }
+        ))
         } navigation: {
             Button("Continue") {
                 if !showDoubledPads {
@@ -36,10 +33,16 @@ struct CountTutorialScreen: View {
             }
             .buttonStyle(BorderedButtonStyle())
         }
+        .onAppear {
+            engine.model.tracks = [
+                Track(),
+            ]
+        }
     }
 }
 
 #Preview {
     CountTutorialScreen(route: .constant(nil))
+        .environmentObject(BeatSequencerEngine())
         .preferredColorScheme(.dark)
 }
