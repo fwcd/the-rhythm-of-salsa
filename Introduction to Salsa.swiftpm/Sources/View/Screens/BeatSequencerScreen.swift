@@ -11,7 +11,9 @@ struct BeatSequencerScreen: View {
                 // FIXME: Figure out where to actually load the MIDI riff
                 let midiURL = Bundle.main.url(forResource: "Riff I-I-V-V", withExtension: "mid")!
                 let midi = try! BeatSequencerModel(midiFileURL: midiURL)
-                engine.model.tracks.append(midi.tracks.first!)
+                var track = midi.tracks.first!
+                track.isLooping = true
+                engine.model.tracks.append(track)
             }
             .navigationTitle("Beat Sequencer")
     }
