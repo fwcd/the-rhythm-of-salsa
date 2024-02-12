@@ -17,11 +17,7 @@ extension Instrument {
         case .clave: events(for: [1, 2, 4, 5.5, 7]) // 2-3 pattern
         case .cowbell: events(for: [0, 4])
         case .congas: events(for: [3, 3.5, 7, 7.5])
-        case .bongos: events(for: Array(0..<16).map { Beats($0) / 2 }).enumerated().map { (i, event) in
-            var event = event
-            event.event.velocity /= i % 2 == 0 ? 2 : 3
-            return event
-        }
+        case .bongos: events(for: Array(0..<16).map { Beats($0) / 2 }) { $0 % 2 == 0 ? 0.4 : 0.2 }
         case .maracas: events(for: [1, 1.5, 2, 2.5, 3.5, 4, 4.5, 5, 6, 6.5, 7, 7.5])
         // TODO: Remove default
         default: []
@@ -29,6 +25,8 @@ extension Instrument {
     }
 }
 
-private func events(for pattern: [Beats]) -> [OffsetEvent] {
-    pattern.map { OffsetEvent(event: Event(duration: 0.5), startOffset: $0) }
+private func events(for pattern: [Beats], velocity: (Int) -> Double = { _ in 1 }) -> [OffsetEvent] {
+    pattern.enumerated().map { (i, offset) in
+        OffsetEvent(event: Event(velocity: UInt32(127 * velocity(i)), duration: 0.5), startOffset: offset)
+    }
 }
