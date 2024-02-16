@@ -6,6 +6,10 @@ extension Track {
         preset: TrackPreset = .init(),
         pattern: Pattern
     ) {
+        var preset = preset
+        if let length = pattern.length {
+            preset.length = length
+        }
         self.init(
             id: id,
             preset: preset,

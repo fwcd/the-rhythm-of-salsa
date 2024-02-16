@@ -6,16 +6,14 @@ struct BeatSequencerScreen: View {
     var body: some View {
         SharedBeatSequencerView()
             .onAppear {
-                engine.model.tracks = Instrument.allCases.map {
-                    Track(preset: .init(instrument: $0), pattern: $0.patterns.first!)
+                engine.model.tracks = Instrument.allCases.compactMap { instrument in
+                    instrument.patterns.first.map {
+                        Track(preset: .init(instrument: instrument), pattern: $0)
+                    }
                 }
                 
                 // FIXME: Figure out where to actually load the MIDI riff
-                let midiURL = Bundle.main.url(forResource: "Riff vi-IV-V-vi", withExtension: "mid")!
-                let midi = try! BeatSequencerModel(midiFileURL: midiURL)
-                var track = midi.tracks.first!
-                track.isLooping = true
-                engine.model.tracks.append(track)
+                
             }
             .navigationTitle("Beat Sequencer")
     }
