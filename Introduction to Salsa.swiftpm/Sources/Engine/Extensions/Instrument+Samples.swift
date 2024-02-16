@@ -9,7 +9,7 @@ extension Instrument {
         case .cowbell: ["Cowbell"]
         case .maracas: ["Maraca"]
         case .timbales: ["Timbales"]
-        default: []
+        case .piano: ["Piano"]
         }
     }
     

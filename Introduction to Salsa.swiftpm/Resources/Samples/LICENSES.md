@@ -36,6 +36,12 @@ All samples are unmodified or shortened versions of the original clips.
 - Author: https://freesound.org/people/Samulis/
 - Source: https://freesound.org/people/Samulis/sounds/375706/
 
+# Piano.wav
+
+- License: CC Attribution 4.0 International
+- Author: https://freesound.org/people/digifishmusic/
+- Source: https://freesound.org/people/digifishmusic/sounds/94812/
+
 # Timbales.wav
 
 - License: CC0 1.0 Universal
