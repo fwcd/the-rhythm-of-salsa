@@ -14,14 +14,16 @@ extension Instrument {
         case .timbales: [pattern(beats: [0, 1, 2, 2.5, 3.5, 4, 5, 5.5, 6.5, 7])]
         case .piano:
             memo([self]) {
-                (Bundle.main.urls(forResourcesWithExtension: "mid", subdirectory: nil) ?? []).map { url in
-                    let midi = try! BeatSequencerModel(midiFileURL: url)
-                    return Pattern(
-                        name: url.deletingPathExtension().lastPathComponent,
-                        length: midi.tracks.first?.length,
-                        offsetEvents: midi.tracks.first?.offsetEvents ?? []
-                    )
-                }
+                (Bundle.main.urls(forResourcesWithExtension: "mid", subdirectory: nil) ?? [])
+                    .sorted { $0.absoluteString < $1.absoluteString }
+                    .map { url in
+                        let midi = try! BeatSequencerModel(midiFileURL: url)
+                        return Pattern(
+                            name: url.deletingPathExtension().lastPathComponent,
+                            length: midi.tracks.first?.length,
+                            offsetEvents: midi.tracks.first?.offsetEvents ?? []
+                        )
+                    }
             }
         }
     }
