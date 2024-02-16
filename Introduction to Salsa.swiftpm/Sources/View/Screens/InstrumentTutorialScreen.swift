@@ -43,7 +43,7 @@ struct InstrumentTutorialScreen: View {
             Track(
                 id: "$TutorialInstrument_\($0)",
                 preset: .init(instrument: $0),
-                offsetEvents: $0.patterns.first!
+                pattern: $0.patterns.first!
             )
         }
     }

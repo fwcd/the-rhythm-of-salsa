@@ -7,7 +7,7 @@ struct BeatSequencerScreen: View {
         SharedBeatSequencerView()
             .onAppear {
                 engine.model.tracks = Instrument.allCases.map {
-                    Track(preset: .init(instrument: $0), offsetEvents: $0.patterns.first!)
+                    Track(preset: .init(instrument: $0), pattern: $0.patterns.first!)
                 }
                 
                 // FIXME: Figure out where to actually load the MIDI riff
