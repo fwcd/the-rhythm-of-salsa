@@ -7,6 +7,10 @@ extension Instrument {
                 #"Notice how the clave does not play on the first beat. The "off-beaty" feeling is a cornerstone of the polyrhythmic Salsa beat."#,
                 "Now try editing the beat yourself by clicking the colored pads below.",
             ]
+        case .cowbell:
+            [
+                "While the clave often plays on the off-beats, the cowbell is generally on the beat. This provides a rhythmic framework that makes it easier to identify the beats by ear."
+            ]
         default:
             []
         }
