@@ -11,9 +11,6 @@ struct BeatSequencerScreen: View {
                         Track(preset: .init(instrument: instrument), pattern: $0)
                     }
                 }
-                
-                // FIXME: Figure out where to actually load the MIDI riff
-                
             }
             .navigationTitle("Beat Sequencer")
     }
