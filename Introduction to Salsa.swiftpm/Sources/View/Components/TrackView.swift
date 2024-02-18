@@ -40,12 +40,13 @@ struct TrackView: View {
                 PadView(
                     isActive: Binding {
                         !track.findEvents(in: beatRange).isEmpty
-                    } set: {
-                        if $0 {
+                    } set: { isActive in
+                        if isActive {
                             track.replaceEvents(in: beatRange, with: Event(duration: 1 / Beats(options.padsPerBeat)))
                         } else {
                             track.removeEvents(in: beatRange)
                         }
+                        track.patternName = nil
                     },
                     isPlayed: beatRange.contains(track.looped(playhead)),
                     velocity: track.findEvents(in: beatRange).first.map { CGFloat($0.event.velocity) / 127 } ?? 1,
@@ -55,6 +56,26 @@ struct TrackView: View {
                     padInBeat: position.padInBeat,
                     options: options.pads
                 )
+            }
+            if options.showsPatternPicker, let instrument = track.instrument {
+                Picker("Pattern", selection: Binding {
+                    track.patternName
+                } set: { newPatternName in
+                    if let newPatternName,
+                       let newPattern = instrument.patterns.first(where: { $0.name == newPatternName }) {
+                        track = Track(id: track.id, preset: track.preset, pattern: newPattern)
+                    } else {
+                        track.patternName = nil
+                    }
+                }) {
+                    Text("Custom")
+                        .disabled(true)
+                        .tag(nil as String?)
+                    ForEach(instrument.patterns, id: \.name) { pattern in
+                        Text(pattern.name)
+                            .tag(pattern.name as String?)
+                    }
+                }
             }
         }
     }

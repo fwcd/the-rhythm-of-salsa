@@ -13,6 +13,7 @@ extension Track {
         self.init(
             id: id,
             preset: preset,
+            patternName: pattern.name,
             offsetEvents: pattern.offsetEvents
         )
     }
