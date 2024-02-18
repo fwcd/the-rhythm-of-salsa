@@ -68,14 +68,15 @@ struct TrackView: View {
                         track.patternName = nil
                     }
                 }) {
-                    Text("Custom")
-                        .disabled(true)
-                        .tag(nil as String?)
                     ForEach(instrument.patterns, id: \.name) { pattern in
                         Text(pattern.name)
                             .tag(pattern.name as String?)
                     }
+                    Text("(custom)")
+                        .disabled(true)
+                        .tag(nil as String?)
                 }
+                .frame(width: 160, alignment: .leading)
             }
         }
     }
