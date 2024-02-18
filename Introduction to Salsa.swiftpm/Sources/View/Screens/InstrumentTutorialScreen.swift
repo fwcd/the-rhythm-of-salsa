@@ -4,22 +4,24 @@ struct InstrumentTutorialScreen: View {
     let instrument: Instrument
     @Binding var route: ContentRoute?
     
-    @State private var textStage: Int = 1
+    @State private var textStage: Int = 0
     @EnvironmentObject private var engine: BeatSequencerEngine
     
     var body: some View {
         PageView(
             title: instrument.name,
-            text: instrument.tutorialDescription.prefix(textStage).joined(separator: "\n\n")
+            text: textStage < instrument.tutorialDescription.count
+                ? instrument.tutorialDescription[textStage]
+                : ""
         ) {
             SharedBeatSequencerView()
         } navigation: {
             Button(instrument.isLast ? "Complete" : "Next") {
                 withAnimation {
-                    if textStage < instrument.tutorialDescription.count {
+                    if textStage < instrument.tutorialDescription.count - 1 {
                         textStage += 1
                     } else {
-                        textStage = 1
+                        textStage = 0
                         route = instrument.isLast
                             ? .beatSequencer
                             : .instrumentTutorial(instrument.next)
