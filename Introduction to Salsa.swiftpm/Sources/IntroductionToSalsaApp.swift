@@ -1,9 +1,9 @@
 import SwiftUI
 
+private let engine = BeatSequencerEngine()
+
 @main
 struct IntroductionToSalsaApp: App {
-    @StateObject private var engine = BeatSequencerEngine()
-    
     var body: some Scene {
         WindowGroup {
             RootScreen()

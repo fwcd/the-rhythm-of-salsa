@@ -19,7 +19,6 @@ private func configureAVAudioSession() {
 }
 
 class BeatSequencerEngine: ObservableObject {
-    private let engine: AVAudioEngine
     private let samplers: [Instrument: AVAudioUnitSampler]
     
     private var sequencer: AVAudioSequencer
@@ -43,7 +42,7 @@ class BeatSequencerEngine: ObservableObject {
     init() {
         configureAVAudioSession()
         
-        engine = AVAudioEngine()
+        let engine = AVAudioEngine()
         sequencer = AVAudioSequencer(audioEngine: engine)
         
         var samplers: [Instrument: AVAudioUnitSampler] = [:]
@@ -52,8 +51,10 @@ class BeatSequencerEngine: ObservableObject {
             let sampler = AVAudioUnitSampler()
             samplers[instrument] = sampler
             
-            engine.attach(sampler)
-            engine.connect(sampler, to: engine.mainMixerNode, format: nil)
+            DispatchQueue.global().async {
+                engine.attach(sampler)
+                engine.connect(sampler, to: engine.mainMixerNode, format: nil)
+            }
             
             if !instrument.sampleNames.isEmpty {
                 do {
