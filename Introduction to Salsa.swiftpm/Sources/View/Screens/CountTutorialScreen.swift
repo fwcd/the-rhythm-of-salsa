@@ -16,6 +16,8 @@ struct CountTutorialScreen: View {
         SharedBeatSequencerView(options: .init(
             tracks: .init(
                 padsPerBeat: showDoubledPads ? 2 : 1,
+                showsVolume: false,
+                showsPatternPicker: false,
                 pads: .init(
                     isPressable: false
                 )

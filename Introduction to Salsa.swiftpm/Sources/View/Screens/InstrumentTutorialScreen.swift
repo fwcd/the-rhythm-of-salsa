@@ -14,7 +14,11 @@ struct InstrumentTutorialScreen: View {
                 ? instrument.tutorialDescription[textStage]
                 : ""
         ) {
-            SharedBeatSequencerView()
+            SharedBeatSequencerView(options: .init(
+                tracks: .init(
+                    showsVolume: false
+                )
+            ))
         } navigation: {
             Button(instrument.isLast ? "Complete" : "Next") {
                 withAnimation {
