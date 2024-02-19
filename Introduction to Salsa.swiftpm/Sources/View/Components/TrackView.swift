@@ -57,26 +57,8 @@ struct TrackView: View {
                     options: options.pads
                 )
             }
-            if options.showsPatternPicker, let instrument = track.instrument {
-                Picker("Pattern", selection: Binding {
-                    track.patternName
-                } set: { newPatternName in
-                    if let newPatternName,
-                       let newPattern = instrument.patterns.first(where: { $0.name == newPatternName }) {
-                        track = Track(id: track.id, preset: track.preset, pattern: newPattern)
-                    } else {
-                        track.patternName = nil
-                    }
-                }) {
-                    ForEach(instrument.patterns, id: \.name) { pattern in
-                        Text(pattern.name)
-                            .tag(pattern.name as String?)
-                    }
-                    Text("(custom)")
-                        .disabled(true)
-                        .tag(nil as String?)
-                }
-                .frame(width: 160, alignment: .leading)
+            if options.showsPatternPicker {
+                PatternPicker(track: $track)
             }
         }
     }
