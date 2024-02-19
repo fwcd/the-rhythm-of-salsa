@@ -41,10 +41,10 @@ struct TrackKnob: View {
                 .fill(.gray.opacity(0.3))
                 .frame(width: size, height: size)
             Arc(startAngle: .zero, endAngle: angularValue)
-                .stroke(Color.accentColor, lineWidth: thickness)
+                .stroke(.foreground, lineWidth: thickness)
                 .frame(width: size, height: size)
             Rectangle()
-                .fill(Color.accentColor)
+                .fill(.foreground)
                 .frame(width: thickness, height: size * 0.4)
         }
         .rotationEffect(startAngle + angularValue)
