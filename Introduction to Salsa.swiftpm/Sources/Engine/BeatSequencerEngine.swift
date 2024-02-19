@@ -143,10 +143,11 @@ class BeatSequencerEngine: ObservableObject {
         }
         
         // Jump to the first loop to not skip a beat
-        if let length = newTracks.first?.length {
-            sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
-                .truncatingRemainder(dividingBy: length.rawValue)
-        }
+        let loopLength = newTracks
+            .map { Int($0.length.rawValue.rounded(.up)) }
+            .reduce(1) { $0.leastCommonMultiple($1) }
+        sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
+            .truncatingRemainder(dividingBy: Double(loopLength))
         
         if wasPlaying {
             startSequencer()
