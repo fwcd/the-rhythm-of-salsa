@@ -8,10 +8,10 @@ struct TrackKnob: View {
     var halfCircleFraction: Double = 1 / 3
     var size: CGFloat = 64
     
-    @State private var startValue: Double? = nil
+    @State private var delta: Double = 0
     
     private var valueWithDelta: Double {
-        min(max(value, minValue), maxValue)
+        min(max(value + delta, minValue), maxValue)
     }
     
     private var normalizedValue: Double {
@@ -47,14 +47,11 @@ struct TrackKnob: View {
         .gesture(
             DragGesture()
                 .onChanged { drag in
-                    if startValue == nil {
-                        startValue = value
-                    }
-                    
-                    value = startValue! + Double(drag.translation.width - drag.translation.height) * 0.002 * sensitivity
+                    delta = Double(drag.translation.width - drag.translation.height) * 0.002 * sensitivity
                 }
                 .onEnded { _ in
-                    startValue = nil
+                    value = valueWithDelta
+                    delta = 0
                 }
         )
     }
