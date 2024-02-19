@@ -114,7 +114,8 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func syncSequencerTracks(with newTracks: [Track]) {
-        let activeTracksByPreset = Dictionary(grouping: activeModel?.tracks ?? [], by: \.preset)
+        let activeTracks = activeModel?.tracks ?? []
+        let activeTracksByPreset = Dictionary(grouping: activeTracks, by: \.preset)
         let newTracksByPreset = Dictionary(grouping: newTracks, by: \.preset)
         
         // Create sequencer tracks for missing presets
@@ -123,7 +124,10 @@ class BeatSequencerEngine: ObservableObject {
         let missingPresets = newPresets.subtracting(sequencerTracks.keys)
         
         let wasPlaying = sequencer.isPlaying
-        if wasPlaying {
+        let changedEvents = activeTracks.flatMap(\.offsetEvents) != newTracks.flatMap(\.offsetEvents)
+        let shouldStartStop = wasPlaying && changedEvents
+        
+        if shouldStartStop {
             stopSequencer()
         }
         
@@ -143,13 +147,15 @@ class BeatSequencerEngine: ObservableObject {
         }
         
         // Jump to the first loop to not skip a beat
-        let loopLength = newTracks
-            .map { Int($0.length.rawValue.rounded(.up)) }
-            .reduce(1) { $0.leastCommonMultiple($1) }
-        sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
-            .truncatingRemainder(dividingBy: Double(loopLength))
+        if changedEvents {
+            let loopLength = newTracks
+                .map { Int($0.length.rawValue.rounded(.up)) }
+                .reduce(1) { $0.leastCommonMultiple($1) }
+            sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
+                .truncatingRemainder(dividingBy: Double(loopLength))
+        }
         
-        if wasPlaying {
+        if shouldStartStop {
             startSequencer()
         }
     }
@@ -162,10 +168,20 @@ class BeatSequencerEngine: ObservableObject {
             sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
         }
         
+        // If a single sequencer track only maps to one model track, we can set the volume directly on the sampler unit as an optimization (instead of having to change the velocities of individual events)
+        var optimizedVolume = false
+        if newTracks.count == 1,
+           let sampler = sequencerTrack.destinationAudioUnit as? AVAudioUnitSampler {
+            sampler.volume = Float(newTracks[0].volume)
+            optimizedVolume = true
+        }
+        
         for newTrack in newTracks {
             for offsetEvent in newTrack.offsetEvents {
                 var event = offsetEvent.event
-                event.velocity = UInt32(min(max(Double(event.velocity) * newTrack.volume, 0), 127))
+                if !optimizedVolume {
+                    event.velocity = UInt32(min(max(Double(event.velocity) * newTrack.volume, 0), 127))
+                }
                 sequencerTrack.addEvent(
                     AVMIDINoteEvent(event),
                     at: AVMusicTimeStamp(offsetEvent.startOffset.rawValue)
