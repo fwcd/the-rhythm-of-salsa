@@ -14,6 +14,7 @@ extension Track {
             id: id,
             preset: preset,
             patternName: pattern.name,
+            volume: pattern.volume,
             offsetEvents: pattern.offsetEvents
         )
     }
