@@ -11,15 +11,11 @@ struct TrackKnob: View {
     @State private var delta: Double = 0
     
     private var valueWithDelta: Double {
-        value + delta
+        min(max(value + delta, minValue), maxValue)
     }
     
     private var normalizedValue: Double {
         (valueWithDelta - minValue) / (maxValue - minValue)
-    }
-    
-    private var cappedNormalizedValue: Double {
-        min(max(normalizedValue, 0), 1)
     }
     
     private var circleFraction: Double {
@@ -27,7 +23,7 @@ struct TrackKnob: View {
     }
     
     private var angularValue: Angle {
-        .radians(cappedNormalizedValue * circleFraction * 2 * .pi)
+        .radians(normalizedValue * circleFraction * 2 * .pi)
     }
     
     private var startAngle: Angle {
@@ -54,7 +50,7 @@ struct TrackKnob: View {
                     delta = Double(drag.translation.width - drag.translation.height) * 0.002 * sensitivity
                 }
                 .onEnded { _ in
-                    value += delta
+                    value = valueWithDelta
                     delta = 0
                 }
         )
