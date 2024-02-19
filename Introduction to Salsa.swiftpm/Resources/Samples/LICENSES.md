@@ -48,7 +48,13 @@ All samples are unmodified or shortened versions of the original clips.
 - Author: https://freesound.org/people/digifishmusic/
 - Source: https://freesound.org/people/digifishmusic/sounds/94812/
 
-# Timbales.wav
+# Timbales 1.wav
+
+- License: CC0 1.0 Universal
+- Author: https://freesound.org/people/newshooze/
+- Source: https://freesound.org/people/newshooze/sounds/107178/
+
+# Timbales 2.wav
 
 - License: CC0 1.0 Universal
 - Author: https://freesound.org/people/Sassaby/
