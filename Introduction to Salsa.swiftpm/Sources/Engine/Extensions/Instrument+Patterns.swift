@@ -18,7 +18,7 @@ extension Instrument {
         case .piano:
             memo([self]) {
                 (Bundle.main.urls(forResourcesWithExtension: "mid", subdirectory: nil) ?? [])
-                    .sorted { $0.absoluteString < $1.absoluteString }
+                    .sorted { $0.absoluteString > $1.absoluteString }
                     .map { url in
                         let midi = try! BeatSequencerModel(midiFileURL: url)
                         return Pattern(
