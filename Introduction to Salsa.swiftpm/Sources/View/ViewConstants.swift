@@ -6,6 +6,8 @@ enum ViewConstants {
     static let largeSpace: CGFloat = 32
     static let veryLargeSpace: CGFloat = 64
     
+    static let smallShadow: CGFloat = 2
+    
     static let titleFontSize: CGFloat = 40
     static let subtitleFontSize: CGFloat = 18
     

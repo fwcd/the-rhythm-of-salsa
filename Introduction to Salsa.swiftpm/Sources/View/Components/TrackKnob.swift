@@ -9,6 +9,7 @@ struct TrackKnob: View {
     var size: CGFloat = 64
     
     @State private var delta: Double = 0
+    @Environment(\.colorScheme) private var colorScheme
     
     private var valueWithDelta: Double {
         min(max(value + delta, minValue), maxValue)
@@ -34,7 +35,8 @@ struct TrackKnob: View {
         ZStack(alignment: .top) {
             let thickness = size / 16
             Circle()
-                .fill(.gray.opacity(0.3))
+                .fill(colorScheme == .light ? Color.white : .gray.opacity(0.3))
+                .shadow(radius: ViewConstants.smallShadow)
                 .frame(width: size, height: size)
             Arc(startAngle: .zero, endAngle: angularValue)
                 .stroke(.foreground, lineWidth: thickness)
