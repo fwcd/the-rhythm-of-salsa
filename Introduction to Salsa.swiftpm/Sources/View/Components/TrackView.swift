@@ -57,9 +57,11 @@ struct TrackView: View {
                     options: options.pads
                 )
             }
-            TrackKnob(value: $track.volume, size: padSize * 0.8)
-                .foregroundStyle(color)
-                .frame(width: padSize, height: padSize)
+            if options.showsVolume {
+                TrackKnob(value: $track.volume, size: padSize * 0.8)
+                    .foregroundStyle(color)
+                    .frame(width: padSize, height: padSize)
+            }
             if options.showsPatternPicker {
                 PatternPicker(track: $track)
             }
