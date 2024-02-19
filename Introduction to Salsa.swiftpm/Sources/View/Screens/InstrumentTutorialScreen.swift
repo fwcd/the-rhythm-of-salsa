@@ -44,8 +44,7 @@ struct InstrumentTutorialScreen: View {
         engine.model.tracks = instrument.prefix.map {
             Track(
                 id: "$TutorialInstrument_\($0)",
-                preset: .init(instrument: $0),
-                pattern: $0.patterns.first!
+                instrument: $0
             )
         }
     }

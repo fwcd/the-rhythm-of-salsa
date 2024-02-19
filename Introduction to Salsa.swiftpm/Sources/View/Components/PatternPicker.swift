@@ -25,3 +25,7 @@ struct PatternPicker: View {
         .frame(width: 160, alignment: .leading)
     }
 }
+
+#Preview {
+    PatternPicker(track: .constant(Track(preset: .init(instrument: .clave))))
+}

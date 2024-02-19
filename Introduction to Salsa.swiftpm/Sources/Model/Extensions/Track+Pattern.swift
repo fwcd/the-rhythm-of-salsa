@@ -17,4 +17,15 @@ extension Track {
             offsetEvents: pattern.offsetEvents
         )
     }
+    
+    init(
+        id: String = UUID().uuidString,
+        instrument: Instrument
+    ) {
+        self.init(
+            id: id,
+            preset: .init(instrument: instrument),
+            pattern: instrument.patterns.first ?? .init()
+        )
+    }
 }
