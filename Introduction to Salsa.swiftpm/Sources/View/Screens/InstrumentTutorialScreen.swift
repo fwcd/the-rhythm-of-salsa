@@ -18,7 +18,8 @@ struct InstrumentTutorialScreen: View {
                 tracks: .init(
                     showsVolume: false,
                     showsInstrumentName: false
-                )
+                ),
+                highlightedInstruments: [instrument]
             ))
         } navigation: {
             Button(instrument.isLast ? "Complete" : "Next") {
