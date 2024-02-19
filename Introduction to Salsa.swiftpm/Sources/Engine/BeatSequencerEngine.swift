@@ -125,6 +125,11 @@ class BeatSequencerEngine: ObservableObject {
         
         let wasPlaying = sequencer.isPlaying
         let changedEvents = activeTracks.flatMap(\.offsetEvents) != newTracks.flatMap(\.offsetEvents)
+        let shouldStartStop = wasPlaying && changedEvents
+        
+        if shouldStartStop {
+            stopSequencer()
+        }
         
         for preset in missingPresets {
             let sequencerTrack = sequencer.createAndAppendTrack()
@@ -148,6 +153,10 @@ class BeatSequencerEngine: ObservableObject {
                 .reduce(1) { $0.leastCommonMultiple($1) }
             sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
                 .truncatingRemainder(dividingBy: Double(loopLength))
+        }
+        
+        if shouldStartStop {
+            startSequencer()
         }
     }
     
