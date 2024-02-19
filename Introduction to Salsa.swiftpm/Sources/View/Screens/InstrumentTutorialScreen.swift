@@ -16,7 +16,8 @@ struct InstrumentTutorialScreen: View {
         ) {
             SharedBeatSequencerView(options: .init(
                 tracks: .init(
-                    showsVolume: false
+                    showsVolume: false,
+                    showsInstrumentName: false
                 )
             ))
         } navigation: {

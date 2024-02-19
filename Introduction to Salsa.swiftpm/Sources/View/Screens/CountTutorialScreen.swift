@@ -17,6 +17,7 @@ struct CountTutorialScreen: View {
             tracks: .init(
                 padsPerBeat: showDoubledPads ? 2 : 1,
                 showsVolume: false,
+                showsInstrumentName: false,
                 showsPatternPicker: false,
                 pads: .init(
                     isPressable: false

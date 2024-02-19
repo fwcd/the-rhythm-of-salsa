@@ -63,8 +63,20 @@ struct TrackView: View {
                     .frame(width: padSize, height: padSize)
                     .padding(.leading, ViewConstants.smallSpace)
             }
-            if options.showsPatternPicker {
-                PatternPicker(track: $track)
+            if options.showsInstrumentName || options.showsPatternPicker {
+                VStack(alignment: .leading) {
+                    if options.showsInstrumentName,
+                       let instrument = track.instrument {
+                        Text(instrument.name)
+                            .font(.caption)
+                            .foregroundStyle(.gray)
+                            .textCase(.uppercase)
+                            .padding(.horizontal, 4)
+                    }
+                    if options.showsPatternPicker {
+                        PatternPicker(track: $track)
+                    }
+                }
             }
         }
     }
@@ -72,9 +84,8 @@ struct TrackView: View {
 
 #Preview {
     TrackView(
-        track: .constant(.init()),
+        track: .constant(.init(instrument: .clave)),
         playhead: .constant(0),
         padSize: 48
     )
-    .preferredColorScheme(.dark)
 }
