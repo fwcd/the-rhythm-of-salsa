@@ -22,7 +22,9 @@ struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
                         .multilineTextAlignment(.center)
                         .font(.system(size: ViewConstants.subtitleFontSize))
                         .frame(maxWidth: 400)
-                    navigation()
+                    HStack {
+                        navigation()
+                    }
                 }
                 detail()
             }

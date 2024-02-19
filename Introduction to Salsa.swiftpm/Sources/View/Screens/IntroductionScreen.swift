@@ -19,6 +19,10 @@ struct IntroductionScreen: View {
                 route = .countTutorial
             }
             .buttonStyle(BorderedProminentButtonStyle())
+            Button("Skip Tutorial") {
+                route = .beatSequencer
+            }
+            .buttonStyle(BorderedButtonStyle())
         }
     }
 }
