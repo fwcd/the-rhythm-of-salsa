@@ -58,8 +58,8 @@ class BeatSequencerEngine: ObservableObject {
             
             if !instrument.sampleNames.isEmpty {
                 do {
-                    // TODO: Currently all samples per instrument seem to play simultaneously. It would be nice if we could e.g. map them to different keys. That might require using CAF files instead of WAV, which e.g. would let us set the base note and a range of low-high notes. See https://developer.apple.com/library/archive/documentation/MusicAudio/Reference/CAFSpec/CAF_spec/CAF_spec.html for details.
-                    try sampler.loadAudioFiles(at: instrument.sampleURLs)
+                    // TODO: Loading all samples per instrument would play them simultaneously. It would be nice if we could e.g. map them to different keys. That might require using CAF files instead of WAV, which e.g. would let us set the base note and a range of low-high notes. See https://developer.apple.com/library/archive/documentation/MusicAudio/Reference/CAFSpec/CAF_spec/CAF_spec.html for details.
+                    try sampler.loadAudioFiles(at: Array(instrument.sampleURLs.prefix(1)))
                 } catch {
                     log.error("Could not load audio file(s) for \(instrument) sampler: \(error)")
                 }
