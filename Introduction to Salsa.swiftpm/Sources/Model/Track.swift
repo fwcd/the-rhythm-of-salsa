@@ -5,6 +5,7 @@ struct Track: Hashable, Codable, Identifiable {
     var id: String = UUID().uuidString
     var preset: TrackPreset = .init()
     var patternName: String? = nil
+    var volume: Double = 1
     var offsetEvents: [OffsetEvent] = []
     
     var instrument: Instrument? {

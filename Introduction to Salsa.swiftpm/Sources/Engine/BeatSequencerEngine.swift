@@ -163,8 +163,10 @@ class BeatSequencerEngine: ObservableObject {
         
         for newTrack in newTracks {
             for offsetEvent in newTrack.offsetEvents {
+                var event = offsetEvent.event
+                event.velocity = UInt32(min(max(Double(event.velocity) * newTrack.volume, 0), 127))
                 sequencerTrack.addEvent(
-                    AVMIDINoteEvent(offsetEvent.event),
+                    AVMIDINoteEvent(event),
                     at: AVMusicTimeStamp(offsetEvent.startOffset.rawValue)
                 )
             }
