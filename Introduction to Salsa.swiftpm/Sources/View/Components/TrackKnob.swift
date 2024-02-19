@@ -14,42 +14,44 @@ struct TrackKnob: View {
         value + delta
     }
     
-    private var normalizedValueWithDelta: Double {
-        valueWithDelta / (maxValue - minValue)
+    private var normalizedValue: Double {
+        (valueWithDelta - minValue) / (maxValue - minValue)
+    }
+    
+    private var cappedNormalizedValue: Double {
+        min(max(normalizedValue, 0), 1)
     }
     
     private var circleFraction: Double {
         2 * halfCircleFraction
     }
     
-    private var angleFraction: Double {
-        min(
-            max(
-                normalizedValueWithDelta * circleFraction - halfCircleFraction,
-                -halfCircleFraction
-            ),
-            halfCircleFraction
-        )
+    private var angularValue: Angle {
+        .radians(cappedNormalizedValue * circleFraction * 2 * .pi)
     }
     
-    private var angle: Angle {
-        .radians(angleFraction * 2 * .pi)
+    private var startAngle: Angle {
+        .radians(-halfCircleFraction * 2 * .pi)
     }
     
     var body: some View {
         ZStack(alignment: .top) {
+            let thickness = size / 16
             Circle()
                 .fill(.gray.opacity(0.3))
                 .frame(width: size, height: size)
+            Arc(startAngle: .zero, endAngle: angularValue)
+                .stroke(Color.accentColor, lineWidth: thickness)
+                .frame(width: size, height: size)
             Rectangle()
                 .fill(Color.accentColor)
-                .frame(width: size / 16, height: size * 0.4)
+                .frame(width: thickness, height: size * 0.4)
         }
-        .rotationEffect(angle)
+        .rotationEffect(startAngle + angularValue)
         .gesture(
             DragGesture()
                 .onChanged { drag in
-                    delta = Double(drag.translation.width +  drag.translation.height) * 0.002 * sensitivity
+                    delta = Double(drag.translation.width + drag.translation.height) * 0.002 * sensitivity
                 }
                 .onEnded { _ in
                     value += delta
