@@ -51,7 +51,7 @@ struct TrackKnob: View {
         .gesture(
             DragGesture()
                 .onChanged { drag in
-                    delta = Double(drag.translation.width + drag.translation.height) * 0.002 * sensitivity
+                    delta = Double(drag.translation.width - drag.translation.height) * 0.002 * sensitivity
                 }
                 .onEnded { _ in
                     value += delta
