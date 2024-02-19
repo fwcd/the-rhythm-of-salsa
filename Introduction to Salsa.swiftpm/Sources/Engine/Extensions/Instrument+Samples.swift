@@ -7,7 +7,7 @@ extension Instrument {
         case .clave: ["Clave"]
         case .congas: ["Conga"]
         case .cowbell: ["Cowbell"]
-        case .maracas: ["Maraca"]
+        case .maracas: ["Maraca 1", "Maraca 2"]
         case .timbales: ["Timbales"]
         case .piano: ["Piano"]
         }

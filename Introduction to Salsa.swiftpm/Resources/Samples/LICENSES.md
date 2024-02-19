@@ -30,7 +30,13 @@ All samples are unmodified or shortened versions of the original clips.
 - Author: https://freesound.org/people/Suicidity/
 - Source: https://freesound.org/people/Suicidity/sounds/91155/
 
-# Maraca.wav
+# Maraca 1.wav
+
+- License: CC0 1.0 Universal
+- Author: https://freesound.org/people/hollandm/
+- Source: https://freesound.org/people/hollandm/sounds/692810/
+
+# Maraca 2.wav
 
 - License: CC0 1.0 Universal
 - Author: https://freesound.org/people/Samulis/
