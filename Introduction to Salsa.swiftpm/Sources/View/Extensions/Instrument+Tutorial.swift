@@ -18,7 +18,14 @@ extension Instrument {
         case .maracas: [
             "Maracas are shakers that play a similar pattern as the bongos, adding a steady groove to the rhythm.",
         ]
-        default: []
+        case .timbales: [
+            #"Timbales are drums that are usually hit on the side or "rim" of the drum, thereby producing a relatively high-pitched sound. They play a swingy rhythm named "cascara", which translates to "shell" in English, referring to this particular style of playing the drums."#,
+        ]
+        case .piano: [
+            "The final layer is a piano that plays a simple riff, usually over four measures, alternating between chords.",
+            "The chords making up this progression are, per convention, written as roman numerals referring to the nth major or major chord in the current key.",
+            "This example is in the key of C, so our chords are vi = 6th minor = Am, IV = 4th major = F, V = 5th major = G and vi = Am",
+        ]
         }
     }
 }
