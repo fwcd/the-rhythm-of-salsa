@@ -52,6 +52,9 @@ struct PadView: View {
                 }
                 .onEnded { _ in
                     startVelocity = nil
+                    if velocity == 0 {
+                        isActive = false
+                    }
                 }
         )
     }
