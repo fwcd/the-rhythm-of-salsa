@@ -30,6 +30,8 @@ extension Instrument {
             IV = 4th (major) = F
             V = 5th (major) = G
             """,
+            // TODO: Reference dance tutorial once ready?
+            #"You now know all of the basic instruments. Clicking "Complete" will take you to the beat sequencer where you can freely experiment with the full beat."#
         ]
         }
     }
