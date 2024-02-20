@@ -148,11 +148,7 @@ class BeatSequencerEngine: ObservableObject {
         
         // Jump to the first loop to not skip a beat
         if changedEvents {
-            let loopLength = newTracks
-                .map { Int($0.length.rawValue.rounded()) }
-                .reduce(1) { $0.leastCommonMultiple($1) }
-            sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
-                .truncatingRemainder(dividingBy: Double(loopLength))
+            jumpToFirstLoop(using: newTracks)
         }
         
         if shouldStartStop {
@@ -196,6 +192,14 @@ class BeatSequencerEngine: ObservableObject {
     
     func decrementPlaybackDependents() {
         sequencerPlaybackDependents -= 1
+    }
+    
+    func jumpToFirstLoop(using tracks: [Track]? = nil) {
+        let loopLength = (tracks ?? model.tracks)
+            .map { Int($0.length.rawValue.rounded()) }
+            .reduce(1) { $0.leastCommonMultiple($1) }
+        sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
+            .truncatingRemainder(dividingBy: Double(loopLength))
     }
     
     private func updateSequencerPlayState() {

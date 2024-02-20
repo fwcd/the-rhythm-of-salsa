@@ -15,20 +15,29 @@ struct SharedBeatSequencerView: View {
         )
         .onAppear {
             if isPlaying {
-                engine.incrementPlaybackDependents()
+                incrementPlaybackDependents()
             }
         }
         .onChange(of: isPlaying) { isPlaying in
             if isPlaying {
-                engine.incrementPlaybackDependents()
+                incrementPlaybackDependents()
             } else {
-                engine.decrementPlaybackDependents()
+                decrementPlaybackDependents()
             }
         }
         .onDisappear {
             if isPlaying {
-                engine.decrementPlaybackDependents()
+                decrementPlaybackDependents()
             }
         }
+    }
+    
+    private func incrementPlaybackDependents() {
+        engine.jumpToFirstLoop()
+        engine.incrementPlaybackDependents()
+    }
+    
+    private func decrementPlaybackDependents() {
+        engine.decrementPlaybackDependents()
     }
 }
