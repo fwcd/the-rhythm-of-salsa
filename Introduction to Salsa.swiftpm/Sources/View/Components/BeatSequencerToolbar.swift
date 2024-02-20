@@ -18,9 +18,15 @@ struct BeatSequencerToolbar: View {
                 }
             }
             .buttonStyle(BorderedProminentButtonStyle())
+            
             Divider()
-            Stepper("\(Int(beatsPerMinute.rawValue)) BPM", value: $beatsPerMinute, in: 60...300)
+            
+            TextField("BPM", value: $beatsPerMinute.rawValue, format: .number)
+                .multilineTextAlignment(.trailing)
+            Stepper("BPM", value: $beatsPerMinute, in: 60...300)
+            
             Divider()
+            
             Button {
                 // TODO
             } label: {
