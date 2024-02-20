@@ -27,7 +27,7 @@ struct BeatSequencerView: View {
                             options: options.tracks
                         )
                         .opacity(isHighlighted ? 1 : 0.3)
-                        .blur(radius: isHighlighted ? 0 : 3)
+                        .grayscale(isHighlighted ? 0 : 1)
                     }
                     
                 }
