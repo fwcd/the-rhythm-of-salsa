@@ -66,9 +66,7 @@ struct TrackView: View {
                     if options.showsInstrumentName,
                        let instrument = track.instrument {
                         Text(instrument.name)
-                            .font(.caption)
-                            .foregroundStyle(.gray)
-                            .textCase(.uppercase)
+                            .caption()
                             .padding(.horizontal, 4)
                     }
                     if options.showsPatternPicker {
