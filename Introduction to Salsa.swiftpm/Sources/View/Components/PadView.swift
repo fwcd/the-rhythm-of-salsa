@@ -55,7 +55,8 @@ struct PadView: View {
         )
         PadView(
             isActive: .constant(true),
-            isPlayed: true
+            isPlayed: true,
+            velocity: 0.5
         )
         PadView(
             isActive: .constant(false),
