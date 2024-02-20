@@ -45,6 +45,11 @@ struct PadView: View {
         .highPriorityGesture(
             DragGesture()
                 .onChanged { drag in
+                    if !isActive {
+                        isActive = true
+                        velocity = 0
+                    }
+                    
                     let startVelocity = self.startVelocity ?? velocity
                     self.startVelocity = startVelocity
                     
