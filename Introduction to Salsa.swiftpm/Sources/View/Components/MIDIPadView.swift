@@ -26,7 +26,7 @@ struct MIDIPadView: View {
                             height: noteThickness
                         )
                         .position(
-                            x: size * CGFloat(offsetEvent.startOffset) / CGFloat(beats) + width / 2,
+                            x: size * CGFloat(offsetEvent.startOffset - beatRange.lowerBound) / CGFloat(beats) + width / 2,
                             y: size * CGFloat(offsetEvent.event.key % UInt32(notes)) / CGFloat(notes)
                         )
                 }
