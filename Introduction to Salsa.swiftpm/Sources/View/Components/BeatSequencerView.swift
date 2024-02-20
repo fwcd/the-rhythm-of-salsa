@@ -12,7 +12,7 @@ struct BeatSequencerView: View {
             VStack(spacing: ViewConstants.largeSpace) {
                 VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
                     BeatIndicatorsView(
-                        playhead: playhead,
+                        playhead: $playhead,
                         padSize: padSize,
                         options: options.tracks
                     )

@@ -29,7 +29,7 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     @Published var model: BeatSequencerModel = .init()
-    @Published var playhead: Beats = 0
+    @Published private(set) var playhead: Beats = 0
     private var activeModel: BeatSequencerModel? = nil
     private var sequencerTracks: [TrackPreset: AVMusicTrack] = [:]
     
@@ -200,6 +200,10 @@ class BeatSequencerEngine: ObservableObject {
             .reduce(1) { $0.leastCommonMultiple($1) }
         sequencer.currentPositionInBeats = sequencer.currentPositionInBeats
             .truncatingRemainder(dividingBy: Double(loopLength))
+    }
+    
+    func movePlayhead(to beats: Beats) {
+        sequencer.currentPositionInBeats = TimeInterval(beats.rawValue)
     }
     
     private func updateSequencerPlayState() {

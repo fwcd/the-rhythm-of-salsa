@@ -9,7 +9,11 @@ struct SharedBeatSequencerView: View {
     var body: some View {
         BeatSequencerView(
             model: $engine.model,
-            playhead: $engine.playhead,
+            playhead: Binding {
+                engine.playhead
+            } set: {
+                engine.movePlayhead(to: $0)
+            },
             isPlaying: $isPlaying,
             options: options
         )
