@@ -31,10 +31,12 @@ struct BeatSequencerView: View {
                     }
                     
                 }
-                BeatSequencerToolbar(
-                    isPlaying: $isPlaying,
-                    beatsPerMinute: $model.beatsPerMinute
-                )
+                if options.showsToolbar {
+                    BeatSequencerToolbar(
+                        isPlaying: $isPlaying,
+                        beatsPerMinute: $model.beatsPerMinute
+                    )
+                }
             }
         }
     }

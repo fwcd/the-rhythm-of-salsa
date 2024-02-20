@@ -23,7 +23,8 @@ struct CountTutorialScreen: View {
                 pads: .init(
                     isPressable: false
                 )
-            )
+            ),
+            showsToolbar: false
         ))
         } navigation: {
             Button("Continue") {

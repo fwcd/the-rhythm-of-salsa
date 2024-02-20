@@ -19,6 +19,7 @@ struct InstrumentTutorialScreen: View {
                     showsVolume: false,
                     showsInstrumentName: false
                 ),
+                showsToolbar: false,
                 highlightedInstruments: [instrument]
             ))
         } navigation: {
