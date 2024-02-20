@@ -11,7 +11,7 @@ struct PadView: View {
     var options: PadOptions = .init()
     
     var body: some View {
-        let shape = RoundedRectangle(cornerRadius: ViewConstants.cornerRadius)
+        let shape = RoundedRectangle(cornerRadius: ViewConstants.smallCornerRadius)
         Button {
             isActive = !isActive
         } label: {

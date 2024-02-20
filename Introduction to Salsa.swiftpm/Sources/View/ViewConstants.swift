@@ -16,5 +16,6 @@ enum ViewConstants {
     
     static let sidebarIconSize: CGFloat = 22
     
-    static let cornerRadius: CGFloat = 5
+    static let smallCornerRadius: CGFloat = 5
+    static let largeCornerRadius: CGFloat = 10
 }
