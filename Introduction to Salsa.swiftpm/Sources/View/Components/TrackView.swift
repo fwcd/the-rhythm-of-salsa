@@ -19,12 +19,16 @@ struct TrackView: View {
         HStack {
             let imageSize = padSize * 0.7
             let color = track.instrument?.color ?? .primary
-            if let instrument = track.instrument {
-                Image(instrument)
-                    .resizable()
-                    .frame(width: imageSize, height: imageSize)
-                    .padding((padSize - imageSize) / 2)
-                    .foregroundStyle(color)
+            if options.showsInstrumentIcon {
+                Group {
+                    if let instrument = track.instrument {
+                        Image(instrument)
+                            .resizable()
+                            .frame(width: imageSize, height: imageSize)
+                            .foregroundStyle(color)
+                    }
+                }
+                .frame(width: padSize, height: padSize)
             }
             let padIndices = (0..<options.padCount).map { i in
                 (

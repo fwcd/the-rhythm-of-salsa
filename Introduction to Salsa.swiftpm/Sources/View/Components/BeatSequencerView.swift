@@ -7,8 +7,28 @@ struct BeatSequencerView: View {
     
     var body: some View {
         SingleAxisGeometryReader { width in
-            let padSize = width / (2 * CGFloat(options.tracks.padCount))
+            let padCount = options.tracks.padCount
+            let padsPerBeat = options.tracks.padsPerBeat
+            let padSize = width / (2 * CGFloat(padCount))
             VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
+                HStack {
+                    let startPad = options.tracks.showsInstrumentIcon ? -1 : 0
+                    ForEach(startPad..<padCount, id: \.self) { i in
+                        Group {
+                            if i >= 0 {
+                                if i % padsPerBeat == 0 {
+                                    Text(String(1 + i / padsPerBeat))
+                                } else {
+                                    Text("+")
+                                        .opacity(0.3)
+                                }
+                            } else {
+                                Text("")
+                            }
+                        }
+                        .frame(width: padSize)
+                    }
+                }
                 ForEach($model.tracks) { $track in
                     let track = $track.wrappedValue
                     let isHighlighted = options.highlightedInstruments.isEmpty
@@ -28,6 +48,8 @@ struct BeatSequencerView: View {
 }
 
 #Preview {
-    BeatSequencerView(model: .constant(.init(tracks: [Track()])), playhead: .constant(0))
-        .preferredColorScheme(.dark)
+    BeatSequencerView(model: .constant(.init(tracks: [
+        Track(),
+        Track(instrument: .clave)
+    ])), playhead: .constant(0))
 }
