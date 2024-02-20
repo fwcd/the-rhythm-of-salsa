@@ -14,6 +14,7 @@ extension Instrument {
         ]
         case .bongos: [
             "Bongos are pairs of smaller drums that play a steady pattern with a stroke on every half-beat.",
+            "Notice how the pattern alternates between strong and light strokes. Each stroke has a velocity that can be changed by dragging it up or down.",
         ]
         case .maracas: [
             "Maracas are shakers that play a similar pattern as the bongos, adding a steady groove to the rhythm.",
