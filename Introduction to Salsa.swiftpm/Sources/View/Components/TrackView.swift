@@ -3,17 +3,13 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
-    var padSize: CGFloat = ViewConstants.padSize
+    var padSize: CGSize = ViewConstants.padSize
     var options: TrackOptions = .init()
     
-    private var beatCount: Int {
-        Int(track.length.rawValue.rounded(.up))
-    }
-            
     var body: some View {
         let color = track.instrument?.color ?? .primary
-        let imageSize = padSize * 0.7
-        TrackRow(beatCount: beatCount, padSize: padSize, options: options) { position, beatRange in
+        let imageSize = padSize.width * 0.7
+        TrackRow(beatCount: track.beatCount, padSize: padSize, options: options) { position, beatRange in
             let isPlayed = beatRange.contains(track.looped(playhead))
             if track.instrument?.prefersMIDIView ?? false {
                 MIDIPadView(
@@ -60,9 +56,9 @@ struct TrackView: View {
         } trailing: {
             if options.showsVolume {
                 let defaultValue = track.instrument?.patterns.first { $0.name == track.patternName }?.volume
-                TrackKnob(value: $track.volume, defaultValue: defaultValue, size: padSize * 0.8)
+                TrackKnob(value: $track.volume, defaultValue: defaultValue, size: padSize.width * 0.8)
                     .foregroundStyle(color)
-                    .frame(width: padSize, height: padSize)
+                    .frame(width: padSize.width, height: padSize.height)
                     .padding(.leading, ViewConstants.smallSpace)
             }
             if options.showsInstrumentName || options.showsPatternPicker {
@@ -87,7 +83,6 @@ struct TrackView: View {
 #Preview {
     TrackView(
         track: .constant(.init(instrument: .clave)),
-        playhead: .constant(0),
-        padSize: 48
+        playhead: .constant(0)
     )
 }

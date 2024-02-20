@@ -5,7 +5,7 @@ struct StrokePadView: View {
     @Binding var velocity: CGFloat
     let isPlayed: Bool
     var color: Color = .primary
-    var size: CGFloat = ViewConstants.padSize
+    var size: CGSize = ViewConstants.padSize
     var beatInMeasure: Int = 0
     var padInBeat: Int = 0
     var options: PadOptions = .init()
@@ -21,8 +21,11 @@ struct StrokePadView: View {
                 .strokePad(isPlayed: isPlayed, color: color)
                 .background(
                     shape
-                        .frame(width: size, height: velocity * size)
-                        .position(x: size / 2, y: (size + (1 - velocity) * size) / 2)
+                        .frame(width: size.width, height: velocity * size.height)
+                        .position(
+                            x: size.width / 2,
+                            y: (size.height + (1 - velocity) * size.height) / 2
+                        )
                         .foregroundStyle(
                             isActive
                                 ? color
@@ -33,7 +36,7 @@ struct StrokePadView: View {
                                     : color.opacity(0.1)
                         )
                 )
-                .frame(width: size, height: size)
+                .frame(width: size.width, height: size.height)
         }
         .buttonStyle(PadViewButtonStyle(isActive: isActive))
         .disabled(!options.isPressable)
@@ -48,7 +51,7 @@ struct StrokePadView: View {
                     let startVelocity = self.startVelocity ?? velocity
                     self.startVelocity = startVelocity
                     
-                    velocity = min(max(startVelocity - drag.translation.height / size, 0), 1)
+                    velocity = min(max(startVelocity - drag.translation.height / size.height, 0), 1)
                 }
                 .onEnded { _ in
                     startVelocity = nil

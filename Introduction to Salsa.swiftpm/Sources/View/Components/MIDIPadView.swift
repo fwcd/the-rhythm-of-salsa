@@ -5,7 +5,7 @@ struct MIDIPadView: View {
     let beatRange: Range<Beats>
     var isPlayed: Bool = false
     var color: Color = .primary
-    var size: CGFloat = ViewConstants.padSize
+    var size: CGSize = ViewConstants.padSize
     var notes: Int = 12
     
     private var beats: Beats {
@@ -17,21 +17,21 @@ struct MIDIPadView: View {
         shape
             .strokePad(isPlayed: isPlayed, color: color)
             .overlay {
-                let noteThickness = size / CGFloat(notes)
+                let noteThickness = size.height / CGFloat(notes)
                 ForEach(offsetEvents, id: \.self) { offsetEvent in
-                    let width = size * CGFloat(offsetEvent.duration) / CGFloat(beats)
+                    let width = size.width * CGFloat(offsetEvent.duration) / CGFloat(beats)
                     Rectangle()
                         .frame(
                             width: width,
                             height: noteThickness
                         )
                         .position(
-                            x: size * CGFloat(offsetEvent.startOffset - beatRange.lowerBound) / CGFloat(beats) + width / 2,
-                            y: size * CGFloat(offsetEvent.event.key % UInt32(notes)) / CGFloat(notes)
+                            x: size.width * CGFloat(offsetEvent.startOffset - beatRange.lowerBound) / CGFloat(beats) + width / 2,
+                            y: size.height * CGFloat(offsetEvent.event.key % UInt32(notes)) / CGFloat(notes)
                         )
                 }
             }
-            .frame(width: size, height: size)
+            .frame(width: size.width, height: size.height)
             .clipShape(shape)
     }
 }

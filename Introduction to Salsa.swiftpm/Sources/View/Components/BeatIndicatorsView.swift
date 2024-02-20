@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BeatIndicatorsView: View {
     @Binding var playhead: Beats
-    var padSize: CGFloat = ViewConstants.padSize
+    var padSize: CGSize = ViewConstants.padSize
     var options: TrackOptions = .init()
     
     private var loopedPlayhead: Beats {
@@ -20,7 +20,7 @@ struct BeatIndicatorsView: View {
                         .opacity(0.3)
                 }
             }
-            .frame(width: padSize)
+            .frame(width: padSize.width)
             .onTapGesture {
                 playhead = beatRange.lowerBound
             }

@@ -9,22 +9,23 @@ struct BeatSequencerView: View {
     var body: some View {
         SingleAxisGeometryReader { width in
             let padsPerRow = options.tracks.beatsPerRow * options.tracks.padsPerBeat
-            let padSize = width / (2 * CGFloat(padsPerRow))
+            let padWidth = width / (2 * CGFloat(padsPerRow))
             VStack(spacing: ViewConstants.largeSpace) {
                 VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
                     BeatIndicatorsView(
                         playhead: $playhead,
-                        padSize: padSize,
+                        padSize: CGSize(width: padWidth, height: padWidth),
                         options: options.tracks
                     )
                     ForEach($model.tracks) { $track in
                         let track = $track.wrappedValue
                         let isHighlighted = options.highlightedInstruments.isEmpty
                             || (track.instrument.map { options.highlightedInstruments.contains($0) } ?? false)
+                        let isWrapped = track.beatCount > options.tracks.beatsPerRow
                         TrackView(
                             track: $track,
                             playhead: $playhead,
-                            padSize: padSize,
+                            padSize: CGSize(width: padWidth, height: isWrapped ? padWidth / 2 : padWidth),
                             options: options.tracks
                         )
                         .opacity(isHighlighted ? 1 : 0.3)

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TrackRow<Content, Icon, Trailing>: View where Content: View, Icon: View, Trailing: View {
     var beatCount: Int = 8
-    var padSize: CGFloat = ViewConstants.padSize
+    var padSize: CGSize = ViewConstants.padSize
     var options: TrackOptions = .init()
     @ViewBuilder var content: (PadPosition, Range<Beats>) -> Content
     @ViewBuilder var icon: () -> Icon
@@ -12,7 +12,7 @@ struct TrackRow<Content, Icon, Trailing>: View where Content: View, Icon: View, 
         HStack {
             if options.showsIcon {
                 icon()
-                    .frame(width: padSize, height: padSize)
+                    .frame(width: padSize.width, height: padSize.height)
             }
             VStack(alignment: .leading) {
                 let beatsPerRow = options.beatsPerRow
@@ -50,7 +50,7 @@ struct TrackRow<Content, Icon, Trailing>: View where Content: View, Icon: View, 
 
 extension TrackRow where Icon == Text, Trailing == EmptyView {
     init(
-        padSize: CGFloat = ViewConstants.padSize,
+        padSize: CGSize = ViewConstants.padSize,
         options: TrackOptions = .init(),
         @ViewBuilder content: @escaping (PadPosition, Range<Beats>) -> Content
     ) {
@@ -67,7 +67,7 @@ extension TrackRow where Icon == Text, Trailing == EmptyView {
 
 extension TrackRow where Trailing == EmptyView {
     init(
-        padSize: CGFloat = ViewConstants.padSize,
+        padSize: CGSize = ViewConstants.padSize,
         options: TrackOptions = .init(),
         @ViewBuilder content: @escaping (PadPosition, Range<Beats>) -> Content,
         @ViewBuilder icon: @escaping () -> Icon
