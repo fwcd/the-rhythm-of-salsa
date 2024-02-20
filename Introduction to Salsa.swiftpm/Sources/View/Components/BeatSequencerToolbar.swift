@@ -2,6 +2,7 @@ import SwiftUI
 
 struct BeatSequencerToolbar: View {
     @Binding var isPlaying: Bool
+    @Binding var mainVolume: Double
     @Binding var beatsPerMinute: Beats
     
     @Environment(\.colorScheme) private var colorScheme
@@ -21,6 +22,9 @@ struct BeatSequencerToolbar: View {
             
             Divider()
             
+            TrackKnob(value: $mainVolume, defaultValue: 1)
+                .foregroundStyle(Color.accentColor)
+                .padding(.horizontal, ViewConstants.smallSpace)
             TextField("BPM", value: $beatsPerMinute.rawValue, format: .number)
                 .multilineTextAlignment(.trailing)
             Stepper("BPM", value: $beatsPerMinute, in: 60...300)
@@ -59,6 +63,7 @@ struct BeatSequencerToolbar: View {
 #Preview {
     BeatSequencerToolbar(
         isPlaying: .constant(false),
+        mainVolume: .constant(1),
         beatsPerMinute: .constant(120)
     )
 }

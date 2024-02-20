@@ -5,7 +5,7 @@ struct PadView: View {
     let isPlayed: Bool
     var velocity: CGFloat = 1
     var color: Color = .primary
-    var size: CGFloat = 64
+    var size: CGFloat = ViewConstants.padSize
     var beatInMeasure: Int = 0
     var padInBeat: Int = 0
     var options: PadOptions = .init()

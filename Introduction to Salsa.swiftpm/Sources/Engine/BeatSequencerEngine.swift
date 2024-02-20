@@ -21,6 +21,7 @@ private func configureAVAudioSession() {
 class BeatSequencerEngine: ObservableObject {
     private let samplers: [Instrument: AVAudioUnitSampler]
     
+    private var engine: AVAudioEngine
     private var sequencer: AVAudioSequencer
     private var sequencerPlaybackDependents: Int = 0 {
         didSet {
@@ -68,6 +69,7 @@ class BeatSequencerEngine: ObservableObject {
             }
         }
         
+        self.engine = engine
         self.samplers = samplers
         
         do {
@@ -101,6 +103,10 @@ class BeatSequencerEngine: ObservableObject {
     
     private func syncSequencer(with newModel: BeatSequencerModel) {
         syncSequencerTracks(with: newModel.tracks)
+        
+        if activeModel?.mainVolume != newModel.mainVolume {
+            engine.mainMixerNode.outputVolume = Float(newModel.mainVolume)
+        }
         
         if activeModel?.beatsPerMinute != newModel.beatsPerMinute {
             let tempoTrack = sequencer.tempoTrack

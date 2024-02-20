@@ -3,7 +3,7 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
-    var padSize: CGFloat = 64
+    var padSize: CGFloat = ViewConstants.padSize
     var options: TrackOptions = .init()
     
     private var beatCount: Int {

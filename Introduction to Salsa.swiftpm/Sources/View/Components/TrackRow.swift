@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TrackRow<Content, Icon, Trailing>: View where Content: View, Icon: View, Trailing: View {
-    var padSize: CGFloat = 64
+    var padSize: CGFloat = ViewConstants.padSize
     var options: TrackOptions = .init()
     @ViewBuilder var content: (PadPosition, Range<Beats>) -> Content
     @ViewBuilder var icon: () -> Icon
@@ -33,7 +33,7 @@ struct TrackRow<Content, Icon, Trailing>: View where Content: View, Icon: View, 
 
 extension TrackRow where Icon == Text, Trailing == EmptyView {
     init(
-        padSize: CGFloat = 64,
+        padSize: CGFloat = ViewConstants.padSize,
         options: TrackOptions = .init(),
         @ViewBuilder content: @escaping (PadPosition, Range<Beats>) -> Content
     ) {
@@ -50,7 +50,7 @@ extension TrackRow where Icon == Text, Trailing == EmptyView {
 
 extension TrackRow where Trailing == EmptyView {
     init(
-        padSize: CGFloat = 64,
+        padSize: CGFloat = ViewConstants.padSize,
         options: TrackOptions = .init(),
         @ViewBuilder content: @escaping (PadPosition, Range<Beats>) -> Content,
         @ViewBuilder icon: @escaping () -> Icon

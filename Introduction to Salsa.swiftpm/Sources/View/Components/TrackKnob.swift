@@ -7,7 +7,7 @@ struct TrackKnob: View {
     var maxValue: Double = 1
     var sensitivity: Double = 1
     var halfCircleFraction: Double = 1 / 3
-    var size: CGFloat = 64
+    var size: CGFloat = ViewConstants.knobSize
     
     @State private var delta: Double = 0
     @Environment(\.colorScheme) private var colorScheme
