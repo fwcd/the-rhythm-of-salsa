@@ -17,6 +17,7 @@ struct BeatSequencerToolbar: View {
                     Label("Play", systemImage: "play")
                 }
             }
+            .buttonStyle(BorderedProminentButtonStyle())
             Divider()
             Stepper("\(Int(beatsPerMinute.rawValue)) BPM", value: $beatsPerMinute, in: 60...200)
             Divider()
