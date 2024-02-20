@@ -6,7 +6,7 @@ struct BeatIndicatorsView: View {
     var options: TrackOptions = .init()
     
     private var loopedPlayhead: Beats {
-        playhead.truncatingRemainder(dividingBy: Beats(options.beatCount))
+        playhead.truncatingRemainder(dividingBy: Beats(options.beatsPerRow))
     }
     
     var body: some View {

@@ -13,7 +13,7 @@ struct TrackView: View {
     var body: some View {
         let color = track.instrument?.color ?? .primary
         let imageSize = padSize * 0.7
-        TrackRow(padSize: padSize, options: options) { position, beatRange in
+        TrackRow(beatCount: beatCount, padSize: padSize, options: options) { position, beatRange in
             let isPlayed = beatRange.contains(track.looped(playhead))
             if track.instrument?.prefersMIDIView ?? false {
                 MIDIPadView(

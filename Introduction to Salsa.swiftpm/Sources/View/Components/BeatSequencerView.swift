@@ -8,7 +8,8 @@ struct BeatSequencerView: View {
     
     var body: some View {
         SingleAxisGeometryReader { width in
-            let padSize = width / (2 * CGFloat(options.tracks.padCount))
+            let padsPerRow = options.tracks.beatsPerRow * options.tracks.padsPerBeat
+            let padSize = width / (2 * CGFloat(padsPerRow))
             VStack(spacing: ViewConstants.largeSpace) {
                 VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
                     BeatIndicatorsView(

@@ -1,13 +1,9 @@
 struct TrackOptions: Hashable {
-    var beatCount: Int = 8
+    var beatsPerRow: Int = 8
     var padsPerBeat: Int = 2
     var showsVolume: Bool = true
     var showsIcon: Bool = true
     var showsInstrumentName: Bool = true
     var showsPatternPicker: Bool = true
     var pads: PadOptions = .init()
-    
-    var padCount: Int {
-        beatCount * padsPerBeat
-    }
 }
