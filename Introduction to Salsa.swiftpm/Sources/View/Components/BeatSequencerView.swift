@@ -12,7 +12,7 @@ struct BeatSequencerView: View {
             let padSize = width / (2 * CGFloat(padCount))
             VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
                 HStack {
-                    let startPad = options.tracks.showsInstrumentIcon ? -1 : 0
+                    let startPad = options.tracks.showsIcon ? -1 : 0
                     ForEach(startPad..<padCount, id: \.self) { i in
                         Group {
                             if i >= 0 {
