@@ -6,7 +6,7 @@ extension AVMIDINoteEvent {
             channel: event.channel,
             key: event.key,
             velocity: event.velocity,
-            duration: AVMusicTimeStamp(event.duration.rawValue)
+            duration: AVMusicTimeStamp(event.duration)
         )
     }
 }

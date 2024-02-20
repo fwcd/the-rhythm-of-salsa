@@ -22,6 +22,12 @@ extension Beats {
     }
 }
 
+extension Beats {
+    init(_ value: Float) {
+        self.init(rawValue: Double(value))
+    }
+}
+
 extension Beats: CustomStringConvertible {
     var description: String {
         if rawValue == 1 {
@@ -112,5 +118,17 @@ extension Beats: ExpressibleByIntegerLiteral {
 extension Beats: ExpressibleByFloatLiteral {
     init(floatLiteral value: Double) {
         self.init(rawValue: value)
+    }
+}
+
+extension Double {
+    init(_ beats: Beats) {
+        self = beats.rawValue
+    }
+}
+
+extension Float {
+    init(_ beats: Beats) {
+        self = Float(beats.rawValue)
     }
 }

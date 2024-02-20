@@ -18,12 +18,7 @@ struct StrokePadView: View {
             isActive = !isActive
         } label: {
             shape
-                .strokeBorder(
-                    isPlayed
-                        ? color
-                        : color.opacity(0.5),
-                    lineWidth: isPlayed ? 2 : 1.5
-                )
+                .strokePad(isPlayed: isPlayed, color: color)
                 .background(
                     shape
                         .frame(width: size, height: velocity * size)
