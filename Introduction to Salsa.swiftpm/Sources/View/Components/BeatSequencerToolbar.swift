@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BeatSequencerToolbar: View {
     @Binding var isPlaying: Bool
-    @Binding var beatsPerMinute: Int
+    @Binding var beatsPerMinute: Beats
     
     @Environment(\.colorScheme) private var colorScheme
     
@@ -12,13 +12,13 @@ struct BeatSequencerToolbar: View {
                 isPlaying = !isPlaying
             } label: {
                 if isPlaying {
-                    Label("Play", systemImage: "play")
-                } else {
                     Label("Stop", systemImage: "stop")
+                } else {
+                    Label("Play", systemImage: "play")
                 }
             }
             Divider()
-            Stepper("\(beatsPerMinute) BPM", value: $beatsPerMinute, in: 60...200)
+            Stepper("\(Int(beatsPerMinute.rawValue)) BPM", value: $beatsPerMinute, in: 60...200)
             Divider()
             Button {
                 // TODO
