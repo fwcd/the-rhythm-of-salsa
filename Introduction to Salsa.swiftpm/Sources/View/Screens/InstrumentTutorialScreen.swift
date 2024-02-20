@@ -22,9 +22,11 @@ struct InstrumentTutorialScreen: View {
                 highlightedInstruments: [instrument]
             ))
         } navigation: {
-            Button(instrument.isLast ? "Complete" : "Next") {
+            let hasNextStage = textStage < instrument.tutorialDescription.count - 1
+            let isLast = instrument.isLast
+            Button(!hasNextStage && isLast ? "Complete" : "Next") {
                 withAnimation {
-                    if textStage < instrument.tutorialDescription.count - 1 {
+                    if hasNextStage {
                         textStage += 1
                     } else {
                         textStage = 0
