@@ -22,8 +22,8 @@ extension Instrument {
             pattern("Son", beats: Array(0..<16).compactMap { $0 % 4 == 1 ? nil : Beats($0) / 2 }) { $0 % 3 == 0 ? 0.8 : 0.5 },
         ]
         case .timbales: [
-            pattern("Cascara 1", volume: 0.5, beats: [0, 1, 1.5, 2.5, 3.5, 4, 5, 6, 6.5, 7.5]),
-            pattern("Cascara 2", volume: 0.5, beats: [0, 1, 2, 2.5, 3.5, 4, 5, 5.5, 6.5, 7]),
+            pattern("Cascara 1", volume: 0.4, beats: [0, 1, 1.5, 2.5, 3.5, 4, 5, 6, 6.5, 7.5]),
+            pattern("Cascara 2", volume: 0.4, beats: [0, 1, 2, 2.5, 3.5, 4, 5, 5.5, 6.5, 7]),
         ]
         case .piano:
             memo([self]) {
