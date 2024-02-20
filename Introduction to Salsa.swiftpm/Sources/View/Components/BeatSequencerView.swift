@@ -10,8 +10,8 @@ struct BeatSequencerView: View {
             let padSize = width / (2 * CGFloat(options.tracks.padCount))
             VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
                 BeatIndicatorsView(
-                    options: options.tracks,
-                    padSize: padSize
+                    padSize: padSize,
+                    options: options.tracks
                 )
                 ForEach($model.tracks) { $track in
                     let track = $track.wrappedValue
