@@ -7,27 +7,18 @@ struct BeatSequencerView: View {
     
     var body: some View {
         SingleAxisGeometryReader { width in
-            let padCount = options.tracks.padCount
-            let padsPerBeat = options.tracks.padsPerBeat
-            let padSize = width / (2 * CGFloat(padCount))
+            let padSize = width / (2 * CGFloat(options.tracks.padCount))
             VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
-                HStack {
-                    let startPad = options.tracks.showsIcon ? -1 : 0
-                    ForEach(startPad..<padCount, id: \.self) { i in
-                        Group {
-                            if i >= 0 {
-                                if i % padsPerBeat == 0 {
-                                    Text(String(1 + i / padsPerBeat))
-                                } else {
-                                    Text("+")
-                                        .opacity(0.3)
-                                }
-                            } else {
-                                Text("")
-                            }
+                TrackRow(options: options.tracks, padSize: padSize) { position, beatRange in
+                    Group {
+                        if position.padInBeat == 0 {
+                            Text(String(1 + position.beatIndex))
+                        } else {
+                            Text("+")
+                                .opacity(0.3)
                         }
-                        .frame(width: padSize)
                     }
+                    .frame(width: padSize)
                 }
                 ForEach($model.tracks) { $track in
                     let track = $track.wrappedValue

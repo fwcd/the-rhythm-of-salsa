@@ -31,11 +31,36 @@ struct TrackRow<Content, Icon, Trailing>: View where Content: View, Icon: View, 
     }
 }
 
+extension TrackRow where Icon == Text, Trailing == EmptyView {
+    init(
+        options: TrackOptions = .init(),
+        padSize: CGFloat = 64,
+        @ViewBuilder content: @escaping (PadPosition, Range<Beats>) -> Content
+    ) {
+        self.init(
+            options: options,
+            padSize: padSize,
+            content: content,
+            icon: { Text("") }, // Workaround since the Spacer is a bit smaller, unfortunately...
+            trailing: {}
+        )
+    }
+}
+
+
 extension TrackRow where Trailing == EmptyView {
     init(
+        options: TrackOptions = .init(),
+        padSize: CGFloat = 64,
         @ViewBuilder content: @escaping (PadPosition, Range<Beats>) -> Content,
         @ViewBuilder icon: @escaping () -> Icon
     ) {
-        self.init(content: content, icon: icon, trailing: {})
+        self.init(
+            options: options,
+            padSize: padSize,
+            content: content,
+            icon: icon,
+            trailing: {}
+        )
     }
 }
