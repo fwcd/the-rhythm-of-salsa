@@ -14,7 +14,7 @@ struct TrackView: View {
         let color = track.instrument?.color ?? .primary
         let imageSize = padSize * 0.7
         TrackRow(padSize: padSize, options: options) { position, beatRange in
-            PadView(
+            StrokePadView(
                 isActive: Binding {
                     !track.findEvents(in: beatRange).isEmpty
                 } set: { isActive in

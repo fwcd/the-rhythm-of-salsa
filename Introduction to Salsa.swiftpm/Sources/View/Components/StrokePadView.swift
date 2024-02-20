@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PadView: View {
+struct StrokePadView: View {
     @Binding var isActive: Bool
     @Binding var velocity: CGFloat
     let isPlayed: Bool
@@ -67,22 +67,22 @@ struct PadView: View {
 
 #Preview {
     HStack {
-        PadView(
+        StrokePadView(
             isActive: .constant(true),
             velocity: .constant(1),
             isPlayed: false
         )
-        PadView(
+        StrokePadView(
             isActive: .constant(false),
             velocity: .constant(1),
             isPlayed: false
         )
-        PadView(
+        StrokePadView(
             isActive: .constant(true),
             velocity: .constant(0.5),
             isPlayed: true
         )
-        PadView(
+        StrokePadView(
             isActive: .constant(false),
             velocity: .constant(1),
             isPlayed: true
