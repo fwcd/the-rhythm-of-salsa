@@ -5,6 +5,12 @@ struct Beats: Codable, Hashable, RawRepresentable {
 }
 
 extension Beats {
+    func truncatingRemainder(dividingBy dividend: Beats) -> Beats {
+        Beats(rawValue.truncatingRemainder(dividingBy: dividend.rawValue))
+    }
+}
+
+extension Beats {
     init(_ value: Int) {
         self.init(rawValue: Double(value))
     }

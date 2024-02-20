@@ -10,6 +10,7 @@ struct BeatSequencerView: View {
             let padSize = width / (2 * CGFloat(options.tracks.padCount))
             VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
                 BeatIndicatorsView(
+                    playhead: playhead,
                     padSize: padSize,
                     options: options.tracks
                 )
