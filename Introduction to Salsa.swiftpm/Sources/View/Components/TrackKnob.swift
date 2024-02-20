@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TrackKnob: View {
     @Binding var value: Double
+    var defaultValue: Double? = nil
     var minValue: Double = 0
     var maxValue: Double = 1
     var sensitivity: Double = 1
@@ -47,6 +48,14 @@ struct TrackKnob: View {
         }
         .rotationEffect(startAngle + angularValue)
         .gesture(
+            TapGesture(count: 2)
+                .onEnded {
+                    if let defaultValue {
+                        value = defaultValue
+                    }
+                }
+        )
+        .simultaneousGesture(
             DragGesture()
                 .onChanged { drag in
                     delta = Double(drag.translation.width - drag.translation.height) * 0.002 * sensitivity

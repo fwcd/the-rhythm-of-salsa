@@ -42,7 +42,8 @@ struct TrackView: View {
             }
         } trailing: {
             if options.showsVolume {
-                TrackKnob(value: $track.volume, size: padSize * 0.8)
+                let defaultValue = track.instrument?.patterns.first { $0.name == track.patternName }?.volume
+                TrackKnob(value: $track.volume, defaultValue: defaultValue, size: padSize * 0.8)
                     .foregroundStyle(color)
                     .frame(width: padSize, height: padSize)
                     .padding(.leading, ViewConstants.smallSpace)
