@@ -13,7 +13,7 @@ struct MIDIPadView: View {
     }
     
     private var isCompact: Bool {
-        size.height < 10
+        size.height < size.width / 2
     }
     
     var body: some View {
