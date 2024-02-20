@@ -37,7 +37,7 @@ struct BeatSequencerToolbar: View {
         .buttonStyle(BorderedButtonStyle())
         .padding(ViewConstants.smallSpace)
         .background(
-            .primary.opacity(colorScheme == .dark ? 0.1 : 0)
+            .primary.opacity(colorScheme == .dark ? 0.05 : 0)
         )
         .clipShape(RoundedRectangle(cornerRadius: ViewConstants.largeCornerRadius))
         .overlay {
