@@ -40,8 +40,18 @@ struct Track: Hashable, Codable, Identifiable {
     }
     
     mutating func removeEvents(in range: Range<Beats>) {
-        offsetEvents.removeAll { event in
-            range.overlaps(event.range)
+        offsetEvents.removeAll { offsetEvent in
+            range.overlaps(offsetEvent.range)
+        }
+    }
+    
+    mutating func updateEvents(in range: Range<Beats>, with updater: (inout Event) throws -> Void) rethrows {
+        offsetEvents = try offsetEvents.compactMap { offsetEvent -> OffsetEvent? in
+            var offsetEvent = offsetEvent
+            if range.overlaps(offsetEvent.range) {
+                try updater(&offsetEvent.event)
+            }
+            return offsetEvent
         }
     }
     

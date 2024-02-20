@@ -25,8 +25,14 @@ struct TrackView: View {
                     }
                     track.patternName = nil
                 },
+                velocity: Binding {
+                    track.findEvents(in: beatRange).first.map { CGFloat($0.event.velocity) / 127 } ?? 1
+                } set: { velocity in
+                    track.updateEvents(in: beatRange) { event in
+                        event.velocity = UInt32(velocity * 127)
+                    }
+                },
                 isPlayed: beatRange.contains(track.looped(playhead)),
-                velocity: track.findEvents(in: beatRange).first.map { CGFloat($0.event.velocity) / 127 } ?? 1,
                 color: color,
                 size: padSize,
                 beatInMeasure: position.beatIndex % 4,

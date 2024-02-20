@@ -2,13 +2,15 @@ import SwiftUI
 
 struct PadView: View {
     @Binding var isActive: Bool
+    @Binding var velocity: CGFloat
     let isPlayed: Bool
-    var velocity: CGFloat = 1
     var color: Color = .primary
     var size: CGFloat = ViewConstants.padSize
     var beatInMeasure: Int = 0
     var padInBeat: Int = 0
     var options: PadOptions = .init()
+    
+    @State private var startVelocity: CGFloat? = nil
     
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: ViewConstants.smallCornerRadius)
@@ -40,6 +42,18 @@ struct PadView: View {
         }
         .buttonStyle(PadViewButtonStyle(isActive: isActive))
         .disabled(!options.isPressable)
+        .highPriorityGesture(
+            DragGesture()
+                .onChanged { drag in
+                    let startVelocity = self.startVelocity ?? velocity
+                    self.startVelocity = startVelocity
+                    
+                    velocity = min(max(startVelocity - drag.translation.height / size, 0), 1)
+                }
+                .onEnded { _ in
+                    startVelocity = nil
+                }
+        )
     }
 }
 
@@ -47,19 +61,22 @@ struct PadView: View {
     HStack {
         PadView(
             isActive: .constant(true),
+            velocity: .constant(1),
             isPlayed: false
         )
         PadView(
             isActive: .constant(false),
+            velocity: .constant(1),
             isPlayed: false
         )
         PadView(
             isActive: .constant(true),
-            isPlayed: true,
-            velocity: 0.5
+            velocity: .constant(0.5),
+            isPlayed: true
         )
         PadView(
             isActive: .constant(false),
+            velocity: .constant(1),
             isPlayed: true
         )
     }
