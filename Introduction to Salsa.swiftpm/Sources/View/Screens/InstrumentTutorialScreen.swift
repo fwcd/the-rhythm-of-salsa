@@ -24,7 +24,7 @@ struct InstrumentTutorialScreen: View {
         } navigation: {
             let hasNextStage = textStage < instrument.tutorialDescription.count - 1
             let isLast = instrument.isLast
-            Button(!hasNextStage && isLast ? "Complete" : "Next") {
+            Button(!hasNextStage && isLast ? "Complete Tutorial" : "Next") {
                 withAnimation {
                     if hasNextStage {
                         textStage += 1
