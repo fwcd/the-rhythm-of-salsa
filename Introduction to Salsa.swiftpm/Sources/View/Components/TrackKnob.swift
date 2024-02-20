@@ -50,9 +50,7 @@ struct TrackKnob: View {
         .gesture(
             TapGesture(count: 2)
                 .onEnded {
-                    if let defaultValue {
-                        value = defaultValue
-                    }
+                    resetToDefault()
                 }
         )
         .simultaneousGesture(
@@ -65,6 +63,24 @@ struct TrackKnob: View {
                     delta = 0
                 }
         )
+        .contextMenu {
+            Button("Set to Minimum Value") {
+                value = minValue
+            }
+            Button("Set to Default Value") {
+                resetToDefault()
+            }
+            .disabled(defaultValue == nil)
+            Button("Set to Maximum Value") {
+                value = maxValue
+            }
+        }
+    }
+    
+    private func resetToDefault() {
+        if let defaultValue {
+            value = defaultValue
+        }
     }
 }
 
