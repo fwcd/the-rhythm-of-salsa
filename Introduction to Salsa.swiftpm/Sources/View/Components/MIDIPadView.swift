@@ -12,23 +12,29 @@ struct MIDIPadView: View {
         beatRange.upperBound - beatRange.lowerBound
     }
     
+    private var isCompact: Bool {
+        size.height < 10
+    }
+    
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: ViewConstants.smallCornerRadius)
         shape
             .strokePad(isPlayed: isPlayed, color: color)
             .overlay {
-                let noteThickness = size.height / CGFloat(notes)
-                ForEach(offsetEvents, id: \.self) { offsetEvent in
-                    let width = size.width * CGFloat(offsetEvent.duration) / CGFloat(beats)
-                    Rectangle()
-                        .frame(
-                            width: width,
-                            height: noteThickness
-                        )
-                        .position(
-                            x: size.width * CGFloat(offsetEvent.startOffset - beatRange.lowerBound) / CGFloat(beats) + width / 2,
-                            y: size.height * CGFloat(offsetEvent.event.key % UInt32(notes)) / CGFloat(notes)
-                        )
+                if !isCompact {
+                    let noteThickness = size.height / CGFloat(notes)
+                    ForEach(offsetEvents, id: \.self) { offsetEvent in
+                        let width = size.width * CGFloat(offsetEvent.duration) / CGFloat(beats)
+                        Rectangle()
+                            .frame(
+                                width: width,
+                                height: noteThickness
+                            )
+                            .position(
+                                x: size.width * CGFloat(offsetEvent.startOffset - beatRange.lowerBound) / CGFloat(beats) + width / 2,
+                                y: size.height * CGFloat(offsetEvent.event.key % UInt32(notes)) / CGFloat(notes)
+                            )
+                    }
                 }
             }
             .frame(width: size.width, height: size.height)
