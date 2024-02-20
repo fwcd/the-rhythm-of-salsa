@@ -6,8 +6,8 @@ struct BeatSequencerView: View {
     var options: BeatSequencerOptions = .init()
     
     var body: some View {
-        GeometryReader { geometry in
-            let padSize = geometry.size.width / (2 * CGFloat(options.tracks.padCount))
+        SingleAxisGeometryReader { width in
+            let padSize = width / (2 * CGFloat(options.tracks.padCount))
             VStack(alignment: .leading, spacing: ViewConstants.smallSpace) {
                 ForEach($model.tracks) { $track in
                     let track = $track.wrappedValue
@@ -23,7 +23,6 @@ struct BeatSequencerView: View {
                     .blur(radius: isHighlighted ? 0 : 3)
                 }
             }
-            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
     }
 }
