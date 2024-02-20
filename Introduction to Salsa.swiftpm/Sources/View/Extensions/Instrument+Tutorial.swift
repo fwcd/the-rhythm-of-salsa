@@ -24,7 +24,12 @@ extension Instrument {
         case .piano: [
             "The final layer is a piano that plays a simple riff, usually over four measures, alternating between chords.",
             "The chords making up this progression are, per convention, written as roman numerals referring to the nth major or major chord in the current key.",
-            "This example is in the key of C, so our chords are vi = 6th minor = Am, IV = 4th major = F, V = 5th major = G and vi = Am",
+            """
+            This example is in the key of C, so our chords are
+            vi = 6th (minor) = Am
+            IV = 4th (major) = F
+            V = 5th (major) = G
+            """,
         ]
         }
     }
