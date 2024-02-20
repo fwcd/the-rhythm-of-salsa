@@ -7,6 +7,18 @@ struct InstrumentTutorialScreen: View {
     @State private var textStage: Int = 0
     @EnvironmentObject private var engine: BeatSequencerEngine
     
+    private var hasNextStage: Bool {
+        textStage < instrument.tutorialDescription.count - 1
+    }
+    
+    private var isLast: Bool {
+        instrument.isLast
+    }
+    
+    private var isNearlyComplete: Bool {
+        !hasNextStage && isLast
+    }
+    
     var body: some View {
         PageView(
             title: instrument.name,
@@ -20,12 +32,10 @@ struct InstrumentTutorialScreen: View {
                     showsInstrumentName: false
                 ),
                 showsToolbar: false,
-                highlightedInstruments: [instrument]
+                highlightedInstruments: isNearlyComplete ? [] : [instrument]
             ))
         } navigation: {
-            let hasNextStage = textStage < instrument.tutorialDescription.count - 1
-            let isLast = instrument.isLast
-            Button(!hasNextStage && isLast ? "Complete Tutorial" : "Next") {
+            Button(isNearlyComplete ? "Complete Tutorial" : "Next") {
                 withAnimation {
                     if hasNextStage {
                         textStage += 1
