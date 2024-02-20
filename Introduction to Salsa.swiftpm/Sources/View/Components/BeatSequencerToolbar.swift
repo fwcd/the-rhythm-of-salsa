@@ -9,49 +9,67 @@ struct BeatSequencerToolbar: View {
     
     var body: some View {
         HStack {
-            Button {
-                isPlaying = !isPlaying
-            } label: {
-                if isPlaying {
-                    Label("Stop", systemImage: "stop")
-                } else {
-                    Label("Play", systemImage: "play")
+            VStack {
+                Button {
+                    isPlaying = !isPlaying
+                } label: {
+                    if isPlaying {
+                        Label("Stop", systemImage: "stop")
+                    } else {
+                        Label("Play", systemImage: "play")
+                    }
                 }
+                .buttonStyle(BorderedProminentButtonStyle())
+                .help("Starts or stops the sequencer")
+                Text("Playback")
+                    .caption()
             }
-            .buttonStyle(BorderedProminentButtonStyle())
-            .help("Starts or stops the sequencer")
             
             Divider()
             
-            TrackKnob(value: $mainVolume, defaultValue: 1)
-                .foregroundStyle(Color.accentColor)
-                .padding(.horizontal, ViewConstants.smallSpace)
-                .help("The main volume")
-            
-            Group {
-                TextField("BPM", value: $beatsPerMinute.rawValue, format: .number)
-                    .multilineTextAlignment(.trailing)
-                Stepper("BPM", value: $beatsPerMinute, in: 60...300)
+            VStack {
+                TrackKnob(value: $mainVolume, defaultValue: 1)
+                    .foregroundStyle(Color.accentColor)
+                    .padding(.horizontal, ViewConstants.smallSpace)
+                    .help("The main volume")
+                Text("Volume")
+                    .caption()
             }
-            .help("The sequencer's beats per minute")
+            
+            VStack {
+                HStack {
+                    TextField("BPM", value: $beatsPerMinute.rawValue, format: .number)
+                        .multilineTextAlignment(.trailing)
+                    Stepper("BPM", value: $beatsPerMinute, in: 60...300)
+                }
+                .help("The sequencer's beats per minute")
+                Text("Beats per Minute")
+                    .caption()
+            }
             
             Divider()
             
-            Button {
-                // TODO
-            } label: {
-                Label("Import", systemImage: "square.and.arrow.down")
+            VStack {
+                HStack {
+                    Button {
+                        // TODO
+                    } label: {
+                        Label("Import", systemImage: "square.and.arrow.down")
+                    }
+                    .disabled(true)
+                    .help("Imports a MIDI file")
+                    
+                    Button {
+                        // TODO
+                    } label: {
+                        Label("Export", systemImage: "square.and.arrow.up")
+                    }
+                    .disabled(true)
+                    .help("Exports a MIDI file")
+                }
+                Text("MIDI I/O")
+                    .caption()
             }
-            .disabled(true)
-            .help("Imports a MIDI file")
-            
-            Button {
-                // TODO
-            } label: {
-                Label("Export", systemImage: "square.and.arrow.up")
-            }
-            .disabled(true)
-            .help("Exports a MIDI file")
         }
         .fixedSize()
         .buttonStyle(BorderedButtonStyle())
