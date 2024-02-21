@@ -26,3 +26,10 @@ enum Instrument: String, Hashable, Codable, CustomStringConvertible, CaseIterabl
         Self.allCases[0..<(ordinal + 1)]
     }
 }
+
+extension Instrument {
+    init?(ordinal: Int) {
+        guard ordinal >= 0 && ordinal < Self.allCases.count else { return nil }
+        self = Self.allCases[ordinal]
+    }
+}

@@ -15,6 +15,7 @@ extension Track {
         // TODO: Mute/solo
         
         let timestampEvents = try track.midiTimestampEvents
+        let channel = timestampEvents.compactMap { MIDINoteMessage($0.event)?.channel }.first
         let offsetEvents = timestampEvents.compactMap { timestampEvent in
             MIDINoteMessage(timestampEvent.event).map {
                 OffsetEvent(
@@ -26,7 +27,7 @@ extension Track {
         
         self.init(
             preset: .init(
-                instrument: .piano, // TODO: Parse instrument or let caller specify it
+                instrument: channel.flatMap { Instrument(ordinal: Int($0)) } ?? .piano,
                 length: Beats(length),
                 isLooping: loopInfo.numberOfLoops > 1
             ),
@@ -50,6 +51,9 @@ extension Track {
         for event in offsetEvents {
             let timestamp = MusicTimeStamp(event.startOffset)
             var message = MIDINoteMessage(event.event)
+            if let ordinal = instrument?.ordinal {
+                message.channel = UInt8(ordinal)
+            }
             guard MusicTrackNewMIDINoteEvent(track, timestamp, &message) == OSStatus(noErr) else {
                 throw MusicTrackError.couldNotCreateMIDIEvent(event)
             }
