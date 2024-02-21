@@ -43,6 +43,12 @@ struct BeatSequencerToolbar: View {
             Divider()
             
             Button {
+                model.tracks = model.tracks.map { $0.cleared() }
+            } label: {
+                Label("Clear", systemImage: "trash")
+            }
+            
+            Button {
                 isPlaying = false
                 midiImporterShown = true
             } label: {

@@ -41,6 +41,17 @@ struct Track: Hashable, Codable, Identifiable {
             : offset
     }
     
+    func cleared() -> Track {
+        var track = self
+        track.clear()
+        return track
+    }
+    
+    mutating func clear() {
+        offsetEvents = []
+        patternName = nil
+    }
+    
     mutating func removeEvents(in range: Range<Beats>) {
         offsetEvents.removeAll { offsetEvent in
             range.overlaps(offsetEvent.range)
