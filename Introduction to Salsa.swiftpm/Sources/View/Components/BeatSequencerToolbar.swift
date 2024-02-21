@@ -43,6 +43,7 @@ struct BeatSequencerToolbar: View {
             Divider()
             
             Button {
+                isPlaying = false
                 midiImporterShown = true
             } label: {
                 Label("Import", systemImage: "square.and.arrow.down")
@@ -58,6 +59,7 @@ struct BeatSequencerToolbar: View {
             .help("Imports a MIDI file")
             
             Button {
+                isPlaying = false
                 midiExporterShown = true
             } label: {
                 Label("Export", systemImage: "square.and.arrow.up")
