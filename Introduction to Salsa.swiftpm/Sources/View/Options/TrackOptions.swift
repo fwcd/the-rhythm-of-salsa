@@ -1,6 +1,7 @@
 struct TrackOptions: Hashable {
     var beatsPerRow: Int = 8
     var padsPerBeat: Int = 2
+    var showsMuteSolo: Bool = true
     var showsVolume: Bool = true
     var showsIcon: Bool = true
     var showsInstrumentName: Bool = true
