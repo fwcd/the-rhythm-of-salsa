@@ -12,7 +12,15 @@ extension Track {
             throw MusicTrackError.couldNotGetLength
         }
         
-        // TODO: Mute/solo
+        var mute: DarwinBoolean = false
+        guard (try? track.getProperty(kSequenceTrackProperty_MuteStatus, into: &mute)) != nil else {
+            throw MusicTrackError.couldNotGetMute
+        }
+        
+        var solo: DarwinBoolean = false
+        guard (try? track.getProperty(kSequenceTrackProperty_SoloStatus, into: &solo)) != nil else {
+            throw MusicTrackError.couldNotGetSolo
+        }
         
         let timestampEvents = try track.midiTimestampEvents
         let channel = timestampEvents.compactMap { MIDINoteMessage($0.event)?.channel }.first
@@ -31,6 +39,8 @@ extension Track {
                 length: Beats(length),
                 isLooping: loopInfo.numberOfLoops > 1
             ),
+            isMute: mute.boolValue,
+            isSolo: solo.boolValue,
             offsetEvents: offsetEvents
         )
     }
@@ -46,7 +56,15 @@ extension Track {
             throw MusicTrackError.couldNotSetLength
         }
         
-        // TODO: Mute/solo
+        var mute = DarwinBoolean(isMute)
+        guard (try? track.setProperty(kSequenceTrackProperty_MuteStatus, to: &mute)) != nil else {
+            throw MusicTrackError.couldNotSetMute
+        }
+        
+        var solo = DarwinBoolean(isSolo)
+        guard (try? track.setProperty(kSequenceTrackProperty_SoloStatus, to: &solo)) != nil else {
+            throw MusicTrackError.couldNotSetSolo
+        }
         
         for event in offsetEvents {
             let timestamp = MusicTimeStamp(event.startOffset)

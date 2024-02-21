@@ -6,6 +6,8 @@ struct Track: Hashable, Codable, Identifiable {
     var preset: TrackPreset = .init()
     var patternName: String? = nil
     var volume: Double = 1
+    var isMute: Bool = false
+    var isSolo: Bool = false
     var offsetEvents: [OffsetEvent] = []
     
     var instrument: Instrument? {

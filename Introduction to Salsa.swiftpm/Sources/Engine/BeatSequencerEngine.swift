@@ -171,18 +171,25 @@ class BeatSequencerEngine: ObservableObject {
         }
         
         // If a single sequencer track only maps to one model track, we can set the volume directly on the sampler unit as an optimization (instead of having to change the velocities of individual events)
-        var optimizedVolume = false
+        var optimized = false
         if newTracks.count == 1,
+           let newTrack = newTracks.first,
            let sampler = sequencerTrack.destinationAudioUnit as? AVAudioUnitSampler {
-            sampler.volume = Float(newTracks[0].volume)
-            optimizedVolume = true
+            sampler.volume = Float(newTrack.volume)
+            sequencerTrack.isMuted = newTrack.isMute
+            sequencerTrack.isSoloed = newTrack.isSolo
+            optimized = true
         }
         
         for newTrack in newTracks {
             for offsetEvent in newTrack.offsetEvents {
                 var event = offsetEvent.event
-                if !optimizedVolume {
-                    event.velocity = UInt32(min(max(Double(event.velocity) * newTrack.volume, 0), 127))
+                if !optimized {
+                    var volume = newTrack.volume
+                    if newTrack.isMute || (newTracks.contains(where: \.isSolo) && !newTrack.isSolo) {
+                        volume = 0
+                    }
+                    event.velocity = UInt32(min(max(Double(event.velocity) * volume, 0), 127))
                 }
                 sequencerTrack.addEvent(
                     AVMIDINoteEvent(event),
