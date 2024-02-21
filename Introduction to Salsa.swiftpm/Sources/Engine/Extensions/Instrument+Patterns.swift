@@ -2,6 +2,9 @@ import Foundation
 
 extension Instrument {
     var patterns: [Pattern] {
+        customPatterns + [pattern("Empty")]
+    }
+    var customPatterns: [Pattern] {
         switch self {
         case .clave: [
             pattern("2-3 Pattern", beats: [1, 2, 4, 5.5, 7]),
