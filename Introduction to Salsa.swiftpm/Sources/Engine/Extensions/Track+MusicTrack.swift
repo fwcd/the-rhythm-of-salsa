@@ -14,11 +14,14 @@ extension Track {
         
         // TODO: Mute/solo
         
-        let offsetEvents = try track.noteEvents.map {
-            OffsetEvent(
-                event: Event($0.message),
-                startOffset: Beats($0.timestamp)
-            )
+        let timestampEvents = try track.midiTimestampEvents
+        let offsetEvents = timestampEvents.compactMap { timestampEvent in
+            MIDINoteMessage(timestampEvent.event).map {
+                OffsetEvent(
+                    event: Event($0),
+                    startOffset: Beats(timestampEvent.timestamp)
+                )
+            }
         }
         
         self.init(

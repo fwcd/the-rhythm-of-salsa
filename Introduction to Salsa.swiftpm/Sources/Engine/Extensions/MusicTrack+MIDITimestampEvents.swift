@@ -4,9 +4,9 @@ import OSLog
 private let log = Logger(subsystem: "Introduction to Salsa", category: "Engine.MusicTrack+NoteEvents")
 
 extension MusicTrack {
-    var noteEvents: [(timestamp: MusicTimeStamp, message: MIDINoteMessage)] {
+    var midiTimestampEvents: [MIDITimestampEvent] {
         get throws {
-            var events: [(timestamp: MusicTimeStamp, message: MIDINoteMessage)] = []
+            var events: [MIDITimestampEvent] = []
             
             var iterator: MusicEventIterator?
             guard NewMusicEventIterator(self, &iterator) == OSStatus(noErr), let iterator else {
@@ -37,11 +37,25 @@ extension MusicTrack {
                     throw MusicTrackError.couldNotGetEventInfo
                 }
                 
-                if eventType == kMusicEventType_MIDINoteMessage, let message = eventData?.load(as: MIDINoteMessage.self) {
-                    events.append((
+                switch eventType {
+                case kMusicEventType_MIDINoteMessage:
+                    guard let message = eventData?.load(as: MIDINoteMessage.self) else {
+                        throw MusicTrackError.couldNotLoadEventAsNoteEvent
+                    }
+                    events.append(.init(
                         timestamp: timestamp,
-                        message: message
+                        event: .note(message)
                     ))
+                case kMusicEventType_MIDIChannelMessage:
+                    guard let message = eventData?.load(as: MIDIChannelMessage.self) else {
+                        throw MusicTrackError.couldNotLoadEventAsChannelEvent
+                    }
+                    events.append(.init(
+                        timestamp: timestamp,
+                        event: .channel(message)
+                    ))
+                default:
+                    break
                 }
                 
                 guard MusicEventIteratorNextEvent(iterator) == OSStatus(noErr) else {

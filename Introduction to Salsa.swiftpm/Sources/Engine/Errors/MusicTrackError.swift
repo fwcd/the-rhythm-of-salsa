@@ -14,4 +14,6 @@ enum MusicTrackError: Error {
     case couldNotAdvanceEventIterator
     case couldNotGetEventInfo
     case couldNotCreateMIDIEvent(OffsetEvent)
+    case couldNotLoadEventAsNoteEvent
+    case couldNotLoadEventAsChannelEvent
 }
