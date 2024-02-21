@@ -1,5 +1,8 @@
 import Foundation
+import OSLog
 import AVFoundation
+
+fileprivate let log = Logger(subsystem: "Introduction to Salsa", category: "Engine.BeatSequencerModel+MIDI")
 
 extension BeatSequencerModel {
     init(midiFileURL: URL) throws {
@@ -8,18 +11,17 @@ extension BeatSequencerModel {
             throw MusicSequenceError.couldNotCreate
         }
         
+        defer {
+            if DisposeMusicSequence(sequence) != OSStatus(noErr) {
+                log.error("Could not dispose of MusicSequence in \(#function)")
+            }
+        }
+        
         guard MusicSequenceFileLoad(sequence, midiFileURL as CFURL, .midiType, []) == OSStatus(noErr) else {
             throw MusicSequenceError.couldNotLoadMIDIFile(midiFileURL)
         }
         
-        let model = try Self(sequence)
-        
-        guard DisposeMusicSequence(sequence) == OSStatus(noErr) else {
-            throw MusicSequenceError.couldNotDisposeOf
-        }
-        
-        self = model
+        self = try Self(sequence)
     }
-    
-    // TODO: Writing
 }
+

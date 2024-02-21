@@ -6,5 +6,4 @@ enum MusicTrackError: Error {
     case couldNotCheckIfEventIteratorHasCurrent
     case couldNotAdvanceEventIterator
     case couldNotGetEventInfo
-    case couldNotDisposeOfEventIterator
 }

@@ -1,4 +1,7 @@
 import AVFoundation
+import OSLog
+
+private let log = Logger(subsystem: "Introduction to Salsa", category: "Engine.MusicTrack+NoteEvents")
 
 extension MusicTrack {
     var noteEvents: [(timestamp: MusicTimeStamp, message: MIDINoteMessage)] {
@@ -8,6 +11,12 @@ extension MusicTrack {
             var iterator: MusicEventIterator?
             guard NewMusicEventIterator(self, &iterator) == OSStatus(noErr), let iterator else {
                 throw MusicTrackError.couldNotFormEventIterator
+            }
+            
+            defer {
+                if DisposeMusicEventIterator(iterator) != OSStatus(noErr) {
+                    log.warning("Could not dispose of MusicEventIterator in \(#function)")
+                }
             }
             
             var hasCurrent: DarwinBoolean = true
@@ -38,10 +47,6 @@ extension MusicTrack {
                 guard MusicEventIteratorNextEvent(iterator) == OSStatus(noErr) else {
                     throw MusicTrackError.couldNotAdvanceEventIterator
                 }
-            }
-            
-            guard DisposeMusicEventIterator(iterator) == OSStatus(noErr) else {
-                throw MusicTrackError.couldNotDisposeOfEventIterator
             }
             
             return events
