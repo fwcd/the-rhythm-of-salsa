@@ -7,6 +7,7 @@ private let log = Logger(subsystem: "Introduction to Salsa", category: "View.Bea
 struct BeatSequencerToolbar: View {
     @Binding var isPlaying: Bool
     @Binding var model: BeatSequencerModel
+    var usesCompactIcons: Bool = false
     
     @Environment(\.colorScheme) private var colorScheme
     @State private var midiImporterShown = false
@@ -18,9 +19,15 @@ struct BeatSequencerToolbar: View {
                 isPlaying = !isPlaying
             } label: {
                 if isPlaying {
-                    Label("Stop", systemImage: "stop")
+                    Image(systemName: "stop")
+                    if !usesCompactIcons {
+                        Text("Stop")
+                    }
                 } else {
-                    Label("Play", systemImage: "play")
+                    Image(systemName: "play")
+                    if !usesCompactIcons {
+                        Text("Play")
+                    }
                 }
             }
             .buttonStyle(BorderedProminentButtonStyle())
@@ -45,14 +52,20 @@ struct BeatSequencerToolbar: View {
             Button {
                 model.tracks = model.tracks.map { $0.cleared() }
             } label: {
-                Label("Clear", systemImage: "trash")
+                Image(systemName: "trash")
+                if !usesCompactIcons {
+                    Text("Clear")
+                }
             }
             
             Button {
                 isPlaying = false
                 midiImporterShown = true
             } label: {
-                Label("Import", systemImage: "square.and.arrow.down")
+                Image(systemName: "square.and.arrow.down")
+                if !usesCompactIcons {
+                    Text("Import")
+                }
             }
             .fileImporter(isPresented: $midiImporterShown, allowedContentTypes: [.midi]) {
                 do {
@@ -68,7 +81,10 @@ struct BeatSequencerToolbar: View {
                 isPlaying = false
                 midiExporterShown = true
             } label: {
-                Label("Export", systemImage: "square.and.arrow.up")
+                Image(systemName: "square.and.arrow.up")
+                if !usesCompactIcons {
+                    Text("Export")
+                }
             }
             .fileExporter(
                 isPresented: $midiExporterShown,
