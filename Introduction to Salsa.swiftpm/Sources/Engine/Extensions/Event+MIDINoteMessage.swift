@@ -10,3 +10,15 @@ extension Event {
         )
     }
 }
+
+extension MIDINoteMessage {
+    init(_ event: Event) {
+        self.init(
+            channel: UInt8(event.channel),
+            note: UInt8(event.key),
+            velocity: UInt8(event.velocity),
+            releaseVelocity: UInt8(event.velocity),
+            duration: Float32(Double(event.duration))
+        )
+    }
+}

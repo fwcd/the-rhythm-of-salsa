@@ -23,5 +23,24 @@ extension BeatSequencerModel {
         
         self = try Self(sequence)
     }
+    
+    func writeTo(midiFileURL: URL) throws {
+        var sequence: MusicSequence?
+        guard NewMusicSequence(&sequence) == OSStatus(noErr), let sequence else {
+            throw MusicSequenceError.couldNotCreate
+        }
+        
+        defer {
+            if DisposeMusicSequence(sequence) != OSStatus(noErr) {
+                log.error("Could not dispose of MusicSequence in \(#function)")
+            }
+        }
+        
+        try writeTo(sequence)
+        
+        guard MusicSequenceFileCreate(sequence, midiFileURL as CFURL, .midiType, .eraseFile, 0) == OSStatus(noErr) else {
+            throw MusicSequenceError.couldNotCreateMIDIFile(midiFileURL)
+        }
+    }
 }
 

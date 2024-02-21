@@ -25,4 +25,24 @@ extension BeatSequencerModel {
             tracks: tracks
         )
     }
+    
+    func writeTo(_ sequence: MusicSequence) throws {
+        var tempoTrack: MusicTrack?
+        guard MusicSequenceGetTempoTrack(sequence, &tempoTrack) == OSStatus(noErr), let tempoTrack else {
+            throw MusicSequenceError.couldNotGetTempoTrack
+        }
+        
+        guard MusicTrackNewExtendedTempoEvent(tempoTrack, MusicTimeStamp(0), Float64(beatsPerMinute.rawValue)) == OSStatus(noErr) else {
+            throw MusicSequenceError.couldNotAddTempoEvent
+        }
+        
+        for track in tracks {
+            var musicTrack: MusicTrack?
+            guard MusicSequenceNewTrack(sequence, &musicTrack) == OSStatus(noErr), let musicTrack else {
+                throw MusicSequenceError.couldNotAddNewTrack
+            }
+            
+            try track.writeTo(musicTrack)
+        }
+    }
 }
