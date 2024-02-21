@@ -1,6 +1,6 @@
 import SwiftUI
 
-extension Text {
+extension View {
     func caption() -> some View {
         self.font(.caption)
             .foregroundStyle(.gray)

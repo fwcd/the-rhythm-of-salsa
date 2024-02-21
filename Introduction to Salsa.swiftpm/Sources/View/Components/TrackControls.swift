@@ -3,7 +3,7 @@ import SwiftUI
 struct TrackControls: View {
     @Binding var track: Track
     var padSize: CGSize = ViewConstants.padSize
-    let options: TrackOptions = .init()
+    var options: TrackOptions = .init()
     
     private var color: Color {
         track.instrument?.color ?? .primary

@@ -57,7 +57,11 @@ struct TrackView: View {
                     .foregroundStyle(color)
             }
         } trailing: {
-            TrackControls(track: $track, padSize: padSize)
+            TrackControls(
+                track: $track,
+                padSize: padSize,
+                options: options
+            )
         }
     }
 }
