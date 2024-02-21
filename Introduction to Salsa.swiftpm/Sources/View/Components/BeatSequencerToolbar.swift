@@ -10,6 +10,7 @@ struct BeatSequencerToolbar: View {
     
     @Environment(\.colorScheme) private var colorScheme
     @State private var midiImporterShown = false
+    @State private var midiExporterShown = false
     
     var body: some View {
         HStack {
@@ -57,11 +58,16 @@ struct BeatSequencerToolbar: View {
             .help("Imports a MIDI file")
             
             Button {
-                // TODO
+                midiExporterShown = true
             } label: {
                 Label("Export", systemImage: "square.and.arrow.up")
             }
-            .disabled(true)
+            .fileExporter(
+                isPresented: $midiExporterShown,
+                document: MIDIFileDocument.parsed(model),
+                contentType: .midi,
+                defaultFilename: "Beat Sequence.mid"
+            ) { _ in }
             .help("Exports a MIDI file")
         }
         .fixedSize()
