@@ -1,10 +1,15 @@
+import OSLog
 import SwiftUI
+import UniformTypeIdentifiers
+
+private let log = Logger(subsystem: "Introduction to Salsa", category: "View.BeatSequencerToolbar")
 
 struct BeatSequencerToolbar: View {
     @Binding var isPlaying: Bool
     @Binding var model: BeatSequencerModel
     
     @Environment(\.colorScheme) private var colorScheme
+    @State private var midiImporterShown = false
     
     var body: some View {
         HStack {
@@ -37,9 +42,17 @@ struct BeatSequencerToolbar: View {
             Divider()
             
             Button {
-                // TODO
+                midiImporterShown = true
             } label: {
                 Label("Import", systemImage: "square.and.arrow.down")
+            }
+            .fileImporter(isPresented: $midiImporterShown, allowedContentTypes: [.midi]) {
+                do {
+                    let url = try $0.get()
+                    model = try BeatSequencerModel(midiFileURL: url)
+                } catch {
+                    log.warning("Could not load MIDI file: \(error)")
+                }
             }
             .help("Imports a MIDI file")
             
