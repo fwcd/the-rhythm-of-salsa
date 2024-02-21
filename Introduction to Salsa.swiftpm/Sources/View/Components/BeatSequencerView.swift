@@ -8,6 +8,7 @@ struct BeatSequencerView: View {
     
     var body: some View {
         SingleAxisGeometryReader { width in
+            let options = sizeAdjustedOptions(at: width)
             let padsPerRow = options.tracks.beatsPerRow * options.tracks.padsPerBeat
             let padWidth = width / (2 * CGFloat(padsPerRow))
             VStack(spacing: ViewConstants.largeSpace) {
@@ -43,6 +44,18 @@ struct BeatSequencerView: View {
                 }
             }
         }
+    }
+    
+    private func sizeAdjustedOptions(at width: CGFloat) -> BeatSequencerOptions {
+        var options = self.options
+        if width < 800 {
+            options.tracks.showsMuteSolo = false
+            if width < 700 {
+                options.tracks.showsInstrumentName = false
+                options.tracks.showsPatternPicker = false
+            }
+        }
+        return options
     }
 }
 
