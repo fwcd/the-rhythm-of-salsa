@@ -2,8 +2,7 @@ import SwiftUI
 
 struct BeatSequencerToolbar: View {
     @Binding var isPlaying: Bool
-    @Binding var mainVolume: Double
-    @Binding var beatsPerMinute: Beats
+    @Binding var model: BeatSequencerModel
     
     @Environment(\.colorScheme) private var colorScheme
     
@@ -23,15 +22,15 @@ struct BeatSequencerToolbar: View {
             
             Divider()
             
-            TrackKnob(value: $mainVolume, defaultValue: 1)
+            TrackKnob(value: $model.mainVolume, defaultValue: 1)
                 .foregroundStyle(Color.accentColor)
                 .padding(.horizontal, ViewConstants.smallSpace)
                 .help("The main volume")
             
             Group {
-                TextField("BPM", value: $beatsPerMinute.rawValue, format: .number)
+                TextField("BPM", value: $model.beatsPerMinute.rawValue, format: .number)
                     .multilineTextAlignment(.trailing)
-                Stepper("BPM", value: $beatsPerMinute, in: 60...300)
+                Stepper("BPM", value: $model.beatsPerMinute, in: 60...300)
             }
             .help("The sequencer's beats per minute")
             
@@ -42,7 +41,6 @@ struct BeatSequencerToolbar: View {
             } label: {
                 Label("Import", systemImage: "square.and.arrow.down")
             }
-            .disabled(true)
             .help("Imports a MIDI file")
             
             Button {
@@ -72,7 +70,6 @@ struct BeatSequencerToolbar: View {
 #Preview {
     BeatSequencerToolbar(
         isPlaying: .constant(false),
-        mainVolume: .constant(1),
-        beatsPerMinute: .constant(120)
+        model: .constant(.init())
     )
 }

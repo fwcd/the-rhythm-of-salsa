@@ -36,8 +36,7 @@ struct BeatSequencerView: View {
                 if options.showsToolbar {
                     BeatSequencerToolbar(
                         isPlaying: $isPlaying,
-                        mainVolume: $model.mainVolume,
-                        beatsPerMinute: $model.beatsPerMinute
+                        model: $model
                     )
                 }
             }
