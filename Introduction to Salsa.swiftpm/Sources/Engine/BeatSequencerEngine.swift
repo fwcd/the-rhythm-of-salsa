@@ -147,9 +147,13 @@ class BeatSequencerEngine: ObservableObject {
         
         // Sync each sequencer track, keyed by preset
         for (preset, sequencerTrack) in sequencerTracks {
-            let activeTracks = activeTracksByPreset[preset] ?? []
-            let newTracks = newTracksByPreset[preset] ?? []
-            sync(sequencerTrack: sequencerTrack, activeTracks: activeTracks, with: newTracks)
+            let activeTracksForPreset = activeTracksByPreset[preset] ?? []
+            let newTracksForPreset = newTracksByPreset[preset] ?? []
+            sync(
+                sequencerTrack: sequencerTrack,
+                activeTracks: activeTracksForPreset,
+                with: newTracksForPreset
+            )
         }
         
         // Jump to the first loop to not skip a beat
@@ -165,11 +169,6 @@ class BeatSequencerEngine: ObservableObject {
     private func sync(sequencerTrack: AVMusicTrack, activeTracks: [Track], with newTracks: [Track]) {
         guard activeTracks != newTracks else { return }
         
-        if !activeTracks.flatMap(\.offsetEvents).isEmpty {
-            // TODO: Check whether this is the right range
-            sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
-        }
-        
         // If a single sequencer track only maps to one model track, we can set the volume directly on the sampler unit as an optimization (instead of having to change the velocities of individual events)
         var optimized = false
         if newTracks.count == 1,
@@ -181,12 +180,20 @@ class BeatSequencerEngine: ObservableObject {
             optimized = true
         }
         
+        guard !optimized || activeTracks.map(\.offsetEvents) != newTracks.map(\.offsetEvents) else { return }
+        
+        if !activeTracks.flatMap(\.offsetEvents).isEmpty {
+            // TODO: Check whether this is the right range
+            sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
+        }
+        
         for newTrack in newTracks {
             for offsetEvent in newTrack.offsetEvents {
                 var event = offsetEvent.event
                 if !optimized {
                     var volume = newTrack.volume
-                    if newTrack.isMute || (newTracks.contains(where: \.isSolo) && !newTrack.isSolo) {
+                    // NOTE: Solo is currently only supported in the single-track ("optimized") case since it would require changing other tracks' events too in the non-optimized case
+                    if newTrack.isMute {
                         volume = 0
                     }
                     event.velocity = UInt32(min(max(Double(event.velocity) * volume, 0), 127))

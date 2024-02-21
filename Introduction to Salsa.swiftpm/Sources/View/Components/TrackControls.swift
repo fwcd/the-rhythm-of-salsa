@@ -10,12 +10,23 @@ struct TrackControls: View {
     }
     
     var body: some View {
+        if options.showsMuteSolo {
+            VStack(spacing: 0) {
+                Toggle("Mute", isOn: $track.isMute)
+                    .foregroundStyle(track.isMute ? color : .gray)
+                Toggle("Solo", isOn: $track.isSolo)
+                    .foregroundStyle(track.isSolo ? color : .gray)
+            }
+            .caption()
+            .toggleStyle(ButtonToggleStyle())
+            .buttonStyle(PlainButtonStyle())
+            .padding(.horizontal, ViewConstants.smallSpace)
+        }
         if options.showsVolume {
             let defaultValue = track.instrument?.patterns.first { $0.name == track.patternName }?.volume
             TrackKnob(value: $track.volume, defaultValue: defaultValue, size: padSize.width * 0.8)
                 .foregroundStyle(color)
                 .frame(width: padSize.width, height: padSize.height)
-                .padding(.leading, ViewConstants.smallSpace)
         }
         if options.showsInstrumentName || options.showsPatternPicker {
             VStack(alignment: .leading) {
