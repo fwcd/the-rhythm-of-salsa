@@ -29,10 +29,9 @@ struct BeatSequencerView: View {
                             track: $track,
                             playhead: $playhead,
                             padSize: CGSize(width: padWidth, height: isWrapped ? padWidth / 4 : padWidth),
+                            isHighlighted: isHighlighted,
                             options: options.tracks
                         )
-                        .opacity(isHighlighted ? 1 : 0.3)
-                        .grayscale(isHighlighted ? 0 : 1)
                     }
                     
                 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct TrackControls: View {
     @Binding var track: Track
     var padSize: CGSize = ViewConstants.padSize
+    var isHighlighted: Bool = true
     var options: TrackOptions = .init()
     
     private var color: Color {
@@ -22,25 +23,28 @@ struct TrackControls: View {
             .buttonStyle(PlainButtonStyle())
             .padding(.horizontal, ViewConstants.smallSpace)
         }
-        if options.showsVolume {
-            let defaultValue = track.instrument?.patterns.first { $0.name == track.patternName }?.volume
-            TrackKnob(value: $track.volume, defaultValue: defaultValue, size: padSize.width * 0.8)
-                .foregroundStyle(color)
-                .frame(width: padSize.width, height: padSize.height)
-        }
-        if options.showsInstrumentName || options.showsPatternPicker {
-            VStack(alignment: .leading) {
-                if options.showsInstrumentName,
-                   let instrument = track.instrument {
-                    Text(instrument.name)
-                        .caption()
-                        .padding(.horizontal, 4)
-                }
-                if options.showsPatternPicker {
-                    PatternPicker(track: $track)
+        Group {
+            if options.showsVolume {
+                let defaultValue = track.instrument?.patterns.first { $0.name == track.patternName }?.volume
+                TrackKnob(value: $track.volume, defaultValue: defaultValue, size: padSize.width * 0.8)
+                    .foregroundStyle(color)
+                    .frame(width: padSize.width, height: padSize.height)
+            }
+            if options.showsInstrumentName || options.showsPatternPicker {
+                VStack(alignment: .leading) {
+                    if options.showsInstrumentName,
+                       let instrument = track.instrument {
+                        Text(instrument.name)
+                            .caption()
+                            .padding(.horizontal, 4)
+                    }
+                    if options.showsPatternPicker {
+                        PatternPicker(track: $track)
+                    }
                 }
             }
         }
+        .unhighlight(!isHighlighted)
     }
 }
 
