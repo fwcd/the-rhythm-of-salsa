@@ -216,6 +216,7 @@ class BeatSequencerEngine: ObservableObject {
     
     func jumpToFirstLoop(using tracks: [Track]? = nil) {
         let loopLength = (tracks ?? model.tracks)
+            .filter { !$0.isSilent }
             .map { Int($0.length.rawValue.rounded()) }
             .reduce(1) { $0.leastCommonMultiple($1) }
         sequencer.currentPositionInBeats = sequencer.currentPositionInBeats

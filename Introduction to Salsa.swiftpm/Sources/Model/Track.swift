@@ -10,6 +10,10 @@ struct Track: Hashable, Codable, Identifiable {
     var isSolo: Bool = false
     var offsetEvents: [OffsetEvent] = []
     
+    var isSilent: Bool {
+        isMute || offsetEvents.isEmpty || volume == 0
+    }
+    
     var instrument: Instrument? {
         get { preset.instrument }
         set { preset.instrument = newValue }
