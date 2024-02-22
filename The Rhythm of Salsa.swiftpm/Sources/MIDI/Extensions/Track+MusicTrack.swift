@@ -46,12 +46,10 @@ extension Track {
     }
     
     func writeTo(_ track: MusicTrack) throws {
-        // As per https://www.mixagesoftware.com/en/midikit/help/HTML/meta_events.html
-        
         if let instrument {
             @Guard var trackNameEvent: UnsafeMutablePointer<MIDIMetaEvent>
             _trackNameEvent = MIDIMetaEvent.create(
-                metaEventType: 0x03,
+                type: .trackName,
                 text: instrument.name
             )
             guard MusicTrackNewMetaEvent(track, MusicTimeStamp(0), trackNameEvent) == OSStatus(noErr) else {
@@ -60,7 +58,7 @@ extension Track {
             
             @Guard var instrumentNameEvent: UnsafeMutablePointer<MIDIMetaEvent>
             _instrumentNameEvent = MIDIMetaEvent.create(
-                metaEventType: 0x04,
+                type: .instrumentName,
                 text: instrument.name
             )
             guard MusicTrackNewMetaEvent(track, MusicTimeStamp(0), instrumentNameEvent) == OSStatus(noErr) else {

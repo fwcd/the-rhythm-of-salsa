@@ -32,11 +32,9 @@ extension BeatSequencerModel {
             throw MusicSequenceError.couldNotGetTempoTrack
         }
         
-        // As per https://www.mixagesoftware.com/en/midikit/help/HTML/meta_events.html
-        
         @Guard var keySignatureEvent: UnsafeMutablePointer<MIDIMetaEvent>
         _keySignatureEvent = MIDIMetaEvent.create(
-            metaEventType: 0x59,
+            type: .keySignature,
             raw: Data([
                 UInt8(bitPattern: Int8(key.sharpsOrFlats)),
                 0 // 0 = major, 1 = minor
