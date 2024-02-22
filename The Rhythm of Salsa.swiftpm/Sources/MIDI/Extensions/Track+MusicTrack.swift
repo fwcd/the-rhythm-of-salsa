@@ -45,7 +45,7 @@ extension Track {
             preset: .init(
                 instrument: instrument ?? channel.flatMap { Instrument(ordinal: Int($0)) } ?? .piano,
                 length: Beats(length),
-                isLooping: loopInfo.numberOfLoops > 1
+                isLooping: true // TODO: Figure out why loopInfo.numberOfLoops is always 1
             ),
             isMute: mute.boolValue,
             isSolo: solo.boolValue,
