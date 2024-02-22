@@ -51,11 +51,9 @@ struct BeatSequencerView: View {
         var options = self.options
         if width < 800 {
             options.tracks.showsMuteSolo = false
-            if width < 700 {
-                options.tracks.showsInstrumentName = false
-                options.tracks.showsPatternPicker = false
-                options.usesCompactToolbarIcons = true
-            }
+            options.tracks.showsInstrumentName = false
+            options.tracks.showsPatternPicker = false
+            options.usesCompactToolbarIcons = true
         }
         return options
     }
