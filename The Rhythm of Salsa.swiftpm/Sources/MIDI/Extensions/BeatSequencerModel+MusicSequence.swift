@@ -2,6 +2,18 @@ import AVFoundation
 
 extension BeatSequencerModel {
     init(_ sequence: MusicSequence) throws {
+        var tempoTrack: MusicTrack?
+        guard MusicSequenceGetTempoTrack(sequence, &tempoTrack) == OSStatus(noErr), let tempoTrack else {
+            throw MusicSequenceError.couldNotGetTempoTrack
+        }
+        
+        let metaEvents = try tempoTrack.midiTimestampEvents.compactMap { MIDIMetaEvent($0.event) }
+        print(try tempoTrack.midiTimestampEvents)
+        let key = metaEvents
+            .first { $0.type == .keySignature }
+            .flatMap { $0.raw.first }
+            .flatMap { Key(sharpsOrFlats: Int(Int8(bitPattern: $0))) }
+        
         var beatsPerMinute: MusicTimeStamp = 0
         guard MusicSequenceGetBeatsForSeconds(sequence, 60, &beatsPerMinute) == OSStatus(noErr) else {
             throw MusicSequenceError.couldNotGetBeatsPerMinute
@@ -22,7 +34,8 @@ extension BeatSequencerModel {
         
         self.init(
             beatsPerMinute: Beats(beatsPerMinute),
-            tracks: tracks
+            tracks: tracks,
+            key: key ?? .c
         )
     }
     

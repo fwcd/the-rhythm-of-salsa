@@ -20,11 +20,6 @@ enum Key: String, Hashable, Codable, CaseIterable, CustomStringConvertible {
         rawValue
     }
     
-    /// The position in the circle of fifths or, equivalently, the numbers of sharps (if positive) or flats (if negative) in the corresponding key signature.
-    var sharpsOrFlats: Int {
-        ordinal - Key.c.ordinal
-    }
-    
     var semitone: Int {
         switch self {
         case .dFlat:  1
