@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TrackControls: View {
     @Binding var track: Track
+    let key: Key
     var padSize: CGSize = ViewConstants.padSize
     var isHighlighted: Bool = true
     var options: TrackOptions = .init()
@@ -39,7 +40,7 @@ struct TrackControls: View {
                             .padding(.horizontal, 4)
                     }
                     if options.showsPatternPicker {
-                        PatternPicker(track: $track)
+                        PatternPicker(track: $track, key: key)
                     }
                 }
             }

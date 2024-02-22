@@ -3,6 +3,7 @@ import SwiftUI
 struct TrackView: View {
     @Binding var track: Track
     @Binding var playhead: Beats
+    let key: Key
     var padSize: CGSize = ViewConstants.padSize
     var isHighlighted: Bool = true
     var options: TrackOptions = .init()
@@ -64,6 +65,7 @@ struct TrackView: View {
         } trailing: {
             TrackControls(
                 track: $track,
+                key: key,
                 padSize: padSize,
                 isHighlighted: isHighlighted,
                 options: options
@@ -75,6 +77,7 @@ struct TrackView: View {
 #Preview {
     TrackView(
         track: .constant(.init(instrument: .clave)),
-        playhead: .constant(0)
+        playhead: .constant(0),
+        key: .c
     )
 }

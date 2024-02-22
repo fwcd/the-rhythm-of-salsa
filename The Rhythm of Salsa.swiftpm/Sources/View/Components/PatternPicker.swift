@@ -2,14 +2,22 @@ import SwiftUI
 
 struct PatternPicker: View {
     @Binding var track: Track
+    let key: Key
     
     var body: some View {
         Picker("Pattern", selection: Binding {
             track.patternName
         } set: { newPatternName in
             if let newPatternName,
-               let newPattern = track.instrument?.patterns.first(where: { $0.name == newPatternName }) {
-                track = Track(id: track.id, preset: track.preset, pattern: newPattern)
+               let instrument = track.instrument,
+               let newPattern = instrument.patterns.first(where: { $0.name == newPatternName }) {
+                track = Track(
+                    id: track.id,
+                    preset: track.preset,
+                    pattern: newPattern,
+                    tracksKey: instrument.tracksKey,
+                    transposedTo: key
+                )
             } else {
                 track.patternName = nil
             }
@@ -29,5 +37,5 @@ struct PatternPicker: View {
 }
 
 #Preview {
-    PatternPicker(track: .constant(Track(instrument: .clave)))
+    PatternPicker(track: .constant(Track(instrument: .clave)), key: .c)
 }

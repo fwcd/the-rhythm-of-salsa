@@ -29,6 +29,7 @@ struct BeatSequencerView: View {
                         TrackView(
                             track: $track,
                             playhead: $playhead,
+                            key: model.key,
                             padSize: CGSize(width: padWidth, height: isWrapped ? padWidth / 4 : padWidth),
                             isHighlighted: isHighlighted,
                             options: options.tracks
