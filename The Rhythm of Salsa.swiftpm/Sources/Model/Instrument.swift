@@ -9,27 +9,4 @@ enum Instrument: String, Hashable, Codable, CustomStringConvertible, CaseIterabl
     
     var name: String { rawValue }
     var description: String { rawValue }
-    
-    var ordinal: Int {
-        Self.allCases.firstIndex(of: self)!
-    }
-    
-    var next: Instrument {
-        Self.allCases[(ordinal + 1) % Self.allCases.count]
-    }
-    
-    var isLast: Bool {
-        ordinal == Self.allCases.count - 1
-    }
-    
-    var prefix: ArraySlice<Instrument> {
-        Self.allCases[0..<(ordinal + 1)]
-    }
-}
-
-extension Instrument {
-    init?(ordinal: Int) {
-        guard ordinal >= 0 && ordinal < Self.allCases.count else { return nil }
-        self = Self.allCases[ordinal]
-    }
 }
