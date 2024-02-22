@@ -25,8 +25,8 @@ extension Track {
         let timestampEvents = try track.midiTimestampEvents
         
         let metaEvents = timestampEvents.compactMap(\.event.asMetaEvent)
-        let instrument = metaEvents.first { $0.wrappedValue.pointee.type == .instrumentName }
-            .flatMap { $0.wrappedValue.pointee.text.map { Instrument(rawValue: $0) } }
+        let instrument = metaEvents.first { $0.pointee.type == .instrumentName }
+            .flatMap { $0.pointee.text.map { Instrument(rawValue: $0) } }
         let channel = timestampEvents.compactMap { MIDINoteMessage($0.event)?.channel }.first
         let offsetEvents = timestampEvents.compactMap { timestampEvent in
             MIDINoteMessage(timestampEvent.event).map {
