@@ -15,12 +15,6 @@ extension MIDIMetaEvent {
         }
     }
     
-    var text: String? {
-        mutating get {
-            String(data: raw, encoding: .utf8)
-        }
-    }
-    
     static func create(
         type: MIDIMetaEventType,
         raw: Data = Data([0])
@@ -39,13 +33,5 @@ extension MIDIMetaEvent {
         return Guard(wrappedValue: pointer) {
             pointer.deallocate()
         }
-    }
-    
-    static func create(
-        type: MIDIMetaEventType,
-        text: String
-    ) -> Guard<UnsafeMutablePointer<MIDIMetaEvent>> {
-        let raw = text.data(using: .utf8)!
-        return create(type: type, raw: raw)
     }
 }

@@ -19,4 +19,5 @@ enum MusicTrackError: Error {
     case couldNotLoadEventAsChannelEvent
     case couldNotAddTrackNameEvent
     case couldNotAddInstrumentNameEvent
+    case couldNotAddTrackInfoEvent
 }

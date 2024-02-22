@@ -2,31 +2,22 @@ import AVFoundation
 
 extension Track {
     init?(_ track: MusicTrack, ignoreIfNonInstrumental: Bool = true) throws {
-        var loopInfo = MusicTrackLoopInfo(loopDuration: 0, numberOfLoops: 1)
-        guard (try? track.getProperty(kSequenceTrackProperty_LoopInfo, into: &loopInfo)) != nil else {
-            throw MusicTrackError.couldNotGetLoopInfo
-        }
-        
         var length: MusicTimeStamp = 0
         guard (try? track.getProperty(kSequenceTrackProperty_TrackLength, into: &length)) != nil else {
             throw MusicTrackError.couldNotGetLength
         }
         
-        var mute: DarwinBoolean = false
-        guard (try? track.getProperty(kSequenceTrackProperty_MuteStatus, into: &mute)) != nil else {
-            throw MusicTrackError.couldNotGetMute
-        }
-        
-        var solo: DarwinBoolean = false
-        guard (try? track.getProperty(kSequenceTrackProperty_SoloStatus, into: &solo)) != nil else {
-            throw MusicTrackError.couldNotGetSolo
-        }
-        
         let timestampEvents = try track.midiTimestampEvents
-        
         let metaEvents = timestampEvents.compactMap(\.event.asMetaEvent)
-        let instrument = metaEvents.first { $0.pointee.type == .instrumentName }
+        
+        let instrument = metaEvents
+            .first { $0.pointee.type == .instrumentName }
             .flatMap { $0.pointee.text.map { Instrument(rawValue: $0) } }
+        
+        let trackInfo = metaEvents
+            .first { $0.pointee.type == .sequencerSpecific }
+            .flatMap { try? $0.pointee.decoded(as: MetaEventTrackInfo.self) }
+        
         let channel = timestampEvents.compactMap { MIDINoteMessage($0.event)?.channel }.first
         let offsetEvents = timestampEvents.compactMap { timestampEvent in
             MIDINoteMessage(timestampEvent.event).map {
@@ -45,10 +36,10 @@ extension Track {
             preset: .init(
                 instrument: instrument ?? channel.flatMap { Instrument(ordinal: Int($0)) } ?? .piano,
                 length: Beats(length),
-                isLooping: true // TODO: Figure out why loopInfo.numberOfLoops is always 1
+                isLooping: trackInfo?.isLooping ?? true
             ),
-            isMute: mute.boolValue,
-            isSolo: solo.boolValue,
+            isMute: trackInfo?.isMute ?? false,
+            isSolo: trackInfo?.isSolo ?? false,
             offsetEvents: offsetEvents
         )
     }
@@ -72,28 +63,26 @@ extension Track {
             guard MusicTrackNewMetaEvent(track, MusicTimeStamp(0), instrumentNameEvent) == OSStatus(noErr) else {
                 throw MusicTrackError.couldNotAddInstrumentNameEvent
             }
-        }
-        
-        var loopInfo = MusicTrackLoopInfo(loopDuration: MusicTimeStamp(preset.length), numberOfLoops: .max)
-        guard (try? track.setProperty(kSequenceTrackProperty_LoopInfo, to: &loopInfo)) != nil else {
-            throw MusicTrackError.couldNotSetLoopInfo
+            
+            @Guard var trackInfoEvent: UnsafeMutablePointer<MIDIMetaEvent>
+            _trackInfoEvent = try MIDIMetaEvent.create(
+                type: .sequencerSpecific,
+                encoding: MetaEventTrackInfo(
+                    isLooping: preset.isLooping,
+                    isSolo: isSolo,
+                    isMute: isMute
+                )
+            )
+            guard MusicTrackNewMetaEvent(track, MusicTimeStamp(0), trackInfoEvent) == OSStatus(noErr) else {
+                throw MusicTrackError.couldNotAddTrackInfoEvent
+            }
         }
         
         var length = MusicTimeStamp(preset.length)
         guard (try? track.setProperty(kSequenceTrackProperty_TrackLength, to: &length)) != nil else {
             throw MusicTrackError.couldNotSetLength
         }
-        
-        var mute = DarwinBoolean(isMute)
-        guard (try? track.setProperty(kSequenceTrackProperty_MuteStatus, to: &mute)) != nil else {
-            throw MusicTrackError.couldNotSetMute
-        }
-        
-        var solo = DarwinBoolean(isSolo)
-        guard (try? track.setProperty(kSequenceTrackProperty_SoloStatus, to: &solo)) != nil else {
-            throw MusicTrackError.couldNotSetSolo
-        }
-        
+
         for event in offsetEvents {
             let timestamp = MusicTimeStamp(event.startOffset)
             var message = MIDINoteMessage(event.event)

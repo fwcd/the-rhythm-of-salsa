@@ -8,10 +8,11 @@ struct MIDIMetaEventType: RawRepresentable {
     static let lyric = Self(rawValue: 0x05)
     static let marker = Self(rawValue: 0x06)
     static let cuePoint = Self(rawValue: 0x07)
+    static let endOfTrack = Self(rawValue: 0x2F)
     static let tempo = Self(rawValue: 0x51)
     static let timeSignature = Self(rawValue: 0x58)
     static let keySignature = Self(rawValue: 0x59)
-    static let endOfTrack = Self(rawValue: 0x2F)
+    static let sequencerSpecific = Self(rawValue: 0x7F)
     
     let rawValue: UInt8
 }
