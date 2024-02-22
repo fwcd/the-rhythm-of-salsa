@@ -16,7 +16,7 @@ extension BeatSequencerModel {
             throw MusicSequenceError.couldNotGetTrackCount
         }
         
-        let tracks = try (UInt32(0)..<trackCount).map { i in
+        let tracks = try (UInt32(0)..<trackCount).compactMap { i in
             var track: MusicTrack? = nil
             guard MusicSequenceGetIndTrack(sequence, i, &track) == OSStatus(noErr), let track else {
                 throw MusicSequenceError.couldNotGetTrack(Int(i))

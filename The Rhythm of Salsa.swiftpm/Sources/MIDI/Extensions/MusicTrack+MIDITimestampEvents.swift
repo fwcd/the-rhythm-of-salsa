@@ -39,12 +39,14 @@ extension MusicTrack {
                 
                 switch eventType {
                 case kMusicEventType_Meta:
-                    guard let meta = eventData?.load(as: MIDIMetaEvent.self) else {
-                        throw MusicTrackError.couldNotLoadEventAsMetaEvent
+                    let newPointer = UnsafeMutablePointer<MIDIMetaEvent>.allocate(capacity: Int(eventDataSize))
+                    let guardedPointer = Guard(wrappedValue: newPointer) {
+                        newPointer.deallocate()
                     }
+                    memcpy(newPointer, eventData, Int(eventDataSize))
                     events.append(.init(
                         timestamp: timestamp,
-                        event: .meta(meta)
+                        event: .meta(guardedPointer)
                     ))
                 case kMusicEventType_MIDINoteMessage:
                     guard let message = eventData?.load(as: MIDINoteMessage.self) else {

@@ -1,28 +1,36 @@
 import AVFoundation
 
 enum MIDIEvent {
-    case meta(MIDIMetaEvent)
+    case meta(Guard<UnsafeMutablePointer<MIDIMetaEvent>>)
     case note(MIDINoteMessage)
     case channel(MIDIChannelMessage)
-}
-
-extension MIDIMetaEvent {
-    init?(_ event: MIDIEvent) {
-        guard case let .meta(meta) = event else { return nil }
-        self = meta
+    
+    var asMetaEvent: Guard<UnsafeMutablePointer<MIDIMetaEvent>>? {
+        guard case let .meta(event) = self else { return nil }
+        return event
+    }
+    
+    var asNoteMessage: MIDINoteMessage? {
+        guard case let .note(message) = self else { return nil }
+        return message
+    }
+    
+    var asChannelMessage: MIDIChannelMessage? {
+        guard case let .channel(message) = self else { return nil }
+        return message
     }
 }
 
 extension MIDINoteMessage {
     init?(_ event: MIDIEvent) {
-        guard case let .note(message) = event else { return nil }
+        guard let message = event.asNoteMessage else { return nil }
         self = message
     }
 }
 
 extension MIDIChannelMessage {
     init?(_ event: MIDIEvent) {
-        guard case let .channel(message) = event else { return nil }
+        guard let message = event.asChannelMessage else { return nil }
         self = message
     }
 }

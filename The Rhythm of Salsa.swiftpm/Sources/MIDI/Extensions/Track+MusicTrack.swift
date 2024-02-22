@@ -1,7 +1,7 @@
 import AVFoundation
 
 extension Track {
-    init(_ track: MusicTrack) throws {
+    init?(_ track: MusicTrack, ignoreIfNonInstrumental: Bool = true) throws {
         var loopInfo = MusicTrackLoopInfo(loopDuration: 0, numberOfLoops: 1)
         guard (try? track.getProperty(kSequenceTrackProperty_LoopInfo, into: &loopInfo)) != nil else {
             throw MusicTrackError.couldNotGetLoopInfo
@@ -23,6 +23,10 @@ extension Track {
         }
         
         let timestampEvents = try track.midiTimestampEvents
+        
+        let metaEvents = timestampEvents.compactMap(\.event.asMetaEvent)
+        let instrument = metaEvents.first { $0.wrappedValue.pointee.type == .instrumentName }
+            .flatMap { $0.wrappedValue.pointee.text.map { Instrument(rawValue: $0) } }
         let channel = timestampEvents.compactMap { MIDINoteMessage($0.event)?.channel }.first
         let offsetEvents = timestampEvents.compactMap { timestampEvent in
             MIDINoteMessage(timestampEvent.event).map {
@@ -33,9 +37,13 @@ extension Track {
             }
         }
         
+        if ignoreIfNonInstrumental {
+            guard instrument != nil || !offsetEvents.isEmpty else { return nil }
+        }
+        
         self.init(
             preset: .init(
-                instrument: channel.flatMap { Instrument(ordinal: Int($0)) } ?? .piano,
+                instrument: instrument ?? channel.flatMap { Instrument(ordinal: Int($0)) } ?? .piano,
                 length: Beats(length),
                 isLooping: loopInfo.numberOfLoops > 1
             ),
