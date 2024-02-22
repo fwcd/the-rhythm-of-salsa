@@ -36,9 +36,10 @@ extension BeatSequencerModel {
         _keySignatureEvent = MIDIMetaEvent.create(
             // As per https://www.mixagesoftware.com/en/midikit/help/HTML/meta_events.html
             metaEventType: 0x59,
-            unused1: 0x02,
-            unused2: UInt8(bitPattern: Int8(key.ordinal)),
-            unused3: 0 // major key
+            raw: Data([
+                UInt8(bitPattern: Int8(key.ordinal)),
+                0 // 0 = major, 1 = minor
+            ])
         )
         guard MusicTrackNewMetaEvent(tempoTrack, MusicTimeStamp(0), keySignatureEvent) == OSStatus(noErr) else {
             throw MusicSequenceError.couldNotAddKeySignatureEvent
