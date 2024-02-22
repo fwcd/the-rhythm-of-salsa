@@ -25,7 +25,7 @@ extension BeatSequencerModel {
         }
         
         self.init(
-            beatsPerMinute: Beats(beatsPerMinute),
+            beatsPerMinute: Beats(beatsPerMinute.rounded()),
             tracks: tracks,
             key: key ?? .c
         )
