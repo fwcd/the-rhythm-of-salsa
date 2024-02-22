@@ -5,7 +5,6 @@ extension Track {
         id: String = UUID().uuidString,
         preset: TrackPreset = .init(),
         pattern: Pattern,
-        tracksKey: Bool,
         transposedTo key: Key? = nil
     ) {
         var preset = preset
@@ -17,7 +16,6 @@ extension Track {
             preset: preset,
             patternName: pattern.name,
             volume: pattern.volume,
-            tracksKey: tracksKey,
             offsetEvents: pattern.offsetEvents
         )
         if let key {
@@ -34,7 +32,6 @@ extension Track {
             id: id,
             preset: .init(instrument: instrument),
             pattern: instrument.patterns.first ?? .init(),
-            tracksKey: instrument.tracksKey,
             transposedTo: key
         )
     }

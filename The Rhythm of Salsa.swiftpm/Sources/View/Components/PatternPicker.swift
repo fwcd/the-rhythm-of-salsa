@@ -15,7 +15,6 @@ struct PatternPicker: View {
                     id: track.id,
                     preset: track.preset,
                     pattern: newPattern,
-                    tracksKey: instrument.tracksKey,
                     transposedTo: key
                 )
             } else {

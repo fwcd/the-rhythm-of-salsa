@@ -8,11 +8,14 @@ struct Track: Hashable, Codable, Identifiable {
     var volume: Double = 1
     var isMute: Bool = false
     var isSolo: Bool = false
-    var tracksKey: Bool = false
     var offsetEvents: [OffsetEvent] = []
     
     var isSilent: Bool {
         isMute || offsetEvents.isEmpty || volume == 0
+    }
+    
+    var tracksKey: Bool {
+        preset.instrument?.tracksKey ?? false
     }
     
     var instrument: Instrument? {
