@@ -2,8 +2,9 @@ import Foundation
 
 extension Instrument {
     var patterns: [Pattern] {
-        customPatterns + [pattern("Empty")]
+        customPatterns + [emptyPattern]
     }
+    
     var customPatterns: [Pattern] {
         switch self {
         case .clave: [
@@ -44,6 +45,8 @@ extension Instrument {
         }
     }
 }
+
+let emptyPattern = pattern("Empty")
 
 private func pattern(
     _ name: String = "Default",

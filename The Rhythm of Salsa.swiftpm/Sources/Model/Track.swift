@@ -49,21 +49,10 @@ struct Track: Hashable, Codable, Identifiable {
             : offset
     }
     
-    func cleared() -> Track {
-        var track = self
-        track.clear()
-        return track
-    }
-    
     func transposed(by semitones: Int) -> Track {
         var track = self
         track.transpose(by: semitones)
         return track
-    }
-    
-    mutating func clear() {
-        offsetEvents = []
-        patternName = nil
     }
     
     mutating func transpose(by semitones: Int) {
