@@ -37,7 +37,7 @@ extension BeatSequencerModel {
             // As per https://www.mixagesoftware.com/en/midikit/help/HTML/meta_events.html
             metaEventType: 0x59,
             raw: Data([
-                UInt8(bitPattern: Int8(key.ordinal)),
+                UInt8(bitPattern: Int8(key.sharpsOrFlats)),
                 0 // 0 = major, 1 = minor
             ])
         )
