@@ -4,7 +4,6 @@ extension Track {
     init(
         id: String = UUID().uuidString,
         preset: TrackPreset = .init(),
-        tracksKey: Bool = false,
         pattern: Pattern
     ) {
         var preset = preset
@@ -16,7 +15,7 @@ extension Track {
             preset: preset,
             patternName: pattern.name,
             volume: pattern.volume,
-            tracksKey: tracksKey,
+            tracksKey: pattern.tracksKey,
             offsetEvents: pattern.offsetEvents
         )
     }
@@ -28,7 +27,6 @@ extension Track {
         self.init(
             id: id,
             preset: .init(instrument: instrument),
-            tracksKey: instrument.tracksKey,
             pattern: instrument.patterns.first ?? .init()
         )
     }

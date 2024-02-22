@@ -2,7 +2,7 @@ import Foundation
 
 extension Instrument {
     var patterns: [Pattern] {
-        customPatterns + [pattern("Empty")]
+        customPatterns + [pattern("Empty", tracksKey: self == .piano)]
     }
     var customPatterns: [Pattern] {
         switch self {
@@ -37,6 +37,7 @@ extension Instrument {
                         return Pattern(
                             name: url.deletingPathExtension().lastPathComponent,
                             length: midi.tracks.first?.length,
+                            tracksKey: true,
                             offsetEvents: midi.tracks.first?.offsetEvents ?? []
                         )
                     }
@@ -45,10 +46,17 @@ extension Instrument {
     }
 }
 
-private func pattern(_ name: String = "Default", volume: Double = 1, beats: [Beats] = [], velocity: (Int) -> Double = { _ in 1 }) -> Pattern {
+private func pattern(
+    _ name: String = "Default",
+    volume: Double = 1,
+    tracksKey: Bool = false,
+    beats: [Beats] = [],
+    velocity: (Int) -> Double = { _ in 1 }
+) -> Pattern {
     Pattern(
         name: name,
         volume: volume,
+        tracksKey: tracksKey,
         offsetEvents: beats.enumerated().map { (i, offset) in
             OffsetEvent(event: Event(velocity: UInt32(127 * velocity(i)), duration: 0.5), startOffset: offset)
         }
