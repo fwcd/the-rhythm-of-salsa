@@ -1,3 +1,4 @@
+/// A key signature, ordered by the circle of fifths.
 enum Key: String, Hashable, Codable, CaseIterable, CustomStringConvertible {
     case gFlat = "Gb"
     case dFlat = "Db"

@@ -1,5 +1,6 @@
 import Foundation
 
+/// A note event with a start offset.
 struct OffsetEvent: Hashable, Codable {
     var event: Event
     var startOffset: Beats

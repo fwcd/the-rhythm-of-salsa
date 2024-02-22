@@ -1,3 +1,4 @@
+/// An instrument in the beat sequencer.
 enum Instrument: String, Hashable, Codable, CustomStringConvertible, CaseIterable {
     case clave = "Clave"
     case cowbell = "Cowbell"

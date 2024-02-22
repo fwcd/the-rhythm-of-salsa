@@ -1,6 +1,6 @@
 import Foundation
 
-/// A sequencer track holding note events for a certain instrument.
+/// A sequencer track containing note events played by an instrument.
 struct Track: Hashable, Codable, Identifiable {
     var id: String = UUID().uuidString
     var preset: TrackPreset = .init()

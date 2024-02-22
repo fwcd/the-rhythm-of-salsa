@@ -1,5 +1,6 @@
 import Foundation
 
+/// An offset or distance in the beat domain.
 struct Beats: Codable, Hashable, RawRepresentable {
     var rawValue: Double
 }

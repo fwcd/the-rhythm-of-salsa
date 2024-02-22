@@ -1,3 +1,4 @@
+/// A beat sequence including a number of tracks, a tempo, a main volume and a key.
 struct BeatSequencerModel: Hashable, Codable {
     var beatsPerMinute: Beats = 180
     var mainVolume: Double = 1
