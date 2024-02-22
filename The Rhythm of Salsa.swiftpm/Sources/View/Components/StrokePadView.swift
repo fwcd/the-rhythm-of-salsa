@@ -10,7 +10,11 @@ struct StrokePadView: View {
     var padInBeat: Int = 0
     var options: PadOptions = .init()
     
-    @State private var startVelocity: CGFloat? = nil
+    @State private var delta: CGFloat = 0
+    
+    private var velocityWithDelta: CGFloat {
+        min(max(velocity + delta, 0), 1)
+    }
     
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: ViewConstants.smallCornerRadius)
@@ -21,10 +25,10 @@ struct StrokePadView: View {
                 .strokePad(isPlayed: isPlayed, color: color)
                 .background(
                     shape
-                        .frame(width: size.width, height: velocity * size.height)
+                        .frame(width: size.width, height: velocityWithDelta * size.height)
                         .position(
                             x: size.width / 2,
-                            y: (size.height + (1 - velocity) * size.height) / 2
+                            y: (size.height + (1 - velocityWithDelta) * size.height) / 2
                         )
                         .foregroundStyle(
                             isActive
@@ -48,13 +52,12 @@ struct StrokePadView: View {
                         velocity = 0
                     }
                     
-                    let startVelocity = self.startVelocity ?? velocity
-                    self.startVelocity = startVelocity
-                    
-                    velocity = min(max(startVelocity - drag.translation.height / size.height, 0), 1)
+                    delta = -drag.translation.height / size.height
                 }
                 .onEnded { _ in
-                    startVelocity = nil
+                    velocity = velocityWithDelta
+                    delta = 0
+                    
                     if velocity == 0 {
                         isActive = false
                     }
