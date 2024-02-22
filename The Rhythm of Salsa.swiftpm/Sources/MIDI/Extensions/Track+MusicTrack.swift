@@ -10,15 +10,20 @@ extension Track {
         let timestampEvents = try track.midiTimestampEvents
         let metaEvents = timestampEvents.compactMap(\.event.asMetaEvent)
         
-        let instrument = metaEvents
-            .first { $0.pointee.type == .instrumentName }
-            .flatMap { $0.pointee.text.map { Instrument(rawValue: $0) } }
-        
         let trackInfo = metaEvents
-            .first { $0.pointee.type == .sequencerSpecific }
-            .flatMap { try? $0.pointee.decoded(as: MetaEventTrackInfo.self) }
+            .first { $0.type == .sequencerSpecific }
+            .flatMap { try? JSONDecoder().decode(MetaEventTrackInfo.self, from: $0.raw) }
         
-        let channel = timestampEvents.compactMap { MIDINoteMessage($0.event)?.channel }.first
+        let instrument = trackInfo?.instrument
+            ?? metaEvents
+                .first { $0.type == .instrumentName }
+                .flatMap { String(data: $0.raw, encoding: .utf8) }
+                .flatMap { Instrument(rawValue: $0) }
+            ?? timestampEvents
+                .compactMap { MIDINoteMessage($0.event)?.channel }
+                .first
+                .flatMap { Instrument(ordinal: Int($0)) }
+        
         let offsetEvents = timestampEvents.compactMap { timestampEvent in
             MIDINoteMessage(timestampEvent.event).map {
                 OffsetEvent(
@@ -34,10 +39,12 @@ extension Track {
         
         self.init(
             preset: .init(
-                instrument: instrument ?? channel.flatMap { Instrument(ordinal: Int($0)) } ?? .piano,
+                instrument: instrument ?? .piano,
                 length: Beats(length),
                 isLooping: trackInfo?.isLooping ?? true
             ),
+            patternName: trackInfo?.patternName,
+            volume: trackInfo?.volume ?? 1,
             isMute: trackInfo?.isMute ?? false,
             isSolo: trackInfo?.isSolo ?? false,
             offsetEvents: offsetEvents
@@ -68,9 +75,12 @@ extension Track {
             _trackInfoEvent = try MIDIMetaEvent.create(
                 type: .sequencerSpecific,
                 encoding: MetaEventTrackInfo(
+                    instrument: instrument,
+                    patternName: patternName,
                     isLooping: preset.isLooping,
                     isSolo: isSolo,
-                    isMute: isMute
+                    isMute: isMute,
+                    volume: volume
                 )
             )
             guard MusicTrackNewMetaEvent(track, MusicTimeStamp(0), trackInfoEvent) == OSStatus(noErr) else {

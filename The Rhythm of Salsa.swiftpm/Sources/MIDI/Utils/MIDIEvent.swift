@@ -1,13 +1,13 @@
 import AVFoundation
 
 enum MIDIEvent {
-    case meta(Guard<UnsafeMutablePointer<MIDIMetaEvent>>)
+    case meta(type: MIDIMetaEventType, raw: Data)
     case note(MIDINoteMessage)
     case channel(MIDIChannelMessage)
     
-    var asMetaEvent: Guard<UnsafeMutablePointer<MIDIMetaEvent>>? {
-        guard case let .meta(event) = self else { return nil }
-        return event
+    var asMetaEvent: (type: MIDIMetaEventType, raw: Data)? {
+        guard case let .meta(type, raw) = self else { return nil }
+        return (type: type, raw: raw)
     }
     
     var asNoteMessage: MIDINoteMessage? {

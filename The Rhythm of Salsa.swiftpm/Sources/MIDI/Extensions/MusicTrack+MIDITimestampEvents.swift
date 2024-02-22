@@ -33,33 +33,28 @@ extension MusicTrack {
                 var eventType: MusicEventType = 0
                 var eventData: UnsafeRawPointer?
                 var eventDataSize: UInt32 = 0
-                guard MusicEventIteratorGetEventInfo(iterator, &timestamp, &eventType, &eventData, &eventDataSize) == OSStatus(noErr) else {
+                guard MusicEventIteratorGetEventInfo(iterator, &timestamp, &eventType, &eventData, &eventDataSize) == OSStatus(noErr), let eventData else {
                     throw MusicTrackError.couldNotGetEventInfo
                 }
                 
                 switch eventType {
                 case kMusicEventType_Meta:
-                    let newPointer = UnsafeMutablePointer<MIDIMetaEvent>.allocate(capacity: Int(eventDataSize))
-                    let guardedPointer = Guard(wrappedValue: newPointer) {
-                        newPointer.deallocate()
-                    }
-                    memcpy(newPointer, eventData, Int(eventDataSize))
+                    let pointer = UnsafeMutablePointer(mutating: eventData.assumingMemoryBound(to: MIDIMetaEvent.self))
                     events.append(.init(
                         timestamp: timestamp,
-                        event: .meta(guardedPointer)
+                        event: .meta(
+                            type: pointer.pointee.type,
+                            raw: pointer.pointee.raw
+                        )
                     ))
                 case kMusicEventType_MIDINoteMessage:
-                    guard let message = eventData?.load(as: MIDINoteMessage.self) else {
-                        throw MusicTrackError.couldNotLoadEventAsNoteEvent
-                    }
+                    let message = eventData.load(as: MIDINoteMessage.self)
                     events.append(.init(
                         timestamp: timestamp,
                         event: .note(message)
                     ))
                 case kMusicEventType_MIDIChannelMessage:
-                    guard let message = eventData?.load(as: MIDIChannelMessage.self) else {
-                        throw MusicTrackError.couldNotLoadEventAsChannelEvent
-                    }
+                    let message = eventData.load(as: MIDIChannelMessage.self)
                     events.append(.init(
                         timestamp: timestamp,
                         event: .channel(message)
