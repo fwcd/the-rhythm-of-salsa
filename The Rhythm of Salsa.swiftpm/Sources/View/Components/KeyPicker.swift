@@ -10,7 +10,6 @@ struct KeyPicker: View {
                     .tag(key.name)
             }
         }
-        .frame(width: 80, alignment: .leading)
         .padding(-8)
     }
 }

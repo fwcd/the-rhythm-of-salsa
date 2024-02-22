@@ -40,6 +40,9 @@ struct BeatSequencerToolbar: View {
                 .padding(.horizontal, ViewConstants.smallSpace)
                 .help("The main volume")
             
+            KeyPicker(key: $model.key)
+                .buttonStyle(.plain)
+            
             Group {
                 TextField("BPM", value: $model.beatsPerMinute.rawValue, format: .number)
                     .multilineTextAlignment(.trailing)
