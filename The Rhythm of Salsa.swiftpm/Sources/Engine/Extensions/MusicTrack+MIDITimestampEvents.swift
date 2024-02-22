@@ -38,6 +38,14 @@ extension MusicTrack {
                 }
                 
                 switch eventType {
+                case kMusicEventType_Meta:
+                    guard let meta = eventData?.load(as: MIDIMetaEvent.self) else {
+                        throw MusicTrackError.couldNotLoadEventAsMetaEvent
+                    }
+                    events.append(.init(
+                        timestamp: timestamp,
+                        event: .meta(meta)
+                    ))
                 case kMusicEventType_MIDINoteMessage:
                     guard let message = eventData?.load(as: MIDINoteMessage.self) else {
                         throw MusicTrackError.couldNotLoadEventAsNoteEvent
