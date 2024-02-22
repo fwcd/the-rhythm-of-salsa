@@ -1,4 +1,4 @@
-enum Key: String, Hashable, Codable, CaseIterable {
+enum Key: String, Hashable, Codable, CaseIterable, CustomStringConvertible {
     case c = "C"
     case cSharpDFlat = "C#/Db"
     case d = "D"
@@ -11,4 +11,11 @@ enum Key: String, Hashable, Codable, CaseIterable {
     case a = "A"
     case aSharpBFlat = "A#/Bb"
     case b = "B"
+    
+    var name: String {
+        rawValue
+    }
+    var description: String {
+        rawValue
+    }
 }
