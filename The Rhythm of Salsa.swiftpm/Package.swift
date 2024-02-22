@@ -8,13 +8,13 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "Introduction to Salsa",
+    name: "The Rhythm of Salsa",
     platforms: [
         .iOS("16.0")
     ],
     products: [
         .iOSApplication(
-            name: "Introduction to Salsa",
+            name: "The Rhythm of Salsa",
             targets: ["AppModule"],
             bundleIdentifier: "dev.fwcd.Introduction-to-Salsa",
             teamIdentifier: "SS8V8UGLY8",

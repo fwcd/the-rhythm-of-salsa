@@ -1,7 +1,7 @@
 import AVFoundation
 import OSLog
 
-private let log = Logger(subsystem: "Introduction to Salsa", category: "Engine.MusicTrack+NoteEvents")
+private let log = Logger(subsystem: AppConstants.name, category: "Engine.MusicTrack+NoteEvents")
 
 extension MusicTrack {
     var midiTimestampEvents: [MIDITimestampEvent] {

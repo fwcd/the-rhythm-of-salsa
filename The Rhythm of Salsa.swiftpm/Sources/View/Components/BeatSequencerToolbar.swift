@@ -2,7 +2,7 @@ import OSLog
 import SwiftUI
 import UniformTypeIdentifiers
 
-private let log = Logger(subsystem: "Introduction to Salsa", category: "View.BeatSequencerToolbar")
+private let log = Logger(subsystem: AppConstants.name, category: "View.BeatSequencerToolbar")
 
 struct BeatSequencerToolbar: View {
     @Binding var isPlaying: Bool

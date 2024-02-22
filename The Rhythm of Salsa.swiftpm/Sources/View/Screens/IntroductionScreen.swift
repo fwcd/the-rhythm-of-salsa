@@ -7,11 +7,11 @@ struct IntroductionScreen: View {
     
     var body: some View {
         PageView(
-            title: "Introduction to Salsa",
+            title: AppConstants.name,
             text: """
-            Salsa is a dance and a style of music that originated in Cuba and was popularized in the 1960s in New York City.
+            Salsa is a dance and a style of Latin music that originated in Cuba and was popularized in the 1960s in New York City.
             
-            This introduction will teach you about the fundamental elements of Salsa music, its rhythm and Cuban-style Salsa dancing.
+            This introduction will teach you about the fundamental elements of Salsa music in an interactive environment that facilitates experimentation with new rhythms.
             """
         ) {
         } navigation: {

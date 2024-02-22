@@ -1,3 +1,3 @@
-# Introduction to Salsa
+# The Rhythm of Salsa
 
-A playground serving as a small introduction to the fundamentals of Salsa music and Cuban-style Salsa dancing.
+An interactive playground serving as a small introduction to the fundamentals of Salsa music.

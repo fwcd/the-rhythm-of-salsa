@@ -2,7 +2,7 @@ import AVFoundation
 import Combine
 import OSLog
 
-private let log = Logger(subsystem: "Introduction to Salsa", category: "Engine.BeatSequencerEngine")
+private let log = Logger(subsystem: AppConstants.name, category: "Engine.BeatSequencerEngine")
 
 private func configureAVAudioSession() {
     let session = AVAudioSession.sharedInstance()

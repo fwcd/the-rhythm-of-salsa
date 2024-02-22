@@ -3,7 +3,7 @@ import SwiftUI
 private let engine = BeatSequencerEngine()
 
 @main
-struct IntroductionToSalsaApp: App {
+struct TheRhythmOfSalsaApp: App {
     var body: some Scene {
         WindowGroup {
             RootScreen()

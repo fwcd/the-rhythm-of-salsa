@@ -2,7 +2,7 @@ import Foundation
 import OSLog
 import AVFoundation
 
-private let log = Logger(subsystem: "Introduction to Salsa", category: "Engine.BeatSequencerModel+MIDI")
+private let log = Logger(subsystem: AppConstants.name, category: "Engine.BeatSequencerModel+MIDI")
 
 extension BeatSequencerModel {
     init(midiFileURL: URL) throws {
