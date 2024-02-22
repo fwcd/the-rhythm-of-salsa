@@ -72,16 +72,16 @@ extension Track {
             }
             
             @Guard var trackInfoEvent: UnsafeMutablePointer<MIDIMetaEvent>
-            _trackInfoEvent = try MIDIMetaEvent.create(
+            _trackInfoEvent = MIDIMetaEvent.create(
                 type: .sequencerSpecific,
-                encoding: MetaEventTrackInfo(
+                raw: try JSONEncoder().encode(MetaEventTrackInfo(
                     instrument: instrument,
                     patternName: patternName,
                     isLooping: preset.isLooping,
                     isSolo: isSolo,
                     isMute: isMute,
                     volume: volume
-                )
+                ))
             )
             guard MusicTrackNewMetaEvent(track, MusicTimeStamp(0), trackInfoEvent) == OSStatus(noErr) else {
                 throw MusicTrackError.couldNotAddTrackInfoEvent
