@@ -2,6 +2,17 @@
 
 An interactive playground serving as a small introduction to the fundamentals of Salsa music.
 
+
+<div align="center">
+<p>
+<img alt="Logo" src="Icons/AppIconRounded.svg" width="80">
+</p>
+
+<p>
+<img alt="Screenshot" src="Screenshots/Beat Sequencer.png" width="600">
+</p>
+</div>
+
 ## See also
 
 - [MiniCAD](https://github.com/fwcd/mini-cad), a parametric 3D modeller using a Swift-inspired DSL (my 2023 project)
