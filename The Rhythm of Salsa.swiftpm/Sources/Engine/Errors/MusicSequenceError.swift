@@ -9,6 +9,7 @@ enum MusicSequenceError: Error {
     case couldNotGetTrackCount
     case couldNotGetTrack(Int)
     case couldNotGetTempoTrack
+    case couldNotAddKeySignatureEvent
     case couldNotAddTempoEvent
     case couldNotAddNewTrack
 }
