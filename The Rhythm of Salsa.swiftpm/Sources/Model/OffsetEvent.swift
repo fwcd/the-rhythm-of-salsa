@@ -15,4 +15,8 @@ struct OffsetEvent: Hashable, Codable {
     var range: Range<Beats> {
         startOffset..<endOffset
     }
+    
+    func mapEvent(_ transform: (Event) -> Event) -> OffsetEvent {
+        OffsetEvent(event: transform(event), startOffset: startOffset)
+    }
 }

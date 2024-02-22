@@ -52,9 +52,23 @@ struct Track: Hashable, Codable, Identifiable {
         return track
     }
     
+    func transposed(by semitones: Int) -> Track {
+        var track = self
+        track.transpose(by: semitones)
+        return track
+    }
+    
     mutating func clear() {
         offsetEvents = []
         patternName = nil
+    }
+    
+    mutating func transpose(by semitones: Int) {
+        offsetEvents = offsetEvents.map {
+            $0.mapEvent {
+                $0.transposed(by: semitones)
+            }
+        }
     }
     
     mutating func removeEvents(in range: Range<Beats>) {

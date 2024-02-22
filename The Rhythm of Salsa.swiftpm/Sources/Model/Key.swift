@@ -18,4 +18,8 @@ enum Key: String, Hashable, Codable, CaseIterable, CustomStringConvertible {
     var description: String {
         rawValue
     }
+    
+    func semitones(to key: Key) -> Int {
+        key.ordinal - ordinal
+    }
 }
