@@ -1,8 +1,9 @@
-//
-//  File.swift
-//  
-//
-//  Created on 22.02.24
-//
+import AVFoundation
 
-import Foundation
+extension MIDIMetaEvent {
+    var rawData: Data {
+        withUnsafePointer(to: data) { dataPointer in
+            Data(Array(UnsafeBufferPointer(start: dataPointer, count: Int(dataLength))))
+        }
+    }
+}
