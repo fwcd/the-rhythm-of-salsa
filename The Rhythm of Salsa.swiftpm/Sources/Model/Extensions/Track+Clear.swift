@@ -1,9 +1,11 @@
 extension Track {
     func cleared() -> Track {
-        Track(preset: preset, pattern: emptyPattern)
+        var track = self
+        track.clear()
+        return track
     }
     
     mutating func clear() {
-        self = cleared()
+        reset(to: emptyPattern)
     }
 }

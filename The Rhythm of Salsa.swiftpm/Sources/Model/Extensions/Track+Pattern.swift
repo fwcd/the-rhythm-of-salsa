@@ -7,20 +7,11 @@ extension Track {
         pattern: Pattern,
         transposedTo key: Key? = nil
     ) {
-        var preset = preset
-        if let length = pattern.length {
-            preset.length = length
-        }
         self.init(
             id: id,
-            preset: preset,
-            patternName: pattern.name,
-            volume: pattern.volume,
-            offsetEvents: pattern.offsetEvents
+            preset: preset
         )
-        if let key {
-            transpose(by: pattern.key.semitones(to: key))
-        }
+        reset(to: pattern, transposedTo: key)
     }
     
     init(
@@ -35,4 +26,22 @@ extension Track {
             transposedTo: key
         )
     }
+    
+    mutating func reset(
+        to pattern: Pattern,
+        transposedTo key: Key? = nil
+    ) {
+        if let length = pattern.length {
+            preset.length = length
+        }
+        
+        patternName = pattern.name
+        volume = pattern.volume
+        offsetEvents = pattern.offsetEvents
+        
+        if let key {
+            transpose(by: pattern.key.semitones(to: key))
+        }
+    }
+    
 }

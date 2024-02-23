@@ -11,12 +11,7 @@ struct PatternPicker: View {
             if let newPatternName,
                let instrument = track.instrument,
                let newPattern = instrument.patterns.first(where: { $0.name == newPatternName }) {
-                track = Track(
-                    id: track.id,
-                    preset: track.preset,
-                    pattern: newPattern,
-                    transposedTo: key
-                )
+                track.reset(to: newPattern, transposedTo: key)
             } else {
                 track.patternName = nil
             }
