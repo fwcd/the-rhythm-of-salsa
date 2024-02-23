@@ -18,6 +18,12 @@ A beat sequencer for Salsa music featuring an interactive introduction.
 
 On the technical side, the app makes heavy use of SwiftUI, AVFoundation's powerful audio sequencer, its sampler and AudioToolbox's MIDI support. The app combines the classic model-view architecture with a modern, value- and protocol-oriented programming style that takes full advantage of modern Swift features such as property wrappers or multiple trailing closures. A delta update mechanism efficiently synchronizes the audio sequencer with the model, letting the user navigate the app freely while never missing a beat.
 
+## Credits
+
+The project uses CC0 and Attribution 4.0-licensed audio samples from https://freesound.org. A detailed list of the respective sources, licenses and authors for these samples can be found in [`Resources/Samples/LICENSES.md`](<The Rhythm of Salsa.swiftpm/Resources/Samples/LICENSES.md>) within the app playground bundle.
+
+Other assets are original content.
+
 ## See also
 
 - [MiniCAD](https://github.com/fwcd/mini-cad), a parametric 3D modeller using a Swift-inspired DSL (my 2023 project)
