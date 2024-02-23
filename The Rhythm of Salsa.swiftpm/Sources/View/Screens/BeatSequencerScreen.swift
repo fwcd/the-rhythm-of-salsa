@@ -6,9 +6,7 @@ struct BeatSequencerScreen: View {
     var body: some View {
         SharedBeatSequencerView()
             .onAppear {
-                engine.model.tracks = Instrument.allCases.compactMap { instrument in
-                    Track(instrument: instrument)
-                }
+                engine.shouldSyncUserModel = true
             }
             .navigationTitle("Beat Sequencer")
     }

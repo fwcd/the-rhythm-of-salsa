@@ -61,12 +61,13 @@ struct InstrumentTutorialScreen: View {
     }
     
     private func updateTracks(with instrument: Instrument) {
-        engine.model.tracks = instrument.prefix.map {
+        engine.shouldSyncUserModel = false
+        engine.model = .init(tracks: instrument.prefix.map {
             Track(
                 id: "$TutorialInstrument_\($0)",
                 instrument: $0
             )
-        }
+        })
     }
 }
 

@@ -30,7 +30,16 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     @Published var model: BeatSequencerModel = .init()
+    @Published var userModel: BeatSequencerModel = .init(
+        tracks: Instrument.allCases.compactMap { instrument in
+            Track(instrument: instrument)
+        }
+    )
     @Published private(set) var playhead: Beats = 0
+    
+    @Published var shouldSyncUserModel: Bool = false
+    private var doesSyncUserModel: Bool = false
+    
     private var activeModel: BeatSequencerModel? = nil
     private var sequencerTracks: [TrackPreset: AVMusicTrack] = [:]
     
@@ -86,6 +95,18 @@ class BeatSequencerEngine: ObservableObject {
             }
             .store(in: &cancellables)
         syncSequencer(with: model)
+        
+        $shouldSyncUserModel
+            .sink { shouldSyncUserModel in
+                guard shouldSyncUserModel != self.doesSyncUserModel else { return }
+                if shouldSyncUserModel {
+                    self.model = self.userModel
+                } else {
+                    self.userModel = self.model
+                }
+                self.doesSyncUserModel = shouldSyncUserModel
+            }
+            .store(in: &cancellables)
         
         // Repeatedly poll the actual playhead position
         // TODO: Make the polling frequency dependent on the BPM

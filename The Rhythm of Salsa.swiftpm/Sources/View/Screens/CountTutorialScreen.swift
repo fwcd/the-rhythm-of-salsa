@@ -40,9 +40,10 @@ struct CountTutorialScreen: View {
             .buttonStyle(BorderedButtonStyle())
         }
         .onAppear {
-            engine.model.tracks = [
+            engine.shouldSyncUserModel = false
+            engine.model = .init(tracks: [
                 Track(),
-            ]
+            ])
         }
     }
 }
