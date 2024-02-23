@@ -7,8 +7,10 @@ struct TrackControls: View {
     var isHighlighted: Bool = true
     var options: TrackOptions = .init()
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     private var color: Color {
-        track.instrument?.color ?? .primary
+        track.instrument?.color(for: colorScheme) ?? .primary
     }
     
     var body: some View {

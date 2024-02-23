@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension Instrument {
-    var color: Color {
+    func color(for colorScheme: ColorScheme) -> Color {
         switch self {
         case .clave: .orange
         case .cowbell: .yellow
@@ -15,7 +15,7 @@ extension Instrument {
 }
 
 extension Color {
-    init(_ instrument: Instrument) {
-        self = instrument.color
+    init(_ instrument: Instrument, for colorScheme: ColorScheme) {
+        self = instrument.color(for: colorScheme)
     }
 }
