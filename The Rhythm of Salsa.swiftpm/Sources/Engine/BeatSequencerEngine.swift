@@ -68,7 +68,6 @@ class BeatSequencerEngine: ObservableObject {
             
             if !instrument.sampleNames.isEmpty {
                 do {
-                    // TODO: Loading all samples per instrument would play them simultaneously. It would be nice if we could e.g. map them to different keys. That might require using CAF files instead of WAV, which e.g. would let us set the base note and a range of low-high notes. See https://developer.apple.com/library/archive/documentation/MusicAudio/Reference/CAFSpec/CAF_spec/CAF_spec.html for details.
                     try sampler.loadAudioFiles(at: Array(instrument.sampleURLs.prefix(1)))
                 } catch {
                     log.error("Could not load audio file(s) for \(instrument) sampler: \(error)")
@@ -109,7 +108,6 @@ class BeatSequencerEngine: ObservableObject {
             .store(in: &cancellables)
         
         // Repeatedly poll the actual playhead position
-        // TODO: Make the polling frequency dependent on the BPM
         Timer.publish(every: 0.1, on: .main, in: .default)
             .autoconnect()
             .sink { [weak self] _ in
@@ -204,7 +202,6 @@ class BeatSequencerEngine: ObservableObject {
         guard !optimized || activeTracks.map(\.offsetEvents) != newTracks.map(\.offsetEvents) else { return }
         
         if !activeTracks.flatMap(\.offsetEvents).isEmpty {
-            // TODO: Check whether this is the right range
             sequencerTrack.clearEvents(in: AVMakeBeatRange(0, AVMusicTimeStampEndOfTrack))
         }
         
