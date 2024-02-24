@@ -68,6 +68,27 @@ struct InstrumentTutorialScreen: View {
             }
             .buttonStyle(BorderedProminentButtonStyle())
         }
+        .background {
+            GeometryReader { geometry in
+                Image(instrument)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundStyle(instrument.color(for: colorScheme))
+                    .padding(ViewConstants.mediumSpace)
+                    .frame(
+                        width: geometry.frame(in: .global).width / 2,
+                        height: geometry.frame(in: .global).height / 2,
+                        alignment: .topTrailing
+                    )
+                    .frame(
+                        width: geometry.frame(in: .global).width,
+                        height: geometry.frame(in: .global).height,
+                        alignment: .topTrailing
+                    )
+                    .opacity(colorScheme == .dark || instrument == .piano ? 0.05 : 0.1)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
         .background(LinearGradient(
             colors: [instrument.color(for: colorScheme).opacity(0.2), .clear],
             startPoint: .top,
