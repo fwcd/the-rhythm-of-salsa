@@ -5,8 +5,16 @@ extension CaseIterable where Self: Equatable {
 }
 
 extension CaseIterable where Self: Equatable, AllCases.Index == Int {
+    var previous: Self {
+        Self.allCases[(ordinal + Self.allCases.count - 1) % Self.allCases.count]
+    }
+    
     var next: Self {
         Self.allCases[(ordinal + 1) % Self.allCases.count]
+    }
+    
+    var isFirst: Bool {
+        ordinal == 0
     }
     
     var isLast: Bool {

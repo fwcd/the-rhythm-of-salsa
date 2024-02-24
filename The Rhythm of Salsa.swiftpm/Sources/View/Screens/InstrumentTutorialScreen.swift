@@ -7,6 +7,10 @@ struct InstrumentTutorialScreen: View {
     @State private var textStage: Int = 0
     @EnvironmentObject private var engine: BeatSequencerEngine
     
+    private var hasPreviousStage: Bool {
+        textStage > 0
+    }
+    
     private var hasNextStage: Bool {
         textStage < instrument.tutorialDescription.count - 1
     }
@@ -36,7 +40,20 @@ struct InstrumentTutorialScreen: View {
                 highlightedInstruments: isNearlyComplete ? [] : [instrument]
             ))
         } navigation: {
-            Button(isNearlyComplete ? "Complete Tutorial" : "Next") {
+            Button("Back") {
+                withAnimation {
+                    if hasPreviousStage {
+                        textStage -= 1
+                    } else if instrument.isFirst {
+                        route = .countTutorial
+                    } else {
+                        textStage = instrument.previous.tutorialDescription.count - 1
+                        route = .instrumentTutorial(instrument.previous)
+                    }
+                }
+            }
+            .buttonStyle(BorderedButtonStyle())
+            Button(isNearlyComplete ? "Complete Tutorial" : "Continue") {
                 withAnimation {
                     if hasNextStage {
                         textStage += 1
@@ -48,7 +65,7 @@ struct InstrumentTutorialScreen: View {
                     }
                 }
             }
-            .buttonStyle(BorderedButtonStyle())
+            .buttonStyle(BorderedProminentButtonStyle())
         }
         .onAppear {
             updateTracks(with: instrument)
