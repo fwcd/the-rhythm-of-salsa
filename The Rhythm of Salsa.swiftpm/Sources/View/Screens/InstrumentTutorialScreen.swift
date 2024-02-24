@@ -5,6 +5,7 @@ struct InstrumentTutorialScreen: View {
     @Binding var route: ContentRoute?
     
     @State private var textStage: Int = 0
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var engine: BeatSequencerEngine
     
     private var hasPreviousStage: Bool {
@@ -67,6 +68,11 @@ struct InstrumentTutorialScreen: View {
             }
             .buttonStyle(BorderedProminentButtonStyle())
         }
+        .background(LinearGradient(
+            colors: [instrument.color(for: colorScheme).opacity(0.2), .clear],
+            startPoint: .top,
+            endPoint: .center
+        ))
         .onAppear {
             updateTracks(with: instrument)
         }
