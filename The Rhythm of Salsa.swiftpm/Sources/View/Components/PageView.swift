@@ -76,7 +76,6 @@ extension PageView where Navigation == EmptyView, Background == EmptyView {
     }
 }
 
-
 extension PageView where Detail == EmptyView, Navigation == EmptyView, Background == EmptyView {
     init(title: String, text: String) {
         self.init(
