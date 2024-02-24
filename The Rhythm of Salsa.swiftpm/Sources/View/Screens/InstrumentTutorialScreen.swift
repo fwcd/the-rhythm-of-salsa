@@ -85,7 +85,7 @@ struct InstrumentTutorialScreen: View {
                             height: geometry.frame(in: .global).height,
                             alignment: .topTrailing
                         )
-                        .opacity(colorScheme == .dark || instrument == .piano ? 0.05 : 0.1)
+                        .opacity(colorScheme == .dark || instrument == .piano ? 0.06 : 0.1)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
