@@ -9,9 +9,9 @@ struct CountTutorialScreen: View {
     var body: some View {
         PageView(
             title: "The Count",
-            text: (["The basic rhythm of Salsa music is divided into units of 8 beats, or two measures"]
-                + (showDoubledPads ? ["To give the rhythm a more swingy feel, instruments often play on off-beats too, effectively resulting in 16 half beats."] : []))
-                .joined(separator: "\n\n")
+            text: !showDoubledPads
+                ? "The basic rhythm of Salsa music is divided into units of 8 beats. Salsa music is 4/4, i.e. every measure has 4 beats, therefore this is the equivalent of two measures."
+                : "To give the rhythm a more swingy feel, instruments often play on off-beats too, effectively resulting in 16 half beats."
         ) {
         SharedBeatSequencerView(options: .init(
             tracks: .init(
@@ -28,6 +28,16 @@ struct CountTutorialScreen: View {
             showsToolbar: false
         ))
         } navigation: {
+            Button("Back") {
+                if showDoubledPads {
+                    withAnimation {
+                        showDoubledPads = false
+                    }
+                } else {
+                    route = .introduction
+                }
+            }
+            .buttonStyle(BorderedButtonStyle())
             Button("Continue") {
                 if !showDoubledPads {
                     withAnimation {
@@ -37,7 +47,7 @@ struct CountTutorialScreen: View {
                     route = .instrumentTutorial(Instrument.allCases.first!)
                 }
             }
-            .buttonStyle(BorderedButtonStyle())
+            .buttonStyle(BorderedProminentButtonStyle())
         }
         .onAppear {
             engine.shouldSyncUserModel = false
