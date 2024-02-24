@@ -3,6 +3,7 @@ import SwiftUI
 struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
     let title: String
     let text: String
+    var isCentered: Bool = true
     var alwaysVertical: Bool = false
     @ViewBuilder let detail: () -> Detail
     @ViewBuilder let navigation: () -> Navigation
@@ -32,7 +33,8 @@ struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
             .padding(ViewConstants.smallSpace)
             .frame(
                 width: geometry.frame(in: .global).width,
-                height: geometry.frame(in: .global).height
+                height: geometry.frame(in: .global).height,
+                alignment: isCentered ? .center : .top
             )
         }
     }
