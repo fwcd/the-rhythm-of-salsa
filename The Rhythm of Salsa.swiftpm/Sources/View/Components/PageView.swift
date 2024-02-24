@@ -1,12 +1,16 @@
 import SwiftUI
 
-struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
+struct PageView<Detail, Navigation, Background>: View
+    where Detail: View,
+          Navigation: View,
+          Background: View {
     let title: String
     let text: String
     var isCentered: Bool = true
     var alwaysVertical: Bool = false
     @ViewBuilder let detail: () -> Detail
     @ViewBuilder let navigation: () -> Navigation
+    @ViewBuilder let background: (Bool) -> Background
     
     var body: some View {
         GeometryReader { geometry in
@@ -36,19 +40,51 @@ struct PageView<Detail, Navigation>: View where Detail: View, Navigation: View {
                 height: geometry.frame(in: .global).height,
                 alignment: isCentered ? .center : .top
             )
+            .background {
+                background(usesCompactTitle)
+            }
         }
     }
 }
 
-extension PageView where Navigation == EmptyView {
+extension PageView where Background == EmptyView {
+    init(
+        title: String,
+        text: String,
+        @ViewBuilder detail: @escaping () -> Detail,
+        @ViewBuilder navigation: @escaping () -> Navigation
+    ) {
+        self.init(
+            title: title,
+            text: text,
+            detail: detail,
+            navigation: navigation,
+            background: { _ in }
+        )
+    }
+}
+
+extension PageView where Navigation == EmptyView, Background == EmptyView {
     init(title: String, text: String, @ViewBuilder detail: @escaping () -> Detail) {
-        self.init(title: title, text: text, detail: detail, navigation: {})
+        self.init(
+            title: title,
+            text: text,
+            detail: detail,
+            navigation: {},
+            background: { _ in }
+        )
     }
 }
 
 
-extension PageView where Detail == EmptyView, Navigation == EmptyView {
+extension PageView where Detail == EmptyView, Navigation == EmptyView, Background == EmptyView {
     init(title: String, text: String) {
-        self.init(title: title, text: text, detail: {}, navigation: {})
+        self.init(
+            title: title,
+            text: text,
+            detail: {},
+            navigation: {},
+            background: { _ in }
+        )
     }
 }
