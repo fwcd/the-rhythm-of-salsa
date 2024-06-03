@@ -16,7 +16,7 @@ let package = Package(
         .iOSApplication(
             name: "The Rhythm of Salsa",
             targets: ["AppModule"],
-            bundleIdentifier: "dev.fwcd.Introduction-to-Salsa",
+            bundleIdentifier: "dev.fwcd.The-Rhythm-Of-Salsa",
             teamIdentifier: "SS8V8UGLY8",
             displayVersion: "1.0",
             bundleVersion: "1",
