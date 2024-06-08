@@ -37,6 +37,7 @@ struct InstrumentTutorialScreen: View {
                     showsVolume: false,
                     showsInstrumentName: false
                 ),
+                showsMixer: false,
                 showsToolbar: false,
                 highlightedInstruments: isNearlyComplete ? [] : [instrument]
             ))

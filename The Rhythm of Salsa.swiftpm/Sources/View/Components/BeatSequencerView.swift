@@ -37,12 +37,17 @@ struct BeatSequencerView: View {
                     }
                     
                 }
-                if options.showsToolbar {
+                if options.showsMixer ?? false {
+                    BeatSequencerMixerView(
+                        model: $model,
+                        options: options
+                    )
+                }
+                if options.showsToolbar ?? true {
                     BeatSequencerToolbar(
                         isPlaying: $isPlaying,
                         model: $model,
-                        usesCompactIcons: options.usesCompactToolbarIcons,
-                        usesVerticalLayout: options.usesVerticalLayout
+                        options: options.toolbar
                     )
                 }
             }
@@ -54,12 +59,18 @@ struct BeatSequencerView: View {
         if width < 800 {
             options.tracks.showsMuteSolo = false
             options.tracks.showsInstrumentName = false
-            options.tracks.showsPatternPicker = false
-            options.usesCompactToolbarIcons = true
+            options.toolbar.usesCompactButtons = true
+            options.showsMixer = options.showsMixer ?? true
         }
         if width < 600 {
-            options.usesVerticalLayout = true
-            options.usesCompactToolbarIcons = false
+            options.toolbar.usesVerticalLayout = true
+            options.tracks.showsPatternPicker = false
+        }
+        if options.showsMixer ?? false {
+            options.tracks.showsVolume = false
+        }
+        if options.toolbar.usesVerticalLayout {
+            options.toolbar.usesCompactButtons = false
         }
         return options
     }

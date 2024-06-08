@@ -7,8 +7,7 @@ private let log = Logger(subsystem: AppConstants.name, category: "View.BeatSeque
 struct BeatSequencerToolbar: View {
     @Binding var isPlaying: Bool
     @Binding var model: BeatSequencerModel
-    var usesCompactIcons: Bool = false
-    var usesVerticalLayout: Bool = false
+    var options: BeatSequencerToolbarOptions = .init()
     
     @Environment(\.colorScheme) private var colorScheme
     @State private var midiImporterShown = false
@@ -21,12 +20,12 @@ struct BeatSequencerToolbar: View {
             } label: {
                 if isPlaying {
                     Image(systemName: "stop")
-                    if !usesCompactIcons {
+                    if !options.usesCompactButtons {
                         Text("Stop")
                     }
                 } else {
                     Image(systemName: "play")
-                    if !usesCompactIcons {
+                    if !options.usesCompactButtons {
                         Text("Play")
                     }
                 }
@@ -61,7 +60,7 @@ struct BeatSequencerToolbar: View {
                     model.tracks = model.tracks.map { $0.cleared() }
                 } label: {
                     Image(systemName: "trash")
-                    if !usesCompactIcons {
+                    if !options.usesCompactButtons {
                         Text("Clear")
                     }
                 }
@@ -71,7 +70,7 @@ struct BeatSequencerToolbar: View {
                     midiImporterShown = true
                 } label: {
                     Image(systemName: "square.and.arrow.down")
-                    if !usesCompactIcons {
+                    if !options.usesCompactButtons {
                         Text("Import")
                     }
                 }
@@ -90,7 +89,7 @@ struct BeatSequencerToolbar: View {
                     midiExporterShown = true
                 } label: {
                     Image(systemName: "square.and.arrow.up")
-                    if !usesCompactIcons {
+                    if !options.usesCompactButtons {
                         Text("Export")
                     }
                 }
@@ -106,7 +105,7 @@ struct BeatSequencerToolbar: View {
         }
         
         Group {
-            if usesVerticalLayout {
+            if options.usesVerticalLayout {
                 VStack {
                     content
                 }
@@ -138,7 +137,7 @@ struct BeatSequencerToolbar: View {
             BeatSequencerToolbar(
                 isPlaying: .constant(false),
                 model: .constant(.init()),
-                usesVerticalLayout: usesVerticalLayout
+                options: .init(usesVerticalLayout: usesVerticalLayout)
             )
         }
     }

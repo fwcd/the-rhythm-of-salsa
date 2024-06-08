@@ -16,7 +16,7 @@ enum ViewConstants {
     
     static let knobSize: CGFloat = 32
     static let padSize: CGSize = CGSize(width: 64, height: 64)
-    static let smallPadSize: CGSize = CGSize(width: 32, height: 64)
+    static let smallPadSize: CGSize = CGSize(width: 32, height: 32)
     static let sidebarIconSize: CGFloat = 22
     
     static let smallCornerRadius: CGFloat = 5

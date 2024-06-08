@@ -2,8 +2,9 @@ import CoreGraphics
 
 struct BeatSequencerOptions: Hashable {
     var tracks: TrackOptions = .init()
-    var showsToolbar: Bool = true
-    var usesCompactToolbarIcons: Bool = false
-    var usesVerticalLayout: Bool = false
+    var mixerTracks: TrackOptions = .init(showsPatternPicker: false)
+    var toolbar: BeatSequencerToolbarOptions = .init()
+    var showsMixer: Bool? = nil
+    var showsToolbar: Bool? = nil
     var highlightedInstruments: Set<Instrument> = []
 }
