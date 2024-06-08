@@ -3,6 +3,7 @@ import CoreGraphics
 struct BeatSequencerOptions: Hashable {
     var tracks: TrackOptions = .init()
     var mixerTracks: TrackOptions = .init(
+        useMuteSoloPadding: false,
         showsInstrumentName: false,
         showsPatternPicker: false
     )

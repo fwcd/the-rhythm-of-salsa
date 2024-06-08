@@ -24,7 +24,7 @@ struct TrackControls: View {
             .caption()
             .toggleStyle(ButtonToggleStyle())
             .buttonStyle(PlainButtonStyle())
-            .padding(.horizontal, ViewConstants.smallSpace)
+            .padding(.horizontal, options.useMuteSoloPadding ? ViewConstants.smallSpace : 0)
         }
         Group {
             if options.showsVolume {
