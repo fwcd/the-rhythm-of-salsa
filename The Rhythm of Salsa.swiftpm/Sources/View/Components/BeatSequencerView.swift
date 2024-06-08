@@ -42,7 +42,7 @@ struct BeatSequencerView: View {
                         isPlaying: $isPlaying,
                         model: $model,
                         usesCompactIcons: options.usesCompactToolbarIcons,
-                        usesVerticalLayout: options.usesVerticalToolbarLayout
+                        usesVerticalLayout: options.usesVerticalLayout
                     )
                 }
             }
@@ -58,7 +58,7 @@ struct BeatSequencerView: View {
             options.usesCompactToolbarIcons = true
         }
         if width < 600 {
-            options.usesVerticalToolbarLayout = true
+            options.usesVerticalLayout = true
             options.usesCompactToolbarIcons = false
         }
         return options
