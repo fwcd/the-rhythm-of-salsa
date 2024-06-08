@@ -50,7 +50,6 @@ struct BeatSequencerView: View {
     }
     
     private func sizeAdjustedOptions(at width: CGFloat) -> BeatSequencerOptions {
-        // TODO: Fix issue where we cannot resize directly from visible pattern pickers to the most compact layout, since the pickers keep the view at a fixed width. This happens e.g. when rotating an iPhone from landscape to portrait
         var options = self.options
         if width < 800 {
             options.tracks.showsMuteSolo = false

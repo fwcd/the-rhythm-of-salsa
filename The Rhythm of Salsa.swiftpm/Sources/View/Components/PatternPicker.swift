@@ -25,7 +25,6 @@ struct PatternPicker: View {
                 .tag(nil as String?)
         }
         .labelsHidden()
-        .frame(width: 160, alignment: .leading)
         .padding(-8)
     }
 }
