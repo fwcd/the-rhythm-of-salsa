@@ -10,6 +10,7 @@ struct BeatSequencerMixerView: View {
         HStack {
             ForEach($model.tracks) { $track in
                 let track = $track.wrappedValue
+                let isHighlighted = track.isHighlighted(in: model.tracks, options: options)
                 let size = ViewConstants.smallPadSize
                 VStack {
                     if let instrument = track.instrument {
@@ -17,6 +18,7 @@ struct BeatSequencerMixerView: View {
                             .resizable()
                             .frame(width: size.width, height: size.height)
                             .foregroundStyle(track.instrument?.color(for: colorScheme) ?? .primary)
+                            .unhighlight(!isHighlighted)
 
                     } else {
                         Spacer()
@@ -26,6 +28,7 @@ struct BeatSequencerMixerView: View {
                         track: $track,
                         key: model.key,
                         padSize: size,
+                        isHighlighted: isHighlighted,
                         options: options.mixerTracks
                     )
                 }
