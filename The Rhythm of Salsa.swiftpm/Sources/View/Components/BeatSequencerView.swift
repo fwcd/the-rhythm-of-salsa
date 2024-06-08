@@ -41,7 +41,8 @@ struct BeatSequencerView: View {
                     BeatSequencerToolbar(
                         isPlaying: $isPlaying,
                         model: $model,
-                        usesCompactIcons: options.usesCompactToolbarIcons
+                        usesCompactIcons: options.usesCompactToolbarIcons,
+                        usesVerticalLayout: options.usesVerticalToolbarLayout
                     )
                 }
             }
@@ -55,6 +56,10 @@ struct BeatSequencerView: View {
             options.tracks.showsInstrumentName = false
             options.tracks.showsPatternPicker = false
             options.usesCompactToolbarIcons = true
+        }
+        if width < 600 {
+            options.usesVerticalToolbarLayout = true
+            options.usesCompactToolbarIcons = false
         }
         return options
     }
