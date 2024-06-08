@@ -20,18 +20,13 @@ struct BeatSequencerView: View {
                     )
                     ForEach($model.tracks) { $track in
                         let track = $track.wrappedValue
-                        let isImplicitlyHighlighted = options.highlightedInstruments.isEmpty
-                        let isExplicitlyHighlighted = !options.highlightedInstruments.isEmpty
-                            && track.instrument.map { options.highlightedInstruments.contains($0) } ?? false
-                        let isMuteOrNonSolo = track.isMute || (!track.isSolo && model.tracks.contains(where: \.isSolo))
-                        let isHighlighted = !isMuteOrNonSolo && (isImplicitlyHighlighted || isExplicitlyHighlighted)
                         let isWrapped = track.beatCount > options.tracks.beatsPerRow
                         TrackView(
                             track: $track,
                             playhead: $playhead,
                             key: model.key,
                             padSize: CGSize(width: padWidth, height: isWrapped ? padWidth / 4 : padWidth),
-                            isHighlighted: isHighlighted,
+                            isHighlighted: track.isHighlighted(in: model.tracks, options: options),
                             options: options.tracks
                         )
                     }
