@@ -7,7 +7,7 @@ struct BeatSequencerMixerView: View {
     @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
-        HStack {
+        HStack(spacing: ViewConstants.smallSpace) {
             ForEach($model.tracks) { $track in
                 let track = $track.wrappedValue
                 let isHighlighted = track.isHighlighted(in: model.tracks, options: options)
