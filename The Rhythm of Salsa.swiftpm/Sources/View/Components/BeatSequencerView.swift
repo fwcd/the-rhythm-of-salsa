@@ -21,7 +21,7 @@ struct BeatSequencerView: View {
                     ForEach(Binding {
                         model.tracks.suffix(options.maxTracks)
                     } set: {
-                        model.tracks.replaceSubrange((model.tracks.count - options.maxTracks)..<model.tracks.count, with: $0)
+                        model.tracks.replaceSubrange(max(0, model.tracks.count - options.maxTracks)..<model.tracks.count, with: $0)
                     }) { $track in
                         let track = $track.wrappedValue
                         let isWrapped = track.beatCount > options.tracks.beatsPerRow

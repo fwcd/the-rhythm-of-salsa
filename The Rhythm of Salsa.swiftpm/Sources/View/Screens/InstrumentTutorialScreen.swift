@@ -25,83 +25,86 @@ struct InstrumentTutorialScreen: View {
     }
     
     var body: some View {
-        PageView(
-            title: instrument.name,
-            text: textStage < instrument.tutorialDescription.count
+        SingleAxisGeometryReader(axis: .vertical) { height in
+            PageView(
+                title: instrument.name,
+                text: textStage < instrument.tutorialDescription.count
                 ? instrument.tutorialDescription[textStage]
                 : ""
-        ) {
-            SharedBeatSequencerView(options: .init(
-                tracks: .init(
-                    showsMuteSolo: false,
-                    showsVolume: false,
-                    showsInstrumentName: false
-                ),
-                showsMixer: false,
-                showsToolbar: false,
-                highlightedInstruments: isNearlyComplete ? [] : [instrument]
-            ))
-        } navigation: {
-            Button("Back") {
-                withAnimation {
-                    if hasPreviousStage {
-                        textStage -= 1
-                    } else if instrument.isFirst {
-                        route = .countTutorial
-                    } else {
-                        textStage = instrument.previous.tutorialDescription.count - 1
-                        route = .instrumentTutorial(instrument.previous)
+            ) {
+                SharedBeatSequencerView(options: .init(
+                    tracks: .init(
+                        showsMuteSolo: false,
+                        showsVolume: false,
+                        showsInstrumentName: false
+                    ),
+                    showsMixer: false,
+                    showsToolbar: false,
+                    maxTracks: height < 500 ? 1 : .max,
+                    highlightedInstruments: isNearlyComplete ? [] : [instrument]
+                ))
+            } navigation: {
+                Button("Back") {
+                    withAnimation {
+                        if hasPreviousStage {
+                            textStage -= 1
+                        } else if instrument.isFirst {
+                            route = .countTutorial
+                        } else {
+                            textStage = instrument.previous.tutorialDescription.count - 1
+                            route = .instrumentTutorial(instrument.previous)
+                        }
                     }
                 }
-            }
-            .buttonStyle(BorderedButtonStyle())
-            Button(isNearlyComplete ? "Complete Tutorial" : "Continue") {
-                withAnimation {
-                    if hasNextStage {
-                        textStage += 1
-                    } else {
-                        textStage = 0
-                        route = instrument.isLast
+                .buttonStyle(BorderedButtonStyle())
+                Button(isNearlyComplete ? "Complete Tutorial" : "Continue") {
+                    withAnimation {
+                        if hasNextStage {
+                            textStage += 1
+                        } else {
+                            textStage = 0
+                            route = instrument.isLast
                             ? .beatSequencer
                             : .instrumentTutorial(instrument.next)
+                        }
                     }
                 }
-            }
-            .buttonStyle(BorderedProminentButtonStyle())
-        } background: { isCompact in
-            if !isCompact {
-                GeometryReader { geometry in
-                    Image(instrument)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundStyle(instrument.color(for: colorScheme))
-                        .padding(ViewConstants.mediumSpace)
-                        .frame(
-                            width: geometry.frame(in: .global).width / 2,
-                            height: geometry.frame(in: .global).height / 2,
-                            alignment: .topTrailing
-                        )
-                        .frame(
-                            width: geometry.frame(in: .global).width,
-                            height: geometry.frame(in: .global).height,
-                            alignment: .topTrailing
-                        )
-                        .opacity(colorScheme == .dark || instrument == .piano ? 0.06 : 0.1)
+                .buttonStyle(BorderedProminentButtonStyle())
+            } background: { isCompact in
+                if !isCompact {
+                    GeometryReader { geometry in
+                        Image(instrument)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(instrument.color(for: colorScheme))
+                            .padding(ViewConstants.mediumSpace)
+                            .frame(
+                                width: geometry.frame(in: .global).width / 2,
+                                height: geometry.frame(in: .global).height / 2,
+                                alignment: .topTrailing
+                            )
+                            .frame(
+                                width: geometry.frame(in: .global).width,
+                                height: geometry.frame(in: .global).height,
+                                alignment: .topTrailing
+                            )
+                            .opacity(colorScheme == .dark || instrument == .piano ? 0.06 : 0.1)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-        }
-        .background(LinearGradient(
-            colors: [instrument.color(for: colorScheme).opacity(0.2), .clear],
-            startPoint: .top,
-            endPoint: .center
-        ))
-        .onAppear {
-            updateTracks(with: instrument)
-        }
-        .onChange(of: instrument) { instrument in
-            withAnimation {
+            .background(LinearGradient(
+                colors: [instrument.color(for: colorScheme).opacity(0.2), .clear],
+                startPoint: .top,
+                endPoint: .center
+            ))
+            .onAppear {
                 updateTracks(with: instrument)
+            }
+            .onChange(of: instrument) { instrument in
+                withAnimation {
+                    updateTracks(with: instrument)
+                }
             }
         }
     }
