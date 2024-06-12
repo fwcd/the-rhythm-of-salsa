@@ -19,6 +19,9 @@ struct BeatSequencerMixerView: View {
                             .frame(width: size.width, height: size.height)
                             .foregroundStyle(track.instrument?.color(for: colorScheme) ?? .primary)
                             .unhighlight(!isHighlighted)
+                            .onTapGesture {
+                                $track.wrappedValue.isMute = !track.isMute
+                            }
 
                     } else {
                         Spacer()
