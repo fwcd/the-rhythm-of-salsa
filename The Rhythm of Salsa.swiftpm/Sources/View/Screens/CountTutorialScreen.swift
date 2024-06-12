@@ -25,6 +25,7 @@ struct CountTutorialScreen: View {
                     isPressable: false
                 )
             ),
+            showsMixer: false,
             showsToolbar: false
         ))
         } navigation: {
