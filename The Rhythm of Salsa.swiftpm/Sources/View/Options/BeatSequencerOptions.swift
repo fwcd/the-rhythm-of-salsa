@@ -10,5 +10,6 @@ struct BeatSequencerOptions: Hashable {
     var toolbar: BeatSequencerToolbarOptions = .init()
     var showsMixer: Bool? = nil
     var showsToolbar: Bool? = nil
+    var maxTracks: Int = .max
     var highlightedInstruments: Set<Instrument> = []
 }
