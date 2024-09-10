@@ -19,10 +19,10 @@ private func configureAVAudioSession() {
 }
 
 class BeatSequencerEngine: ObservableObject {
-    private let samplers: [Instrument: AVAudioUnitSampler]
+    private var samplers: [Instrument: AVAudioUnitSampler] = [:]
     
-    private var engine: AVAudioEngine
-    private var sequencer: AVAudioSequencer
+    private var engine: AVAudioEngine?
+    private var sequencer: AVAudioSequencer?
     private var sequencerPlaybackDependents: Int = 0 {
         didSet {
             updateSequencerPlayState()
@@ -45,15 +45,24 @@ class BeatSequencerEngine: ObservableObject {
     
     private var cancellables: Set<AnyCancellable> = []
     
+    private var isBooted: Bool = false
+    
     // Credits go to
     // - https://www.rockhoppertech.com/blog/swift-2-avaudiosequencer/
     // - https://www.rockhoppertech.com/blog/the-great-avaudiounitsampler-workout/
     
-    init() {
+    init() {}
+    
+    func boot() {
+        guard !isBooted else { return }
+        isBooted = true
+        
+        log.info("Booting BeatSequencerEngine...")
+        
         configureAVAudioSession()
         
         let engine = AVAudioEngine()
-        sequencer = AVAudioSequencer(audioEngine: engine)
+        let sequencer = AVAudioSequencer(audioEngine: engine)
         
         var samplers: [Instrument: AVAudioUnitSampler] = [:]
         
@@ -79,6 +88,7 @@ class BeatSequencerEngine: ObservableObject {
         }
         
         self.engine = engine
+        self.sequencer = sequencer
         self.samplers = samplers
         
         do {
@@ -123,6 +133,8 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func syncSequencer(with newModel: BeatSequencerModel) {
+        guard let engine, let sequencer else { return }
+        
         syncSequencerTracks(with: newModel.tracks)
         
         if activeModel?.mainVolume != newModel.mainVolume {
@@ -141,6 +153,8 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func syncSequencerTracks(with newTracks: [Track]) {
+        guard let sequencer else { return }
+        
         let activeTracks = activeModel?.tracks ?? []
         let activeTracksByPreset = Dictionary(grouping: activeTracks, by: \.preset)
         let newTracksByPreset = Dictionary(grouping: newTracks, by: \.preset)
@@ -236,6 +250,7 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     func jumpToFirstLoop(using tracks: [Track]? = nil) {
+        guard let sequencer else { return }
         let loopLength = (tracks ?? model.tracks)
             .filter { !$0.isSilent }
             .map { Int($0.length.rawValue.rounded()) }
@@ -245,7 +260,7 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     func movePlayhead(to beats: Beats) {
-        sequencer.currentPositionInBeats = TimeInterval(beats.rawValue)
+        sequencer?.currentPositionInBeats = TimeInterval(beats.rawValue)
     }
     
     private func updateSequencerPlayState() {
@@ -257,7 +272,7 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func startSequencer() {
-        guard !sequencer.isPlaying else { return }
+        guard let sequencer, !sequencer.isPlaying else { return }
         do {
             sequencer.prepareToPlay()
             try sequencer.start()
@@ -267,7 +282,7 @@ class BeatSequencerEngine: ObservableObject {
     }
     
     private func stopSequencer() {
-        guard sequencer.isPlaying else { return }
+        guard let sequencer, sequencer.isPlaying else { return }
         sequencer.stop()
     }
 }

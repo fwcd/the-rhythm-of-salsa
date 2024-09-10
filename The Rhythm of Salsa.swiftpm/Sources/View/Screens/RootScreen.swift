@@ -5,6 +5,8 @@ struct RootScreen: View {
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
     @State private var instrumentTutorialExpanded: Bool = true
     
+    @EnvironmentObject private var engine: BeatSequencerEngine
+    
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $route) {
@@ -32,6 +34,11 @@ struct RootScreen: View {
                 BeatSequencerScreen()
             case nil:
                 EmptyView()
+            }
+        }
+        .onChange(of: route) { route in
+            if route != .introduction {
+                engine.boot()
             }
         }
     }
