@@ -1,5 +1,7 @@
 # The Rhythm of Salsa
 
+[![Build](https://github.com/fwcd/the-rhythm-of-salsa/actions/workflows/build.yml/badge.svg)](https://github.com/fwcd/the-rhythm-of-salsa/actions/workflows/build.yml)
+
 A beat sequencer for Salsa music featuring an interactive introduction.
 
 <div align="center">
