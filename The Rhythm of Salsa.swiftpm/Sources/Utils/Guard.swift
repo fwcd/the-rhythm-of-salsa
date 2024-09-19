@@ -13,16 +13,3 @@ class Guard<Value> {
         onDeinit()
     }
 }
-
-extension Guard: TypedPointer where Value: TypedPointer {
-    var pointee: Value.Pointee {
-        wrappedValue.pointee
-    }
-}
-
-extension Guard: TypedMutablePointer where Value: TypedMutablePointer {
-    var pointee: Value.Pointee {
-        get { wrappedValue.pointee }
-        set { wrappedValue.pointee = newValue }
-    }
-}
