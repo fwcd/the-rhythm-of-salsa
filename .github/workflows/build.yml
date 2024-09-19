@@ -13,5 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build ${{ matrix.scheme }}
-      run: xcodebuild -scheme "The Rhythm of Salsa" -destination "generic/platform=iOS"
+      run: >
+        xcodebuild
+        -scheme "The Rhythm of Salsa"
+        -destination "generic/platform=iOS"
+        CODE_SIGN_IDENTITY=""
+        CODE_SIGNING_REQUIRED=NO
+        CODE_SIGNING_ALLOWED=NO
       working-directory: The Rhythm Of Salsa.swiftpm
